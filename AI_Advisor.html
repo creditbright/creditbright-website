@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright AI Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FAFAF8;--bg-dark:#1B2A1F;--card:#FFFFFF;
+  --border:#E8E5DE;--text:#1A1D1A;--text-secondary:#5A5F58;
+  --text-muted:#6A6E67;--green:#2E7D4F;--green-light:#E8F5EC;
+  --green-dark:#1B5E3A;--green-glow:#43A66A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg-dark);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:90px 0 60px;position:relative}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(46,125,79,0.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(59,164,217,0.08) 0%,transparent 50%);pointer-events:none;z-index:0}
+
+.desktop-brand-top,.desktop-brand-bottom{display:none}
+@media(min-width:500px){
+  .desktop-brand-top{display:flex;align-items:center;gap:12px;position:fixed;top:30px;left:0;right:0;justify-content:center;z-index:0;pointer-events:none}
+  
+  .desktop-logo-text{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.65);text-shadow:0 1px 8px rgba(0,0,0,0.2)}
+  .desktop-brand-bottom{display:flex;flex-direction:column;align-items:center;position:fixed;bottom:20px;left:0;right:0;z-index:0;pointer-events:none}
+  .desktop-brand-sub{font-family:'Instrument Serif',serif;font-size:14px;color:rgba(255,255,255,0.25);font-style:italic}
+}
+@media(max-width:430px){
+  body{background:var(--bg)}
+  body::before{display:none}
+  .phone-frame{width:100%!important;min-height:100vh!important;border-radius:0!important;box-shadow:none!important}
+}
+@media(max-width:420px){
+  body{padding:0;background:var(--bg)}
+  body::before{display:none}
+  .phone-frame{width:100%!important;min-height:100vh!important;border-radius:0!important;box-shadow:none!important}
+}
+
+.phone-frame{width:390px;height:760px;background:var(--bg);border-radius:40px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,0.06),0 25px 80px rgba(0,0,0,0.35),0 8px 24px rgba(0,0,0,0.2);position:relative;z-index:1;display:flex;flex-direction:column}
+
+/* Logo bar */
+.logo-bar{padding:14px 24px 0;display:flex;align-items:center;gap:8px;background:var(--bg);flex-shrink:0}
+.logo-text{font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;color:var(--text);letter-spacing:0.06em}
+
+/* Header */
+.chat-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
+.chat-header-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.chat-header-icon{width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:18px;color:white;font-weight:600}
+.chat-header-info{flex:1}
+.chat-header-name{font-size:16px;font-weight:600;color:var(--text)}
+.chat-header-status{font-size:12px;color:var(--green);font-weight:500;display:flex;align-items:center;gap:4px}
+.chat-header-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
+.chat-header-tagline{font-size:13px;color:var(--text-muted);line-height:1.5}
+
+/* Messages area */
+.chat-messages{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:12px}
+.chat-messages::-webkit-scrollbar{width:0}
+
+.msg{max-width:85%;padding:12px 16px;font-size:14.5px;line-height:1.6;animation:msgIn 0.3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.msg.assistant{align-self:flex-start;background:var(--card);border:1px solid var(--border);border-radius:2px 18px 18px 18px;color:var(--text)}
+.msg.user{align-self:flex-end;background:var(--green);border-radius:18px 2px 18px 18px;color:white}
+.msg.system{align-self:center;background:var(--green-light);border-radius:12px;color:var(--green-dark);font-size:13px;text-align:center;padding:8px 16px;max-width:90%}
+
+.msg p{margin:0 0 8px}
+.msg p:last-child{margin:0}
+.msg strong{font-weight:600}
+.msg ul,.msg ol{margin:4px 0 8px 16px;font-size:14px}
+.msg li{margin-bottom:4px}
+
+/* Typing indicator */
+.typing{align-self:flex-start;background:var(--card);border:1px solid var(--border);border-radius:2px 18px 18px 18px;padding:12px 20px;display:none}
+.typing-dots{display:flex;gap:4px}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:var(--text-muted);animation:typePulse 1.4s ease infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typePulse{0%,60%,100%{opacity:0.3;transform:scale(0.8)}30%{opacity:1;transform:scale(1)}}
+
+/* Input area */
+.chat-input-area{padding:12px 16px 24px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end}
+.chat-input{flex:1;border:1px solid var(--border);border-radius:22px;padding:10px 16px;font-size:15px;font-family:'DM Sans',sans-serif;background:var(--card);color:var(--text);outline:none;resize:none;max-height:100px;line-height:1.4}
+.chat-input:focus{border-color:var(--green)}
+.chat-input::placeholder{color:var(--text-muted)}
+.chat-send{width:40px;height:40px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s}
+.chat-send:hover{background:var(--green-dark)}
+.chat-send:disabled{background:var(--border);cursor:not-allowed}
+.chat-send svg{width:18px;height:18px;fill:white}
+
+/* Suggested questions */
+.suggestions{display:flex;flex-direction:column;gap:6px;padding:0 4px;margin-bottom:8px}
+.suggestion{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 14px;font-size:13.5px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.4}
+.suggestion:hover{border-color:var(--green);color:var(--green);background:var(--green-light)}
+
+/* Disclaimer */
+.disclaimer{text-align:center;font-size:11px;color:var(--text-muted);padding:4px 16px 0;line-height:1.4}
+
+/* API Key Screen */
+.api-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
+.api-overlay.hidden{display:none}
+.api-icon{font-size:40px;margin-bottom:16px}
+.api-title{font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);margin-bottom:8px}
+.api-desc{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:24px}
+.api-input{width:100%;border:1px solid var(--border);border-radius:14px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--card);color:var(--text);outline:none;text-align:center}
+.api-input:focus{border-color:var(--green)}
+.api-input::placeholder{color:var(--text-muted)}
+.api-btn{width:100%;margin-top:12px;padding:14px;background:var(--green);color:white;border:none;border-radius:14px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background 0.2s}
+.api-btn:hover{background:var(--green-dark)}
+.api-btn:disabled{background:var(--border);cursor:not-allowed}
+.api-note{font-size:11.5px;color:var(--text-muted);margin-top:16px;line-height:1.5}
+.api-error{font-size:13px;color:#C62828;margin-top:8px;display:none}
+
+.logo-dots{display:flex;gap:5px;align-items:center}
+.logo-dot{width:8px;height:8px;border-radius:50%}
+.logo-dot:nth-child(1){background:#2E7D4F}
+.logo-dot:nth-child(2){background:#43A66A}
+.logo-dot:nth-child(3){background:#A8D5BA}
+.desktop-dots{display:flex;gap:7px;align-items:center}
+.desktop-dots .logo-dot{width:12px;height:12px;filter:drop-shadow(0 2px 12px rgba(46,125,79,0.3))}
+.chat-container::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:center;padding:20px 24px 24px;font-size:12px;color:var(--text-muted);letter-spacing:0.06em;opacity:0.5}
+</style>
+</head>
+<body>
+
+<div class="desktop-brand-top"><div class="desktop-dots"><div class="logo-dot"></div><div class="logo-dot"></div><div class="logo-dot"></div></div><span class="desktop-logo-text">CREDIT BRIGHT</span></div>
+<div class="desktop-brand-bottom"><span class="desktop-brand-sub">AI Advisor · creditbright.com</span></div>
+
+<div class="phone-frame">
+  <div class="logo-bar"><div class="logo-dots"><div class="logo-dot"></div><div class="logo-dot"></div><div class="logo-dot"></div></div><span class="logo-text">CREDIT BRIGHT</span></div>
+
+  <div class="chat-header">
+    <div class="chat-header-top">
+      <div class="chat-header-icon">CB</div>
+      <div class="chat-header-info">
+        <div class="chat-header-name">Credit Bright AI Advisor</div>
+        <div class="chat-header-status">Online</div>
+      </div>
+    </div>
+    <div class="chat-header-tagline">Your personal credit advisor. Ask anything about credit, debt, borrowing, or building your financial future in Canada.</div>
+  </div>
+
+  <div class="chat-messages" id="messages">
+    <div class="msg system">Your conversations are private and not stored.</div>
+    <div class="msg assistant">
+      <p>Hi there. I'm your Credit Bright advisor.</p>
+      <p>I can help you understand credit scores, compare borrowing options, make sense of debt repayment strategies, or answer any question about how credit works in Canada.</p>
+      <p>What's on your mind?</p>
+    </div>
+    <div id="suggestions" class="suggestions">
+      <div class="suggestion" onclick="useSuggestion(this)">I have $8,000 in credit card debt. What's the fastest way to pay it off?</div>
+      <div class="suggestion" onclick="useSuggestion(this)">What's the difference between a credit score and a credit report?</div>
+      <div class="suggestion" onclick="useSuggestion(this)">I'm thinking of buying a home. How do lenders decide if I qualify?</div>
+      <div class="suggestion" onclick="useSuggestion(this)">How does carrying a balance actually cost me money?</div>
+    </div>
+    <div class="typing" id="typing">
+      <div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <div class="disclaimer">Credit Bright AI provides education, not financial advice. For personal decisions, consult a licensed professional.</div>
+    <div class="chat-input-row" style="margin-top:8px">
+      <textarea class="chat-input" id="input" placeholder="Ask me anything about credit..." rows="1" onkeydown="handleKey(event)" oninput="autoGrow(this)"></textarea>
+      <button class="chat-send" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+var conversationHistory = [];
+var isLoading = false;
+var sessionStart = new Date();
+var questionCount = 0;
+
+function useSuggestion(el) {
+  document.getElementById('input').value = el.textContent;
+  document.getElementById('suggestions').style.display = 'none';
+  sendMessage();
+}
+
+function autoGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function addMessage(role, text) {
+  var messages = document.getElementById('messages');
+  var typing = document.getElementById('typing');
+  var div = document.createElement('div');
+  div.className = 'msg ' + role;
+
+  if (role === 'assistant') {
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    var paragraphs = text.split('\n\n').filter(function(p) { return p.trim(); });
+    div.innerHTML = paragraphs.map(function(p) {
+      return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+  } else {
+    div.textContent = text;
+  }
+
+  messages.insertBefore(div, typing);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function showTyping(show) {
+  document.getElementById('typing').style.display = show ? 'block' : 'none';
+  if (show) {
+    var messages = document.getElementById('messages');
+    messages.scrollTop = messages.scrollHeight;
+  }
+}
+
+async function logSessionMetadata() {
+  try {
+    var { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+
+    var now = new Date();
+    var durationSeconds = Math.round((now - sessionStart) / 1000);
+
+    await sb.from('tool_sessions').insert({
+      user_id: session.user.id,
+      tool: 'ai_advisor',
+      questions_asked: questionCount,
+      started_at: sessionStart.toISOString(),
+      ended_at: now.toISOString(),
+      duration_seconds: durationSeconds
+    });
+  } catch (e) {
+    console.error('Metadata log error:', e);
+  }
+}
+
+// Log metadata when user leaves the page
+window.addEventListener('beforeunload', function() {
+  if (questionCount > 0) {
+    logSessionMetadata();
+  }
+});
+
+async function sendMessage() {
+  if (isLoading) return;
+  var input = document.getElementById('input');
+  var text = input.value.trim();
+  if (!text) return;
+
+  var sug = document.getElementById('suggestions');
+  if (sug) sug.style.display = 'none';
+
+  addMessage('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+
+  conversationHistory.push({ role: 'user', content: text });
+  questionCount++;
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping(true);
+
+  try {
+    var response = await fetch('/.netlify/functions/ai-advisor', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversationHistory })
+    });
+
+    var data = await response.json();
+    var reply = data.content.map(function(b) { return b.text || ''; }).join('');
+
+    conversationHistory.push({ role: 'assistant', content: reply });
+    showTyping(false);
+    addMessage('assistant', reply);
+
+  } catch (err) {
+    showTyping(false);
+    addMessage('assistant', "I'm sorry, I wasn't able to connect just now. Please try again in a moment.");
+    console.error('API error:', err);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
+</script>
+</body>
+</html>
