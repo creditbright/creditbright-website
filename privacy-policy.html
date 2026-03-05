@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy · Credit Bright</title>
+<meta name="description" content="How Credit Bright collects, uses, and protects your personal information.">
+
+<meta property="og:title" content="Privacy Policy · Credit Bright">
+<meta property="og:description" content="How Credit Bright collects, uses, and protects your personal information.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://creditbright.com/privacy-policy.html">
+<meta property="og:site_name" content="Credit Bright">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF8;
+  --bg-dark: #1B2A1F;
+  --bg-dark-2: #243028;
+  --card: #FFFFFF;
+  --border: #E8E5DE;
+  --text: #1A1D1A;
+  --text-secondary: #5A5F58;
+  --text-muted: #8A8E87;
+  --green: #2E7D4F;
+  --green-light: #E8F5EC;
+  --green-glow: #43A66A;
+  --muted-bg: #F4F3F0;
+  --max-w: 1140px;
+  --nav-h: 72px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-family: 'Instrument Serif', serif; font-weight: 400; }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(250,250,248,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+}
+.nav-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--text);
+}
+.nav-back {
+  font-size: 14px; font-weight: 500; color: var(--green);
+  display: flex; align-items: center; gap: 6px; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+.nav-back svg { width: 16px; height: 16px; stroke: var(--green); fill: none; stroke-width: 2; }
+
+/* ── Hero ── */
+.note-hero {
+  background: linear-gradient(165deg, var(--bg-dark) 0%, var(--bg-dark-2) 100%);
+  padding: calc(var(--nav-h) + 60px) 0 80px;
+  text-align: center;
+}
+.note-hero-label {
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); margin-bottom: 16px;
+}
+.note-hero h1 {
+  color: #fff; font-size: clamp(30px, 4.5vw, 48px); line-height: 1.15;
+  max-width: 700px; margin: 0 auto 16px;
+}
+.note-hero-sub {
+  color: rgba(255,255,255,0.5); font-size: 17px; max-width: 540px; margin: 0 auto;
+}
+.note-hero-date {
+  margin-top: 24px; font-size: 13px; color: rgba(255,255,255,0.3);
+}
+
+/* ── Article ── */
+.article-wrap {
+  max-width: 680px; margin: 0 auto; padding: 64px 28px 80px;
+}
+.article-wrap p {
+  color: var(--text-secondary); font-size: 17px; line-height: 1.8; margin-bottom: 20px;
+}
+.article-wrap p:last-child { margin-bottom: 0; }
+.article-wrap strong {
+  color: var(--text); font-weight: 600;
+}
+.article-wrap a { color: var(--green); font-weight: 500; }
+.article-wrap a:hover { text-decoration: underline; }
+.article-section {
+  font-family: 'Instrument Serif', serif; font-size: 24px; font-weight: 400;
+  color: var(--text); margin: 48px 0 20px; line-height: 1.3;
+}
+
+/* ── CTA ── */
+.note-cta {
+  background: var(--muted-bg); padding: 64px 28px; text-align: center;
+}
+.note-cta-inner {
+  max-width: 540px; margin: 0 auto;
+}
+.note-cta h2 {
+  font-size: 28px; margin-bottom: 12px; color: var(--text);
+}
+.note-cta p {
+  font-size: 16px; color: var(--text-secondary); margin-bottom: 28px;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px; background: var(--green); color: #fff;
+  font-size: 15px; font-weight: 600; border-radius: 50px;
+  border: none; cursor: pointer; transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-primary:hover { background: var(--green-glow); transform: translateY(-2px); }
+
+/* ── Footer ── */
+footer {
+  background: var(--bg-dark); padding: 64px 0 32px;
+}
+.footer-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px; margin-bottom: 48px;
+}
+.footer-brand-text {
+  font-size: 14px; color: rgba(255,255,255,0.35);
+  line-height: 1.7; margin-top: 16px; max-width: 280px;
+}
+.footer-col h4 {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.footer-col a {
+  display: block; font-size: 14px; color: rgba(255,255,255,0.35);
+  margin-bottom: 10px; transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--green-glow); }
+.footer-bottom {
+  padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 13px; color: rgba(255,255,255,0.25); }
+.footer-flag { font-size: 13px; color: rgba(255,255,255,0.25); }
+
+@media (max-width: 860px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 540px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#2E7D4F" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#2E7D4F" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#2E7D4F" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#2E7D4F" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg>
+      CREDIT BRIGHT
+    </a>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to Credit Bright
+    </a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="note-hero">
+  <div class="note-hero-label">Legal</div>
+  <h1>Privacy Policy</h1>
+  <p class="note-hero-sub">How Credit Bright collects, uses, and protects your personal information.</p>
+  <div class="note-hero-date">Last updated: March 2, 2026</div>
+</div>
+
+<!-- Article -->
+<article class="article-wrap">
+
+  <h2 class="article-section" style="margin-top:0;">About this policy</h2>
+
+  <p>Credit Bright Solutions Inc. ("Credit Bright," "we," "us," or "our") operates the website at creditbright.com and related applications. This Privacy Policy explains what personal information we collect, why we collect it, how we use and protect it, and your rights under Canadian privacy law.</p>
+
+  <p>This policy applies to all users of our website, courses, tools, and services. By creating an account or using Credit Bright, you acknowledge that you have read and understood this policy.</p>
+
+  <p>Credit Bright Solutions Inc. is a federal corporation incorporated under the Canada Business Corporations Act, registered in British Columbia.</p>
+
+  <h2 class="article-section">The law that governs this policy</h2>
+
+  <p>This policy is governed by the Personal Information Protection and Electronic Documents Act (PIPEDA). Where applicable, we also comply with Quebec's Act respecting the protection of personal information in the private sector (Law 25) for residents of Quebec, and with Canada's Anti-Spam Legislation (CASL) with respect to electronic communications.</p>
+
+  <h2 class="article-section">What we collect</h2>
+
+  <p><strong>Account information.</strong> When you create an account, we collect your full name, email address, and a password. This information is stored securely in our database, hosted by Supabase.</p>
+
+  <p><strong>Payment information.</strong> When you purchase a course or bundle, your payment is processed by Stripe. Credit Bright does not store your credit card number, bank account details, or other payment credentials. Stripe processes and stores this information in accordance with PCI DSS standards. We receive a transaction record from Stripe confirming your purchase, including the amount, date, and product purchased.</p>
+
+  <p><strong>Course and assessment data.</strong> As you work through Credit Bright courses and tools, we collect data about your activity and performance. This includes pre-assessment and post-assessment scores, responses to in-course activities and exercises, sections completed and completion timestamps, time spent on each section, Credit Calculator inputs and outputs, Credit Simulator actions and results, and certificate issuance records.</p>
+
+  <p><strong>AI Advisor usage data.</strong> When you use the Credit Bright AI Advisor, your questions are sent to a third-party AI service (Anthropic) for processing. We record metadata about your usage: the number of questions asked, session timestamps, and session duration. We do not store the content of your questions or the responses you receive. Your conversations with the AI Advisor are not retained by Credit Bright after the session ends.</p>
+
+  <p><strong>Contact form submissions.</strong> If you submit a message through our contact form, we collect your name, email address, the category you select, and the content of your message.</p>
+
+  <p><strong>Website analytics.</strong> We may use analytics services to understand how visitors use our website. This may include pages visited, time on site, referring source, browser type, and device information. Where third-party analytics tools are used, data may be processed in accordance with those providers' privacy policies. We do not use analytics data to identify individual visitors.</p>
+
+  <h2 class="article-section">Why we collect it</h2>
+
+  <p>We collect personal information for the following purposes: to create and manage your account, to process payments and grant access to purchased courses and tools, to track your learning progress and issue certificates, to generate performance reports for you and, where applicable, for your sponsoring organization, to respond to your inquiries and provide support, to improve our courses, tools, and services, and to comply with legal obligations.</p>
+
+  <h2 class="article-section">Organizational accounts</h2>
+
+  <p>If your access to Credit Bright is provided through your employer or another organization, we may share your course and assessment data with that organization. This includes enrollment status, completion rates, assessment scores, time spent, and certificate status. This data is used to measure the effectiveness of the program and to generate aggregate reports. We do not share the content of AI Advisor conversations with sponsoring organizations. We share only metadata: the number of queries and session duration.</p>
+
+  <h2 class="article-section">Who we share information with</h2>
+
+  <p><strong>Supabase.</strong> Our database provider. Stores account information, course progress, and assessment data.</p>
+
+  <p><strong>Stripe.</strong> Our payment processor. Processes payment transactions. Credit Bright does not have access to your full payment credentials.</p>
+
+  <p><strong>Anthropic.</strong> The provider of the AI technology that powers the Credit Bright AI Advisor. When you use the AI Advisor, your question is sent to Anthropic's API for processing. Credit Bright uses Anthropic's API in a configuration where user inputs are not used to train AI models.</p>
+
+  <p><strong>Netlify.</strong> Our website hosting provider. Serves the Credit Bright website. Netlify may collect standard server logs including IP addresses.</p>
+
+  <p>We do not sell your personal information. We do not share your personal information with advertisers. We do not use your information for purposes unrelated to Credit Bright's services.</p>
+
+  <h2 class="article-section">Data storage and security</h2>
+
+  <p>Your personal information is stored on secure servers operated by our service providers. We use industry-standard security measures including encrypted connections (HTTPS/TLS), secure authentication, and access controls. While no system is completely secure, we take reasonable steps to protect your information from unauthorized access, disclosure, alteration, or destruction.</p>
+
+  <h2 class="article-section">Data retention</h2>
+
+  <p>We retain your account information and course data for as long as your account is active. If you request deletion of your account, we will delete your personal information within 30 days, except where we are required to retain it by law. Payment transaction records are retained as required for tax and accounting purposes.</p>
+
+  <h2 class="article-section">Your rights</h2>
+
+  <p>Under PIPEDA, and where applicable under Quebec's Law 25, you have the right to know what personal information we hold about you, request access to your personal information, request correction of inaccurate information, request deletion of your personal information, and withdraw your consent to the collection or use of your information.</p>
+
+  <p>To exercise any of these rights, contact us at <a href="mailto:privacy@creditbright.com">privacy@creditbright.com</a>. We will respond within 30 days.</p>
+
+  <h2 class="article-section">Rights for Quebec residents</h2>
+
+  <p>If you reside in Quebec, you have additional rights under Law 25, including the right to data portability and the right to be informed of any automated decision-making that may affect you. Credit Bright does not use automated decision-making that produces legal or significant effects on individuals. To exercise your rights, contact <a href="mailto:privacy@creditbright.com">privacy@creditbright.com</a>.</p>
+
+  <h2 class="article-section">Electronic communications and CASL</h2>
+
+  <p>Credit Bright complies with Canada's Anti-Spam Legislation (CASL). We will only send you commercial electronic messages if you have provided your express consent. You may provide consent during account creation or at other points where we clearly request it.</p>
+
+  <p>Transactional messages related to your account, such as purchase confirmations, password resets, and course access notifications, do not require consent under CASL and will be sent as necessary to operate your account.</p>
+
+  <p>Every commercial message from Credit Bright will identify Credit Bright Solutions Inc. as the sender, include our contact information, and contain a working unsubscribe mechanism. If you unsubscribe, we will process your request within 10 business days as required by CASL.</p>
+
+  <h2 class="article-section">Cookies and similar technologies</h2>
+
+  <p>Credit Bright uses cookies only as necessary to operate our services. This includes session cookies for authentication and functional cookies required for the operation of our courses and tools. We do not use advertising cookies or cross-site tracking cookies. If we introduce analytics cookies in the future, we will update this policy and obtain consent where required.</p>
+
+  <h2 class="article-section">Children and minors</h2>
+
+  <p>Credit Bright is designed for users aged 16 and older. We do not knowingly collect personal information from children under 16. If you believe a child under 16 has created an account, please contact us at <a href="mailto:privacy@creditbright.com">privacy@creditbright.com</a> and we will promptly delete the account and associated information.</p>
+
+  <h2 class="article-section">Changes to this policy</h2>
+
+  <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top of this page. If we make material changes, we will notify you by email or by a prominent notice on our website before the changes take effect.</p>
+
+  <h2 class="article-section">Contact us</h2>
+
+  <p>If you have questions about this Privacy Policy, want to exercise your privacy rights, or wish to file a complaint, contact our Privacy Officer:</p>
+
+  <p>Credit Bright Solutions Inc.<br>
+  Email: <a href="mailto:privacy@creditbright.com">privacy@creditbright.com</a></p>
+
+  <p>If you are not satisfied with our response, you have the right to file a complaint with the Office of the Privacy Commissioner of Canada at <a href="https://www.priv.gc.ca" target="_blank" rel="noopener">priv.gc.ca</a>. Quebec residents may also file a complaint with the Commission d'acces a l'information du Quebec.</p>
+
+</article>
+
+<!-- CTA -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="nav-logo" style="color:rgba(255,255,255,0.7);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg>
+          CREDIT BRIGHT
+        </a>
+        <p class="footer-brand-text">Canada's credit education standard. Knowledge that changes how you think. A certificate that proves it.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="index.html">Home</a>
+        <a href="credit-note-score-vs-savings.html">Score vs Savings</a>
+        <a href="credit-note-five-things-lenders-look-at.html">5 Cs of Credit</a>
+        <a href="credit-note-minimum-payment-trap.html">Minimum Payment Trap</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html">About</a>
+        <a href="index.html">For Businesses</a>
+        <a href="index.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2026 Credit Bright. All rights reserved.</div>
+      <div class="footer-flag">🍁 Built in Canada, for Canada</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
