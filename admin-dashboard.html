@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright · Organization Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAF8;--bg-dark:#1B2A1F;--card:#FFFFFF;--border:#E8E5DE;--text:#1A1D1A;--text-secondary:#5A5F58;--text-muted:#8A8E87;--green:#2E7D4F;--green-light:#E8F5EC;--green-glow:#43A66A;--green-dark:#1B5E3A;--gold-light:#FEF8E7;--muted-bg:#F4F3F0;--max-w:1060px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-text{font-size:12px;font-weight:700;letter-spacing:0.18em;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:20px}
+.org-name{font-size:14px;color:var(--text-secondary)}
+.org-name strong{color:var(--text);font-weight:600}
+.sign-out-btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:8px;padding:7px 16px;cursor:pointer;transition:all 0.2s}
+.sign-out-btn:hover{color:var(--text);border-color:var(--text-muted)}
+.main{max-width:var(--max-w);margin:0 auto;padding:48px 28px 80px}
+.page-header{margin-bottom:40px}
+.page-header h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:32px;color:var(--text);margin-bottom:6px}
+.page-header p{font-size:15px;color:var(--text-muted);margin:0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px}
+.stat-label{font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.stat-value{font-family:'Instrument Serif',serif;font-size:36px;color:var(--text);line-height:1}
+.stat-sub{font-size:13px;color:var(--text-muted);margin-top:6px}
+.score-improvement{background:var(--green-light);border:1px solid #c8e6d0;border-radius:14px;padding:28px 32px;margin-bottom:40px;display:flex;align-items:center;justify-content:space-between}
+.score-improvement-text h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:22px;color:var(--green-dark);margin-bottom:4px}
+.score-improvement-text p{font-size:14px;color:var(--green);margin:0}
+.score-arrow{display:flex;align-items:center;gap:16px}
+.score-box{text-align:center;padding:12px 20px;background:white;border-radius:10px}
+.score-box-label{font-size:11px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase}
+.score-box-value{font-size:28px;color:var(--text);margin-top:2px;font-family:'Instrument Serif',serif}
+.score-arrow-icon{font-size:24px;color:var(--green)}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-label{font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--green)}
+.section-line{flex:1;height:1px;background:var(--border)}
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:40px}
+.table-card table{width:100%;border-collapse:collapse}
+.table-card th{text-align:left;padding:14px 20px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--muted-bg);border-bottom:1px solid var(--border)}
+.table-card td{padding:14px 20px;font-size:14px;color:var(--text);border-bottom:1px solid var(--border)}
+.table-card tr:last-child td{border-bottom:none}
+.status-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.status-badge.completed{background:var(--green-light);color:var(--green)}
+.status-badge.in-progress{background:var(--gold-light);color:#8B6914}
+.status-badge.not-started{background:var(--muted-bg);color:var(--text-muted)}
+.export-btn{display:inline-flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--green);background:var(--green-light);border:none;border-radius:8px;padding:10px 20px;cursor:pointer;transition:all 0.2s}
+.export-btn:hover{background:#d4edda}
+.loading-state{display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:16px}
+.loading-dots{display:flex;gap:6px}
+.loading-dots span{width:10px;height:10px;border-radius:50%;background:var(--green);opacity:0.3;animation:loadPulse 1.2s ease-in-out infinite}
+.loading-dots span:nth-child(2){animation-delay:0.15s}
+.loading-dots span:nth-child(3){animation-delay:0.3s}
+@keyframes loadPulse{0%,100%{opacity:0.3;transform:scale(0.85)}50%{opacity:1;transform:scale(1.1)}}
+.portal-footer{text-align:center;padding:20px 24px 32px;font-size:12px;color:var(--text-muted);letter-spacing:0.06em;opacity:0.5}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.score-improvement{flex-direction:column;gap:20px;text-align:center}.main{padding:32px 16px 64px}.topbar{padding:0 16px}.org-name{display:none}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="loading-state" id="loadingState"><div class="loading-dots"><span></span><span></span><span></span></div></div>
+<div id="dashboard" style="display:none;">
+<div class="topbar">
+  <a href="index.html" class="topbar-logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#2E7D4F" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#2E7D4F" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#2E7D4F" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#2E7D4F" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="logo-text">CREDIT BRIGHT</span>
+  </a>
+  <div class="topbar-right">
+    <span class="org-name"><strong id="orgName">Organization</strong></span>
+    <button class="sign-out-btn" onclick="handleSignOut()">Sign Out</button>
+  </div>
+</div>
+<div class="main">
+  <div class="page-header">
+    <h1 id="pageTitle">Organization Dashboard</h1>
+    <p>Employee credit education performance at a glance.</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Enrolled</div><div class="stat-value" id="statEnrolled">0</div><div class="stat-sub">employees</div></div>
+    <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="statCompleted">0</div><div class="stat-sub" id="statCompletionRate">0% completion rate</div></div>
+    <div class="stat-card"><div class="stat-label">Certificates</div><div class="stat-value" id="statCertificates">0</div><div class="stat-sub">issued</div></div>
+    <div class="stat-card"><div class="stat-label">Avg. Time</div><div class="stat-value" id="statAvgTime">--</div><div class="stat-sub">to completion</div></div>
+  </div>
+  <div class="score-improvement">
+    <div class="score-improvement-text"><h3>Assessment Score Improvement</h3><p>Average across all enrolled employees.</p></div>
+    <div class="score-arrow">
+      <div class="score-box"><div class="score-box-label">Pre</div><div class="score-box-value" id="avgPre">--%</div></div>
+      <div class="score-arrow-icon">&#8594;</div>
+      <div class="score-box"><div class="score-box-label">Post</div><div class="score-box-value" id="avgPost" style="color:var(--green);">--%</div></div>
+    </div>
+  </div>
+  <div class="section-header"><span class="section-label">Employee Detail</span><div class="section-line"></div><button class="export-btn" onclick="exportCSV()">Export CSV</button></div>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>Employee</th><th>Course</th><th>Status</th><th>Pre-Score</th><th>Post-Score</th><th>Time Spent</th><th>Certificate</th></tr></thead>
+      <tbody id="employeeTable"><tr><td colspan="7" style="text-align:center;padding:60px 20px;color:var(--text-muted);"><p style="font-size:15px;margin:0;">No enrollment data yet. Employees will appear here once they begin a course.</p></td></tr></tbody>
+    </table>
+  </div>
+</div>
+<div class="portal-footer">Credit Bright · Organization Dashboard</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL='https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_KEY='sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+(async()=>{
+  var{data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='website-login.html';return}
+  var{data:profile}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+  document.getElementById('loadingState').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  if(!profile||!profile.organization_id){document.getElementById('pageTitle').textContent='No Organization Linked';document.getElementById('orgName').textContent='No org';return}
+  var{data:org}=await sb.from('organizations').select('*').eq('id',profile.organization_id).single();
+  if(!org)return;
+  document.getElementById('orgName').textContent=org.name;
+  document.getElementById('pageTitle').textContent=org.name+' Dashboard';
+  var{data:orgUsers}=await sb.from('profiles').select('id,full_name,email').eq('organization_id',org.id);
+  if(!orgUsers||orgUsers.length===0)return;
+  var userIds=orgUsers.map(function(u){return u.id});
+  var{data:enrollments}=await sb.from('enrollments').select('*').in('user_id',userIds);
+  var{data:certificates}=await sb.from('certificates').select('*').in('user_id',userIds);
+  var enrolled=enrollments?enrollments.length:0;
+  var completed=enrollments?enrollments.filter(function(e){return e.completed_at}).length:0;
+  var certCount=certificates?certificates.length:0;
+  var completionRate=enrolled>0?Math.round((completed/enrolled)*100):0;
+  document.getElementById('statEnrolled').textContent=orgUsers.length;
+  document.getElementById('statCompleted').textContent=completed;
+  document.getElementById('statCompletionRate').textContent=completionRate+'% completion rate';
+  document.getElementById('statCertificates').textContent=certCount;
+  if(certificates&&certificates.length>0){
+    var preScores=certificates.filter(function(c){return c.pre_assessment_score}).map(function(c){return Number(c.pre_assessment_score)});
+    var postScores=certificates.filter(function(c){return c.post_assessment_score}).map(function(c){return Number(c.post_assessment_score)});
+    if(preScores.length>0)document.getElementById('avgPre').textContent=Math.round(preScores.reduce(function(a,b){return a+b},0)/preScores.length)+'%';
+    if(postScores.length>0)document.getElementById('avgPost').textContent=Math.round(postScores.reduce(function(a,b){return a+b},0)/postScores.length)+'%';
+  }
+  if(enrollments&&enrollments.length>0){
+    var tbody=document.getElementById('employeeTable');
+    tbody.innerHTML='';
+    var productMap={foundation:'Foundation Course',getting_out_of_debt:'Getting Out of Debt',negotiating_better_deals:'Negotiating Better Deals',bundle:'Complete Bundle'};
+    for(var i=0;i<enrollments.length;i++){
+      var e=enrollments[i];
+      var user=orgUsers.find(function(u){return u.id===e.user_id});
+      var cert=certificates?certificates.find(function(c){return c.user_id===e.user_id&&c.certificate_type===e.product}):null;
+      var status=e.completed_at?'completed':'in-progress';
+      var statusLabel=e.completed_at?'Completed':'In Progress';
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td style="font-weight:500;">'+(user?user.full_name||user.email:'Unknown')+'</td><td>'+(productMap[e.product]||e.product)+'</td><td><span class="status-badge '+status+'">'+statusLabel+'</span></td><td>'+(cert?cert.pre_assessment_score+'%':'--')+'</td><td>'+(cert?cert.post_assessment_score+'%':'--')+'</td><td>--</td><td>'+(cert?'Issued':'--')+'</td>';
+      tbody.appendChild(tr);
+    }
+  }
+})();
+function exportCSV(){
+  var table=document.querySelector('.table-card table');
+  var rows=table.querySelectorAll('tr');
+  var csv='';
+  rows.forEach(function(row){
+    var cells=row.querySelectorAll('th,td');
+    var rowData=[];
+    cells.forEach(function(cell){rowData.push('"'+cell.textContent.trim().replace(/"/g,'""')+'"')});
+    csv+=rowData.join(',')+'\n';
+  });
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='credit-bright-report.csv';a.click();
+}
+async function handleSignOut(){await sb.auth.signOut();window.location.href='website-login.html'}
+</script>
+</body>
+</html>
