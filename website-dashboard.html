@@ -281,6 +281,114 @@ body {
   transform: translateX(3px);
 }
 
+/* Purchase buttons */
+.card-purchase {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: auto;
+}
+
+.card-purchase.buy {
+  background: var(--green);
+  color: #fff;
+}
+
+.card-purchase.buy:hover {
+  background: var(--green-dark);
+  transform: translateY(-1px);
+}
+
+.card-purchase.access {
+  background: var(--green-light);
+  color: var(--green);
+}
+
+.card-purchase.access:hover {
+  background: #d4edda;
+}
+
+.card-price {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+
+/* Bundle banner */
+.bundle-banner {
+  background: var(--card);
+  border: 2px solid var(--green);
+  border-radius: 16px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.bundle-info h3 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.bundle-info p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.bundle-pricing {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bundle-old-price {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.bundle-new-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.bundle-btn {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: var(--green);
+  color: #fff;
+  transition: all 0.2s;
+}
+
+.bundle-btn:hover {
+  background: var(--green-dark);
+}
+
 /* ── Master Certificate Banner ── */
 .master-banner {
   background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-2));
@@ -390,6 +498,8 @@ body {
   .topbar { padding: 0 16px; }
   .main { padding: 32px 16px 64px; }
   .user-name { display: none; }
+  .bundle-banner { flex-direction: column; text-align: center; }
+  .bundle-pricing { text-align: center; }
 }
 
 @media (min-width: 769px) and (max-width: 960px) {
@@ -454,38 +564,45 @@ body {
     <div class="card-grid" id="coursesGrid">
 
       <!-- Foundation Course -->
-      <div class="product-card">
+      <div class="product-card" id="card-foundation" data-product="foundation" data-price="price_1T7dwLFTH1AgGAu08jCWdUEc">
         <div class="card-icon course">📋</div>
         <div class="card-title">Foundation Course</div>
         <div class="card-desc">The complete guide to understanding credit in Canada. Seven sections, pre and post assessment, and your first certificate.</div>
-        <div class="card-status">
-          <div class="status-dot not-started"></div>
-          <span class="status-text">Not started</span>
-        </div>
+        <div class="card-price">$89 CAD</div>
+        <button class="card-purchase buy" onclick="purchaseCourse('foundation', 'price_1T7dwLFTH1AgGAu08jCWdUEc')">Purchase</button>
       </div>
 
       <!-- Negotiating Better Deals -->
-      <div class="product-card">
+      <div class="product-card" id="card-negotiating_better_deals" data-product="negotiating_better_deals" data-price="price_1T7dyWFTH1AgGAu0xdKaQrcT">
         <div class="card-icon course">🤝</div>
         <div class="card-title">Negotiating Better Deals</div>
         <div class="card-desc">Learn to negotiate lower rates, waive fees, and handle rejection. Real scripts for real conversations with your lender.</div>
-        <div class="card-status">
-          <div class="status-dot not-started"></div>
-          <span class="status-text">Not started</span>
-        </div>
+        <div class="card-price">$49 CAD</div>
+        <button class="card-purchase buy" onclick="purchaseCourse('negotiating_better_deals', 'price_1T7dyWFTH1AgGAu0xdKaQrcT')">Purchase</button>
       </div>
 
       <!-- Getting Out of Debt -->
-      <div class="product-card">
+      <div class="product-card" id="card-getting_out_of_debt" data-product="getting_out_of_debt" data-price="price_1T7dxQFTH1AgGAu0UWFleMyJ">
         <div class="card-icon course">📊</div>
         <div class="card-title">Getting Out of Debt</div>
         <div class="card-desc">Avalanche, snowball, and everything in between. A step-by-step plan to pay down what you owe and stay out of debt.</div>
-        <div class="card-status">
-          <div class="status-dot not-started"></div>
-          <span class="status-text">Not started</span>
-        </div>
+        <div class="card-price">$49 CAD</div>
+        <button class="card-purchase buy" onclick="purchaseCourse('getting_out_of_debt', 'price_1T7dxQFTH1AgGAu0UWFleMyJ')">Purchase</button>
       </div>
 
+    </div>
+
+    <!-- Bundle Banner -->
+    <div class="bundle-banner" id="bundleBanner">
+      <div class="bundle-info">
+        <h3>Complete Credit Bright Bundle</h3>
+        <p>All three courses. All three certificates. Plus the Master Certificate.</p>
+      </div>
+      <div class="bundle-pricing">
+        <div class="bundle-old-price">$187 CAD</div>
+        <div class="bundle-new-price">$149 CAD</div>
+        <button class="bundle-btn" onclick="purchaseCourse('bundle', 'price_1T7dzXFTH1AgGAu0lR1nho5c')">Get the Bundle</button>
+      </div>
     </div>
 
     <!-- Tools Section -->
@@ -534,6 +651,8 @@ const SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+var currentUser = null;
+
 // Check auth on load
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
@@ -543,17 +662,116 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     return;
   }
 
+  currentUser = session.user;
+
   // Show dashboard
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
 
   // Set user name
-  const user = session.user;
-  const name = user.user_metadata?.full_name || user.email.split('@')[0];
+  const name = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
   const firstName = name.split(' ')[0];
   document.getElementById('userName').textContent = firstName;
   document.getElementById('welcomeTitle').textContent = 'Welcome, ' + firstName;
+
+  // Check for purchase success
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('purchase') === 'success') {
+    // Remove query param from URL
+    window.history.replaceState({}, '', 'website-dashboard.html');
+  }
+
+  // Check enrollments
+  await checkEnrollments();
 })();
+
+async function checkEnrollments() {
+  const { data: enrollments } = await sb.from('enrollments').select('*').eq('user_id', currentUser.id);
+
+  if (!enrollments) return;
+
+  var enrolledProducts = enrollments.map(function(e) { return e.product; });
+
+  // If bundle purchased, all courses are unlocked
+  var hasBundle = enrolledProducts.indexOf('bundle') >= 0;
+
+  var courses = ['foundation', 'getting_out_of_debt', 'negotiating_better_deals'];
+
+  for (var i = 0; i < courses.length; i++) {
+    var product = courses[i];
+    var card = document.getElementById('card-' + product);
+    if (!card) continue;
+
+    if (hasBundle || enrolledProducts.indexOf(product) >= 0) {
+      // User has access
+      var priceEl = card.querySelector('.card-price');
+      if (priceEl) priceEl.style.display = 'none';
+
+      var btn = card.querySelector('.card-purchase');
+      btn.className = 'card-purchase access';
+      btn.textContent = 'Start Course';
+      btn.onclick = function(p) { return function() { launchCourse(p); }; }(product);
+
+      // Update master progress pip
+      var enrollment = enrollments.find(function(e) { return e.product === product || e.product === 'bundle'; });
+      if (enrollment && enrollment.completed_at) {
+        var pips = document.querySelectorAll('.progress-pip');
+        var pipIndex = courses.indexOf(product);
+        if (pips[pipIndex]) pips[pipIndex].classList.add('earned');
+      }
+    }
+  }
+
+  // Hide bundle banner if bundle purchased or all individual courses purchased
+  if (hasBundle || (enrolledProducts.indexOf('foundation') >= 0 && enrolledProducts.indexOf('getting_out_of_debt') >= 0 && enrolledProducts.indexOf('negotiating_better_deals') >= 0)) {
+    document.getElementById('bundleBanner').style.display = 'none';
+  }
+}
+
+async function purchaseCourse(product, priceId) {
+  var btn = event.target;
+  btn.textContent = 'Redirecting...';
+  btn.disabled = true;
+
+  try {
+    var response = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        priceId: priceId,
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+        successUrl: 'https://creditbright.com/website-dashboard.html?purchase=success',
+        cancelUrl: 'https://creditbright.com/website-dashboard.html?purchase=cancelled'
+      })
+    });
+
+    var data = await response.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      btn.textContent = 'Purchase';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again.');
+    }
+  } catch (err) {
+    btn.textContent = 'Purchase';
+    btn.disabled = false;
+    alert('Could not connect to payment system. Please try again.');
+  }
+}
+
+function launchCourse(product) {
+  // These will point to actual course files once wired in
+  var courseMap = {
+    'foundation': 'base-model.html',
+    'getting_out_of_debt': 'getting-out-of-debt.html',
+    'negotiating_better_deals': 'negotiating-better-deals.html'
+  };
+  var url = courseMap[product];
+  if (url) window.location.href = url;
+}
 
 async function handleSignOut() {
   await sb.auth.signOut();
