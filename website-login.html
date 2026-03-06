@@ -598,8 +598,32 @@ async function handleSignup(e) {
   if (error) {
     showMessage(error.message, 'error');
   } else if (data.session) {
+    // Send welcome email
+    try {
+      fetch('/.netlify/functions/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'welcome',
+          to: email,
+          firstName: name.split(' ')[0]
+        })
+      });
+    } catch (e) { /* email failure should not block signup */ }
     window.location.href = 'website-dashboard.html';
   } else {
+    // Send welcome email even if confirmation required
+    try {
+      fetch('/.netlify/functions/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'welcome',
+          to: email,
+          firstName: name.split(' ')[0]
+        })
+      });
+    } catch (e) { /* email failure should not block signup */ }
     showMessage('Account created! Check your email to confirm, then sign in.', 'success');
     setTimeout(() => switchTab('login'), 3000);
   }
