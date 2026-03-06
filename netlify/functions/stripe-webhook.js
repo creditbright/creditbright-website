@@ -6,7 +6,7 @@ const supabase = createClient('https://pohsjjmcasejogfjqoth.supabase.co', proces
 
 const PRICE_MAP = {
   'price_1T7dwLFTH1AgGAu08jCWdUEc': { key: 'foundation', name: 'Credit Bright Foundation Course', amount: '89.00' },
-  'price_1T7dxQFTH1AgGAu0UWFleMyJ': { key: 'getting_out_of_debt', name: 'Getting Out of Debt', amount: '49.00' },
+  'price_1T7dxQFTH1AgGAu0UWFIeMyJ': { key: 'getting_out_of_debt', name: 'Getting Out of Debt', amount: '49.00' },
   'price_1T7dyWFTH1AgGAu0xdKaQrcT': { key: 'negotiating_better_deals', name: 'Negotiating Better Deals', amount: '49.00' },
   'price_1T7dzXFTH1AgGAu0lR1nho5c': { key: 'bundle', name: 'Complete Credit Bright Bundle', amount: '149.00' }
 };
