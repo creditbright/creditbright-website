@@ -1,8 +1,8 @@
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const emailWrapper = function(content) {
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:0;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#FAFAF8;padding:40px 20px;"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;"><tr><td style="padding:0 0 32px;text-align:center;"><span style="font-size:14px;font-weight:700;letter-spacing:0.14em;color:#1A1D1A;">CREDIT BRIGHT</span></td></tr><tr><td style="background:#FFFFFF;border:1px solid #E8E5DE;border-radius:16px;padding:40px 36px;">' + content + '</td></tr><tr><td style="padding:32px 0 0;text-align:center;"><p style="font-size:13px;color:#8A8E87;margin:0 0 8px;">Credit Bright. Canada\'s credit education standard.</p><p style="font-size:12px;color:#8A8E87;margin:0 0 4px;">You are receiving this because you have an account at creditbright.com.</p><p style="font-size:12px;margin:0;"><a href="https://creditbright.com/unsubscribe.html" style="color:#2E7D4F;">Manage email preferences</a></p></td></tr></table></td></tr></table></body></html>';
+var emailWrapper = function(content) {
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:0;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#FAFAF8;padding:40px 20px;"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;"><tr><td style="padding:0 0 32px;text-align:center;"><span style="font-size:14px;font-weight:700;letter-spacing:0.14em;color:#1A1D1A;">CREDIT BRIGHT</span></td></tr><tr><td style="background:#FFFFFF;border:1px solid #E8E5DE;border-radius:16px;padding:40px 36px;">' + content + '</td></tr><tr><td style="padding:32px 0 0;text-align:center;"><p style="font-size:13px;color:#8A8E87;margin:0 0 8px;">Credit Bright. Canada\'s credit education standard.</p></td></tr></table></td></tr></table></body></html>';
 };
 
 var TEMPLATES = {
@@ -31,31 +31,51 @@ exports.handler = async function(event) {
     return { statusCode: 405, body: 'Method not allowed' };
   }
 
+  var headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+  };
+
   try {
     var body = JSON.parse(event.body);
+    var type = body.type;
+    var to = body.to;
     var template;
 
-    if (body.type === 'welcome') {
+    if (type === 'welcome') {
       template = TEMPLATES.welcome(body.firstName);
-    } else if (body.type === 'purchase') {
+    } else if (type === 'purchase') {
       template = TEMPLATES.purchase(body.firstName, body.productName, body.amount, body.date);
-    } else if (body.type === 'certificate') {
+    } else if (type === 'certificate') {
       template = TEMPLATES.certificate(body.firstName, body.certName, body.subjectArea, body.preScore, body.postScore);
+    } else if (type === 'contact') {
+      var contactHtml = emailWrapper('<h1 style="font-family:Georgia,Times New Roman,serif;font-size:26px;font-weight:400;color:#1A1D1A;margin:0 0 16px;">New contact form message</h1><table width="100%" style="background:#FAFAF8;border-radius:10px;margin:0 0 24px;"><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Name</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + body.name + '</td></tr><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Email</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + body.email + '</td></tr><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Type</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + (body.contactType || 'Not specified') + '</td></tr></table><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0 0 8px;font-weight:600;">Message:</p><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0;">' + body.message.replace(/\n/g, '<br>') + '</p>');
+
+      var result = await resend.emails.send({
+        from: 'Credit Bright <hello@creditbright.com>',
+        to: ['ykarov@creditbright.com', 'matt@creditbright.com'],
+        replyTo: body.email,
+        subject: 'Contact form: ' + body.name + ' (' + (body.contactType || 'General') + ')',
+        html: contactHtml
+      });
+
+      return { statusCode: 200, headers: headers, body: JSON.stringify({ success: true, id: result.data?.id }) };
     } else {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Unknown email type' }) };
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Unknown email type' }) };
     }
 
     var result = await resend.emails.send({
       from: 'Credit Bright <hello@creditbright.com>',
-      to: body.to,
+      to: to,
       subject: template.subject,
       html: template.html
     });
 
-    return { statusCode: 200, body: JSON.stringify({ success: true, id: result.data?.id }) };
+    return { statusCode: 200, headers: headers, body: JSON.stringify({ success: true, id: result.data?.id }) };
 
   } catch (err) {
     console.error('Email error:', err);
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    return { statusCode: 500, headers: headers, body: JSON.stringify({ error: err.message }) };
   }
 };
