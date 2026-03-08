@@ -1961,7 +1961,12 @@ footer {
           <textarea id="contact-message" placeholder="How can we help?"></textarea>
         </div>
 
-        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="alert('Thank you for your message. We will be in touch soon.')">Send Message</button>
+        <button class="btn btn-primary" id="contactSendBtn" style="width:100%;justify-content:center;" onclick="sendContactForm()">Send Message</button>
+        <div id="contactSuccess" style="display:none;text-align:center;padding:40px 20px;">
+          <div style="font-size:40px;margin-bottom:16px;">✓</div>
+          <h3 style="font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:8px;">Message sent</h3>
+          <p style="color:#5A5F58;font-size:15px;">Thank you for reaching out. Someone from our team will get back to you soon.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1997,8 +2002,8 @@ footer {
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="terms-of-service.html">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -2087,6 +2092,49 @@ function triggerAnimations() {
 window.addEventListener('load', () => {
   setTimeout(triggerAnimations, 200);
 });
+
+// Contact form submission
+async function sendContactForm() {
+  var name = document.getElementById('contact-name').value.trim();
+  var email = document.getElementById('contact-email').value.trim();
+  var type = document.getElementById('contact-type').value;
+  var message = document.getElementById('contact-message').value.trim();
+
+  if (!name || !email || !message) {
+    alert('Please fill in your name, email, and message.');
+    return;
+  }
+
+  var btn = document.getElementById('contactSendBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  try {
+    await fetch('/.netlify/functions/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'contact',
+        name: name,
+        email: email,
+        contactType: type,
+        message: message
+      })
+    });
+
+    // Hide form, show success
+    document.querySelector('.contact-form .form-row').style.display = 'none';
+    var groups = document.querySelectorAll('.contact-form .form-group');
+    for (var i = 0; i < groups.length; i++) groups[i].style.display = 'none';
+    btn.style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+
+  } catch (err) {
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+    alert('Something went wrong. Please try again or email us at privacy@creditbright.com.');
+  }
+}
 
 </script>
 
