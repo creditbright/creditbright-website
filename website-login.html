@@ -486,11 +486,16 @@ const SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Check if already logged in
+// Check if this is a password recovery link
+var isRecovery = window.location.hash.indexOf('type=recovery') >= 0 || window.location.href.indexOf('type=recovery') >= 0;
+
+// Check if already logged in (but not if recovering password)
 (async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    window.location.href = 'website-dashboard.html';
+  if (!isRecovery) {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      window.location.href = 'website-dashboard.html';
+    }
   }
 })();
 
