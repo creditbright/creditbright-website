@@ -451,6 +451,25 @@ body {
         </div>
         <button type="submit" class="auth-btn" id="signupBtn" disabled>Create Account</button>
       </form>
+
+      <!-- Reset Password Form -->
+      <form id="resetForm" style="display:none;" onsubmit="handleNewPassword(event)">
+        <div class="form-group">
+          <label class="form-label" for="newPassword">New Password</label>
+          <div class="input-wrapper">
+            <input class="form-input" type="password" id="newPassword" placeholder="At least 8 characters" required minlength="8" autocomplete="new-password">
+            <button type="button" class="password-toggle" onclick="togglePassword('newPassword', this)">Show</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <div class="input-wrapper">
+            <input class="form-input" type="password" id="confirmPassword" placeholder="Confirm your new password" required minlength="8" autocomplete="new-password">
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)">Show</button>
+          </div>
+        </div>
+        <button type="submit" class="auth-btn" id="resetBtn">Set New Password</button>
+      </form>
     </div>
 
     <div class="auth-footer">
@@ -636,12 +655,56 @@ async function handleForgotPassword() {
     return;
   }
 
-  const { error } = await sb.auth.resetPasswordForEmail(email);
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://creditbright.com/website-login.html'
+  });
 
   if (error) {
     showMessage(error.message, 'error');
   } else {
     showMessage('Password reset link sent. Check your email.', 'success');
+  }
+}
+
+// Detect password recovery redirect
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    // Show reset password form
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('resetForm').style.display = 'block';
+    document.querySelector('.auth-tabs').style.display = 'none';
+    document.getElementById('authTitle').textContent = 'Set new password';
+    document.getElementById('authSubtitle').textContent = 'Enter your new password below.';
+  }
+});
+
+async function handleNewPassword(e) {
+  e.preventDefault();
+  var newPass = document.getElementById('newPassword').value;
+  var confirmPass = document.getElementById('confirmPassword').value;
+
+  if (newPass !== confirmPass) {
+    showMessage('Passwords do not match.', 'error');
+    return;
+  }
+
+  if (newPass.length < 8) {
+    showMessage('Password must be at least 8 characters.', 'error');
+    return;
+  }
+
+  setLoading('resetBtn', true);
+
+  const { error } = await sb.auth.updateUser({ password: newPass });
+
+  setLoading('resetBtn', false);
+
+  if (error) {
+    showMessage(error.message, 'error');
+  } else {
+    showMessage('Password updated! Redirecting to your dashboard...', 'success');
+    setTimeout(function() { window.location.href = 'website-dashboard.html'; }, 2000);
   }
 }
 </script>
