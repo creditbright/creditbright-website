@@ -41,6 +41,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 /* Logo bar */
 .logo-bar{padding:14px 24px 0;display:flex;align-items:center;gap:8px;background:var(--bg);flex-shrink:0}
 .logo-text{font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;color:var(--text);letter-spacing:0.06em}
+.back-btn{display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text-muted);text-decoration:none;margin-left:auto;padding:6px 12px;border-radius:8px;transition:all 0.2s;border:1px solid var(--border)}
+.back-btn:hover{color:var(--text);border-color:var(--text-muted)}
 
 /* Header */
 .chat-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
@@ -127,7 +129,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 <div class="desktop-brand-bottom"><span class="desktop-brand-sub">AI Advisor · creditbright.com</span></div>
 
 <div class="phone-frame">
-  <div class="logo-bar"><div class="logo-dots"><div class="logo-dot"></div><div class="logo-dot"></div><div class="logo-dot"></div></div><span class="logo-text">CREDIT BRIGHT</span></div>
+  <div class="logo-bar"><div class="logo-dots"><div class="logo-dot"></div><div class="logo-dot"></div><div class="logo-dot"></div></div><span class="logo-text">CREDIT BRIGHT</span><a href="website-dashboard.html" class="back-btn">← Dashboard</a></div>
 
   <div class="chat-header">
     <div class="chat-header-top">
