@@ -23,27 +23,27 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:v
 .student-list{display:flex;flex-direction:column;gap:8px;margin-bottom:40px}
 .student-card{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;cursor:pointer;transition:all 0.2s}
 .student-card:hover{border-color:var(--green);box-shadow:0 2px 12px rgba(46,125,79,0.08)}
-.student-name{font-weight:600;font-size:15px}
-.student-email{font-size:13px;color:var(--text-muted);margin-top:2px}
-.student-meta{text-align:right}
-.student-courses{font-size:13px;color:var(--text-secondary)}
+.student-name{font-weight:600;font-size:15px}.student-email{font-size:13px;color:var(--text-muted);margin-top:2px}
+.student-meta{text-align:right}.student-courses{font-size:13px;color:var(--text-secondary)}
 .report{display:none;animation:fadeIn 0.4s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .report.visible{display:block}
 .report-header{background:var(--bg-dark);border-radius:20px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
 .report-header::after{content:'';position:absolute;top:0;right:0;bottom:0;width:40%;background:radial-gradient(ellipse at 80% 50%,rgba(46,125,79,0.2),transparent);pointer-events:none}
-.report-student-name{font-family:'Instrument Serif',serif;font-size:32px;color:#fff;font-weight:400;margin-bottom:4px}
-.report-student-email{font-size:14px;color:rgba(255,255,255,0.5)}
-.report-student-joined{font-size:13px;color:rgba(255,255,255,0.35);margin-top:8px}
+.rh-name{font-family:'Instrument Serif',serif;font-size:32px;color:#fff;font-weight:400;margin-bottom:4px}
+.rh-email{font-size:14px;color:rgba(255,255,255,0.5)}
+.rh-joined{font-size:13px;color:rgba(255,255,255,0.35);margin-top:8px}
 .report-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-size:18px;width:36px;height:36px;border-radius:50%;cursor:pointer;z-index:1;transition:all 0.2s}
 .report-close:hover{background:rgba(255,255,255,0.2);color:#fff}
-.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-@media(max-width:640px){.report-grid{grid-template-columns:1fr 1fr}}
-.report-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
-.report-card-label{font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
-.report-card-value{font-family:'Instrument Serif',serif;font-size:32px;color:var(--text);font-weight:400}
-.report-card-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
-.report-card-unit{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted)}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:640px){.summary-grid{grid-template-columns:1fr}}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.scard-label{font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+.scard-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0}
+.scard-item{font-size:14px;color:var(--text-secondary)}
+.scard-val{font-family:'Instrument Serif',serif;font-size:22px}
+.scard-val.green{color:var(--green)}.scard-val.gold{color:var(--gold)}.scard-val.red{color:var(--red)}
+.scard-sub{font-size:12px;color:var(--text-muted)}
 .block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
 .block-title{font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:0.03em;font-family:'DM Sans',sans-serif}
@@ -56,39 +56,32 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:v
 .score-item{flex:1;min-width:90px}
 .score-label{font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px}
 .score-value{font-size:28px;font-family:'Instrument Serif',serif}
-.score-value.green{color:var(--green)}
-.score-value.gold{color:var(--gold)}
-.score-value.red{color:var(--red)}
+.score-value.green{color:var(--green)}.score-value.gold{color:var(--gold)}.score-value.red{color:var(--red)}
 .progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:12px 0}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-glow));border-radius:3px;transition:width 0.6s ease}
 .detail-label{font-size:13px;color:var(--text-muted)}
+.sub-title{font-size:12px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin:20px 0 10px;padding-top:16px;border-top:1px solid var(--border)}
 .toggle-link{font-size:13px;color:var(--green);cursor:pointer;font-weight:500;margin-top:12px;display:inline-block}
 .toggle-link:hover{text-decoration:underline}
-.toggle-content{display:none;margin-top:12px}
-.toggle-content.open{display:block}
+.toggle-content{display:none;margin-top:12px}.toggle-content.open{display:block}
 .q-row{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
 .q-row:last-child{border-bottom:none}
 .q-icon{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:2px}
-.q-correct{background:var(--green-light);color:var(--green)}
-.q-wrong{background:var(--red-light);color:var(--red)}
+.q-correct{background:var(--green-light);color:var(--green)}.q-wrong{background:var(--red-light);color:var(--red)}
 .q-text{font-size:13px;color:var(--text-secondary);line-height:1.5}
-.q-answer{font-size:12px;color:var(--text-muted);margin-top:4px}
-.q-answer strong{color:var(--text)}
+.q-answer{font-size:12px;color:var(--text-muted);margin-top:4px}.q-answer strong{color:var(--text)}
 .section-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
 .section-row:last-child{border-bottom:none}
-.section-row-name{color:var(--text-secondary);flex:1}
-.section-row-time{color:var(--text-muted);text-align:right;min-width:70px}
+.section-row-name{color:var(--text-secondary);flex:1}.section-row-time{color:var(--text-muted);text-align:right;min-width:70px}
 .tool-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
 .tool-row:last-child{border-bottom:none}
 .tool-icon{font-size:22px;width:36px;text-align:center}
-.tool-info{flex:1}
-.tool-name{font-weight:500;font-size:14px}
-.tool-detail{font-size:12px;color:var(--text-muted);margin-top:2px}
+.tool-info{flex:1}.tool-name{font-weight:500;font-size:14px}.tool-detail{font-size:12px;color:var(--text-muted);margin-top:2px}
 .compliance-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
 .compliance-row:last-child{border-bottom:none}
-.compliance-label{color:var(--text-secondary)}
-.compliance-value{font-weight:500;text-align:right}
+.compliance-label{color:var(--text-secondary)}.compliance-value{font-weight:500;text-align:right}
 .compliance-date{font-size:12px;color:var(--text-muted);margin-top:2px}
+.empty-field{color:var(--text-muted);font-style:italic;font-size:13px}
 .loading{text-align:center;padding:60px;color:var(--text-muted);font-size:15px}
 .empty-state{text-align:center;padding:40px;color:var(--text-muted);font-size:14px;background:var(--card);border:1px solid var(--border);border-radius:16px}
 .print-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);padding:6px 14px;border-radius:8px;background:var(--card);transition:all 0.2s;font-family:'DM Sans',sans-serif}
@@ -113,255 +106,221 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:v
   <div id="report" class="report"></div>
 </div>
 <script>
-var SUPABASE_URL='https://pohsjjmcasejogfjqoth.supabase.co';
-var SUPABASE_ANON_KEY='sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
-var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+var SB_URL='https://pohsjjmcasejogfjqoth.supabase.co';
+var SB_KEY='sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb=window.supabase.createClient(SB_URL,SB_KEY);
 var ADMIN_EMAILS=['ykarov@creditbright.com','matt@creditbright.com'];
-var courseNames={'foundation':'Foundation Course','getting_out_of_debt':'Getting Out of Debt','negotiating_better_deals':'Negotiating Better Deals'};
-var toolNames={'calculator':'Credit Calculator','simulator':'Credit Simulator','ai_advisor':'AI Credit Advisor'};
-var toolIcons={'calculator':'🧮','simulator':'📊','ai_advisor':'💬'};
-var sectionNames={'welcome':'Welcome','intro':'Introduction','pre_assessment':'Pre-Assessment','post_assessment':'Post-Assessment','section_1':'Section 1','section_2':'Section 2','section_3':'Section 3','section_4':'Section 4','section_5':'Section 5','section_6':'Section 6','section_7':'Section 7','mini_calculator':'Mini Calculator Activity','mini_simulator':'Mini Simulator Activity','certificate':'Certificate'};
-function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'})}
-function fmtTime(d){if(!d)return'';return new Date(d).toLocaleString('en-CA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}
-function fmtMins(s){if(!s||s<60)return(s||0)+' sec';return Math.round(s/60)+' min'}
+var CN={'foundation':'Foundation Course','getting_out_of_debt':'Getting Out of Debt','negotiating_better_deals':'Negotiating Better Deals'};
+var TN={'calculator':'Credit Calculator','simulator':'Credit Simulator','ai_advisor':'AI Credit Advisor'};
+var TI={'calculator':'🧮','simulator':'📊','ai_advisor':'💬'};
+var SN={'welcome':'Welcome','intro':'Introduction','pre_assessment':'Pre-Assessment','post_assessment':'Post-Assessment','section_1':'Section 1','section_2':'Section 2','section_3':'Section 3','section_4':'Section 4','section_5':'Section 5','section_6':'Section 6','section_7':'Section 7','mini_calculator':'Mini Calculator','mini_simulator':'Mini Simulator','certificate':'Certificate','_resume':'(bookmark)'};
+function fd(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'})}
+function ft(d){if(!d)return'—';return new Date(d).toLocaleString('en-CA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+function fm(s){if(!s)return'0 sec';if(s<60)return s+' sec';return Math.round(s/60)+' min'}
+function ef(v){return '<span class="empty-field">'+(v||'No data yet')+'</span>'}
 
 async function initAdmin(){
-  try{
-    var{data:{user},error}=await sb.auth.getUser();
-    if(error||!user){window.location.href='website-login.html';return}
-    var email=(user.email||'').toLowerCase();
-    if(!ADMIN_EMAILS.some(function(a){return a.toLowerCase()===email})){window.location.href='website-dashboard.html';return}
-    loadStudents();
-  }catch(e){window.location.href='website-login.html'}
-}
+  try{var{data:{user},error}=await sb.auth.getUser();
+  if(error||!user){window.location.href='website-login.html';return}
+  if(!ADMIN_EMAILS.some(function(a){return a.toLowerCase()===(user.email||'').toLowerCase()})){window.location.href='website-dashboard.html';return}
+  loadStudents()}catch(e){window.location.href='website-login.html'}}
 
 async function loadStudents(){
-  var{data:profiles}=await sb.from('profiles').select('id,full_name,email,created_at').order('full_name');
-  if(!profiles||profiles.length===0){document.getElementById('student-list').innerHTML='<div class="empty-state">No students yet.</div>';return}
-  var{data:enrollments}=await sb.from('enrollments').select('user_id,product');
-  var enrollMap={};
-  if(enrollments)enrollments.forEach(function(e){if(!enrollMap[e.user_id])enrollMap[e.user_id]=[];if(enrollMap[e.user_id].indexOf(e.product)===-1)enrollMap[e.user_id].push(e.product)});
-  var html='';
-  profiles.forEach(function(p){
-    var courses=enrollMap[p.id]||[];
-    var hasBundle=courses.indexOf('bundle')!==-1;
-    var label=hasBundle?'Bundle (all courses)':courses.length+' course'+(courses.length!==1?'s':'');
-    if(courses.length===0)label='No purchases';
-    html+='<div class="student-card" onclick="loadReport(\''+p.id+'\')">';
-    html+='<div><div class="student-name">'+(p.full_name||'Unnamed')+'</div>';
-    html+='<div class="student-email">'+(p.email||'')+'</div></div>';
-    html+='<div class="student-meta"><div class="student-courses">'+label+'</div>';
-    html+='<div style="font-size:12px;color:var(--text-muted);margin-top:2px">Joined '+fmtDate(p.created_at)+'</div></div>';
-    html+='</div>';
-  });
-  document.getElementById('student-list').innerHTML=html;
-}
+  var{data:P}=await sb.from('profiles').select('id,full_name,email,created_at').order('full_name');
+  if(!P||!P.length){document.getElementById('student-list').innerHTML='<div class="empty-state">No students yet.</div>';return}
+  var{data:E}=await sb.from('enrollments').select('user_id,product');
+  var em={};if(E)E.forEach(function(e){if(!em[e.user_id])em[e.user_id]=[];if(em[e.user_id].indexOf(e.product)===-1)em[e.user_id].push(e.product)});
+  var h='';P.forEach(function(p){
+    var c=em[p.id]||[];var hb=c.indexOf('bundle')!==-1;
+    var l=hb?'Bundle (all courses)':c.length?c.length+' course'+(c.length!==1?'s':''):'No purchases';
+    h+='<div class="student-card" onclick="loadReport(\''+p.id+'\')"><div><div class="student-name">'+(p.full_name||'Unnamed')+'</div><div class="student-email">'+(p.email||'')+'</div></div><div class="student-meta"><div class="student-courses">'+l+'</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px">Joined '+fd(p.created_at)+'</div></div></div>'});
+  document.getElementById('student-list').innerHTML=h}
 
-async function loadReport(userId){
-  var report=document.getElementById('report');
-  report.className='report visible';
-  report.innerHTML='<div class="loading">Building report...</div>';
-  window.scrollTo({top:report.offsetTop-20,behavior:'smooth'});
+async function loadReport(uid){
+  var R=document.getElementById('report');R.className='report visible';R.innerHTML='<div class="loading">Building report...</div>';
+  window.scrollTo({top:R.offsetTop-20,behavior:'smooth'});
+  var[pR,eR,sR,aR,tR,cR,cnR,epR]=await Promise.all([
+    sb.from('profiles').select('*').eq('id',uid).single(),
+    sb.from('enrollments').select('*').eq('user_id',uid),
+    sb.from('section_progress').select('*').eq('user_id',uid).order('completed_at'),
+    sb.from('assessment_responses').select('*').eq('user_id',uid).order('answered_at'),
+    sb.from('tool_sessions').select('*').eq('user_id',uid).order('started_at'),
+    sb.from('certificates').select('*').eq('user_id',uid),
+    sb.from('consents').select('*').eq('user_id',uid).order('recorded_at'),
+    sb.from('email_preferences').select('*').eq('user_id',uid)]);
+  var p=pR.data,enr=eR.data||[],prog=sR.data||[],assess=aR.data||[],tools=tR.data||[],certs=cR.data||[],consents=cnR.data||[],eprefs=epR.data||[];
+  if(!p){R.innerHTML='<div class="empty-state">Student not found.</div>';return}
+  var h='';
 
-  var[profileRes,enrollRes,progressRes,assessRes,toolRes,certRes,consentRes,emailPrefRes]=await Promise.all([
-    sb.from('profiles').select('*').eq('id',userId).single(),
-    sb.from('enrollments').select('*').eq('user_id',userId),
-    sb.from('section_progress').select('*').eq('user_id',userId).order('completed_at'),
-    sb.from('assessment_responses').select('*').eq('user_id',userId).order('answered_at'),
-    sb.from('tool_sessions').select('*').eq('user_id',userId).order('started_at'),
-    sb.from('certificates').select('*').eq('user_id',userId),
-    sb.from('consents').select('*').eq('user_id',userId).order('recorded_at'),
-    sb.from('email_preferences').select('*').eq('user_id',userId)
-  ]);
+  // ═══ HEADER ═══
+  h+='<div class="report-header"><button class="report-close" onclick="closeReport()">&times;</button>';
+  h+='<div class="rh-name">'+(p.full_name||'Unnamed')+'</div>';
+  h+='<div class="rh-email">'+(p.email||'')+'</div>';
+  h+='<div class="rh-joined">Joined '+fd(p.created_at)+'</div></div>';
+  h+='<div style="text-align:right;margin-bottom:16px"><button class="print-btn" onclick="window.print()">🖨 Print Report</button></div>';
 
-  var profile=profileRes.data;var enrollments=enrollRes.data||[];var progress=progressRes.data||[];
-  var assessments=assessRes.data||[];var tools=toolRes.data||[];var certs=certRes.data||[];
-  var consents=consentRes.data||[];var emailPrefs=emailPrefRes.data||[];
+  // ═══ SUMMARY: PER-COURSE TIME ═══
+  var CK=['foundation','getting_out_of_debt','negotiating_better_deals'];
+  h+='<div class="summary-grid">';
 
-  if(!profile){report.innerHTML='<div class="empty-state">Student not found.</div>';return}
+  // Card 1: Course Time per course
+  h+='<div class="scard"><div class="scard-label">Time per Course</div>';
+  CK.forEach(function(ck){
+    var secs=0;prog.forEach(function(sp){if(sp.course===ck&&sp.section_key!=='_resume'&&sp.time_spent_seconds)secs+=sp.time_spent_seconds});
+    var enrolled=enr.some(function(e){return e.product===ck||e.product==='bundle'});
+    h+='<div class="scard-row"><span class="scard-item">'+(CN[ck]||ck)+'</span><span class="scard-val">'+(enrolled?fm(secs):ef('Not enrolled'))+'</span></div>'});
+  h+='</div>';
 
-  var html='';
+  // Card 2: Tool sessions per tool
+  h+='<div class="scard"><div class="scard-label">Tool Usage</div>';
+  ['calculator','simulator','ai_advisor'].forEach(function(t){
+    var ts=tools.filter(function(s){return s.tool===t});
+    var qs=0;ts.forEach(function(s){if(s.questions_asked)qs+=s.questions_asked});
+    var detail=ts.length+' session'+(ts.length!==1?'s':'');
+    if(t==='ai_advisor'&&qs>0)detail+=', '+qs+' questions';
+    h+='<div class="scard-row"><span class="scard-item">'+(TN[t]||t)+'</span><span class="scard-val" style="font-size:16px">'+(ts.length>0?detail:ef('None'))+'</span></div>'});
+  h+='</div>';
 
-  // HEADER
-  html+='<div class="report-header"><button class="report-close" onclick="closeReport()">&times;</button>';
-  html+='<div class="report-student-name">'+(profile.full_name||'Unnamed')+'</div>';
-  html+='<div class="report-student-email">'+(profile.email||'')+'</div>';
-  html+='<div class="report-student-joined">Joined '+fmtDate(profile.created_at)+'</div></div>';
+  // Card 3: Certificates and overall
+  h+='<div class="scard"><div class="scard-label">Achievements</div>';
+  h+='<div class="scard-row"><span class="scard-item">Certificates Earned</span><span class="scard-val">'+certs.length+'</span></div>';
+  var totalSecs=0;prog.forEach(function(sp){if(sp.section_key!=='_resume'&&sp.time_spent_seconds)totalSecs+=sp.time_spent_seconds});
+  h+='<div class="scard-row"><span class="scard-item">Total Course Time</span><span class="scard-val" style="font-size:16px">'+fm(totalSecs)+'</span></div>';
+  h+='<div class="scard-row"><span class="scard-item">Total Tool Sessions</span><span class="scard-val">'+tools.length+'</span></div>';
+  h+='</div></div>';
 
-  // PRINT
-  html+='<div style="text-align:right;margin-bottom:16px"><button class="print-btn" onclick="window.print()">🖨 Print Report</button></div>';
+  // ═══ ENROLLMENT HISTORY ═══
+  h+='<div class="block"><div class="block-title">Enrollment History</div>';
+  if(!enr.length)h+='<div class="detail-label">No purchases yet.</div>';
+  else enr.forEach(function(e){
+    var n=CN[e.product]||e.product;if(e.product==='bundle')n='Complete Bundle (all courses)';
+    var mb=(e.access_method||'paid')==='paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-blue">Promo</span>';
+    h+='<div class="section-row"><span class="section-row-name">'+n+' '+mb+'</span>';
+    h+=e.completed_at?'<span class="badge badge-green">Completed</span>':'<span class="badge badge-muted">Active</span>';
+    h+='</div>'});
+  h+='</div>';
 
-  // SUMMARY CARDS
-  var coursesEnrolled=enrollments.filter(function(e){return e.product!=='bundle'}).length;
-  if(enrollments.some(function(e){return e.product==='bundle'}))coursesEnrolled=3;
-  var totalSecs=0;progress.forEach(function(sp){if(sp.section_key!=='_resume'&&sp.time_spent_seconds)totalSecs+=sp.time_spent_seconds});
-  var aiSessions=tools.filter(function(t){return t.tool==='ai_advisor'});
-  var totalQ=0;aiSessions.forEach(function(t){if(t.questions_asked)totalQ+=t.questions_asked});
-
-  html+='<div class="report-grid">';
-  html+='<div class="report-card"><div class="report-card-label">Courses</div><div class="report-card-value">'+coursesEnrolled+'</div><div class="report-card-sub">enrolled</div></div>';
-  html+='<div class="report-card"><div class="report-card-label">Certificates</div><div class="report-card-value">'+certs.length+'</div><div class="report-card-sub">earned</div></div>';
-  html+='<div class="report-card"><div class="report-card-label">Course Time</div><div class="report-card-value">'+Math.round(totalSecs/60)+' <span class="report-card-unit">min</span></div></div>';
-  html+='<div class="report-card"><div class="report-card-label">Tool Sessions</div><div class="report-card-value">'+tools.length+'</div><div class="report-card-sub">'+totalQ+' AI questions</div></div>';
-  html+='</div>';
-
-  // ENROLLMENT HISTORY
-  html+='<div class="block"><div class="block-title">Enrollment History</div>';
-  if(enrollments.length===0){html+='<div class="detail-label">No purchases yet.</div>'}
-  else{enrollments.forEach(function(e){
-    var name=courseNames[e.product]||e.product;if(e.product==='bundle')name='Complete Bundle (all courses)';
-    var method=e.access_method||'paid';
-    var mb=method==='paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-blue">Promo</span>';
-    html+='<div class="section-row"><span class="section-row-name">'+name+' '+mb+'</span>';
-    if(e.completed_at)html+='<span class="badge badge-green" style="margin-left:8px">Completed</span>';
-    html+='</div>';
-  })}
-  html+='</div>';
-
-  // COURSE BLOCKS
-  ['foundation','getting_out_of_debt','negotiating_better_deals'].forEach(function(ck){
-    var enrolled=enrollments.some(function(e){return e.product===ck||e.product==='bundle'});
-    if(!enrolled)return;
-    var cp=progress.filter(function(sp){return sp.course===ck&&sp.section_key!=='_resume'});
-    var ca=assessments.filter(function(a){return a.course===ck});
+  // ═══ COURSE BLOCKS ═══
+  CK.forEach(function(ck){
+    var enrolled=enr.some(function(e){return e.product===ck||e.product==='bundle'});
+    var cp=prog.filter(function(sp){return sp.course===ck&&sp.section_key!=='_resume'});
+    var ca=assess.filter(function(a){return a.course===ck});
     var cc=certs.find(function(c){return c.certificate_type===ck});
     var preA=ca.filter(function(a){return a.assessment_type==='pre'});
     var postA=ca.filter(function(a){return a.assessment_type==='post'});
-    var preC=preA.filter(function(a){return a.is_correct}).length;
-    var postC=postA.filter(function(a){return a.is_correct}).length;
-    var preT=preA.length,postT=postA.length;
+    var secA=ca.filter(function(a){return a.assessment_type==='section'});
+    var preC=preA.filter(function(a){return a.is_correct}).length,preT=preA.length;
+    var postC=postA.filter(function(a){return a.is_correct}).length,postT=postA.length;
+    var secC=secA.filter(function(a){return a.is_correct}).length,secT=secA.length;
     var prePct=preT>0?Math.round(preC/preT*100):null;
     var postPct=postT>0?Math.round(postC/postT*100):null;
-    var status=cc?'Completed':(cp.length>0?'In Progress':'Not Started');
-    var sb2=cc?'badge-green':(cp.length>0?'badge-gold':'badge-muted');
+    var secPct=secT>0?Math.round(secC/secT*100):null;
+    var status=cc?'Completed':(cp.length>0?'In Progress':(enrolled?'Not Started':'Not Enrolled'));
+    var sb2=cc?'badge-green':(cp.length>0?'badge-gold':(enrolled?'badge-muted':'badge-muted'));
     var cSecs=0;cp.forEach(function(sp){if(sp.time_spent_seconds)cSecs+=sp.time_spent_seconds});
+    var maxS=ck==='foundation'?13:6;
 
-    html+='<div class="block"><div class="block-title">'+(courseNames[ck]||ck)+' <span class="badge '+sb2+'">'+status+'</span></div>';
-    html+='<div class="score-row">';
-    if(prePct!==null)html+='<div class="score-item"><div class="score-label">Pre-Assessment</div><div class="score-value">'+prePct+'%</div><div class="detail-label">'+preC+' of '+preT+' correct</div></div>';
-    if(postPct!==null){var pc=postPct>=70?'green':postPct>=50?'gold':'red';html+='<div class="score-item"><div class="score-label">Post-Assessment</div><div class="score-value '+pc+'">'+postPct+'%</div><div class="detail-label">'+postC+' of '+postT+' correct</div></div>'}
-    if(prePct!==null&&postPct!==null){var imp=postPct-prePct;var ic=imp>0?'green':imp===0?'gold':'red';html+='<div class="score-item"><div class="score-label">Improvement</div><div class="score-value '+ic+'">'+(imp>0?'+':'')+imp+'%</div></div>'}
-    html+='<div class="score-item"><div class="score-label">Time Spent</div><div class="score-value">'+Math.round(cSecs/60)+' <span class="report-card-unit">min</span></div></div>';
-    html+='</div>';
+    h+='<div class="block"><div class="block-title">'+(CN[ck]||ck)+' <span class="badge '+sb2+'">'+status+'</span></div>';
 
-    var maxS=ck==='foundation'?13:6;var pctD=Math.min(Math.round(cp.length/maxS*100),100);
-    html+='<div class="progress-bar"><div class="progress-fill" style="width:'+pctD+'%"></div></div>';
-    html+='<div class="detail-label">'+cp.length+' of '+maxS+' sections visited ('+pctD+'%)</div>';
+    // Scores row: always show all fields
+    h+='<div class="score-row">';
+    h+='<div class="score-item"><div class="score-label">Pre-Assessment</div><div class="score-value">'+(prePct!==null?prePct+'%':ef())+'</div>'+(preT>0?'<div class="detail-label">'+preC+' of '+preT+' correct</div>':'')+'</div>';
+    h+='<div class="score-item"><div class="score-label">Post-Assessment</div><div class="score-value'+(postPct!==null?(postPct>=70?' green':postPct>=50?' gold':' red'):'')+'">'+(postPct!==null?postPct+'%':ef())+'</div>'+(postT>0?'<div class="detail-label">'+postC+' of '+postT+' correct</div>':'')+'</div>';
+    h+='<div class="score-item"><div class="score-label">Improvement</div><div class="score-value';
+    if(prePct!==null&&postPct!==null){var imp=postPct-prePct;h+=(imp>0?' green':imp===0?' gold':' red')+'">'+(imp>0?'+':'')+imp+'%'}
+    else h+='">'+ef();
+    h+='</div></div>';
+    h+='<div class="score-item"><div class="score-label">Course Activities</div><div class="score-value">'+(secPct!==null?secPct+'%':ef())+'</div>'+(secT>0?'<div class="detail-label">'+secC+' of '+secT+' correct</div>':'')+'</div>';
+    h+='<div class="score-item"><div class="score-label">Time Spent</div><div class="score-value">'+(enrolled?fm(cSecs):ef())+'</div></div>';
+    h+='</div>';
 
-    if(cc){
-      html+='<div style="margin-top:16px;padding:14px 18px;background:var(--gold-light);border-radius:12px;font-size:13px;color:#7D6608;">';
-      html+='🎓 Certificate <strong>'+(cc.certificate_number||'')+'</strong>';
-      if(cc.pre_assessment_score!=null)html+=' | Pre: '+cc.pre_assessment_score;
-      if(cc.post_assessment_score!=null)html+=' | Post: '+cc.post_assessment_score;
-      if(cc.issued_at)html+=' | Issued '+fmtDate(cc.issued_at);
-      html+='</div>';
-    }
+    // Progress bar
+    var pctD=cp.length>0?Math.min(Math.round(cp.length/maxS*100),100):0;
+    h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pctD+'%"></div></div>';
+    h+='<div class="detail-label">'+cp.length+' of '+maxS+' sections visited ('+pctD+'%)</div>';
 
-    // Section breakdown
-    if(cp.length>0){
-      var sid='sections-'+ck;
-      html+='<div class="toggle-link" onclick="toggleSection(\''+sid+'\')">View section-by-section breakdown ▾</div>';
-      html+='<div class="toggle-content" id="'+sid+'">';
-      cp.forEach(function(sp){
-        var name=sectionNames[sp.section_key]||sp.section_title||sp.section_key;
-        html+='<div class="section-row"><span class="section-row-name">'+name+'</span><span class="section-row-time">'+fmtMins(sp.time_spent_seconds)+'</span></div>';
-      });
-      html+='</div>';
-    }
+    // Certificate
+    if(cc){h+='<div style="margin-top:16px;padding:14px 18px;background:var(--gold-light);border-radius:12px;font-size:13px;color:#7D6608;">🎓 Certificate <strong>'+(cc.certificate_number||'')+'</strong>';
+      if(cc.pre_assessment_score!=null)h+=' | Pre: '+cc.pre_assessment_score;
+      if(cc.post_assessment_score!=null)h+=' | Post: '+cc.post_assessment_score;
+      if(cc.issued_at)h+=' | Issued '+fd(cc.issued_at);h+='</div>'}
+    else if(enrolled){h+='<div style="margin-top:16px;padding:14px 18px;background:var(--muted-bg);border-radius:12px;font-size:13px;color:var(--text-muted);">🎓 Certificate: not yet earned</div>'}
 
-    // Question detail
-    if(ca.length>0){
-      var qid='questions-'+ck;
-      html+='<div class="toggle-link" onclick="toggleSection(\''+qid+'\')">View question-by-question detail ▾</div>';
-      html+='<div class="toggle-content" id="'+qid+'">';
-      if(preA.length>0){
-        html+='<div style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin:12px 0 8px">Pre-Assessment ('+preC+'/'+preT+')</div>';
-        preA.forEach(function(a){
-          var icon=a.is_correct?'<div class="q-icon q-correct">✓</div>':'<div class="q-icon q-wrong">✗</div>';
-          html+='<div class="q-row">'+icon+'<div><div class="q-text">'+(a.question_text||a.question_key)+'</div>';
-          html+='<div class="q-answer">Answered: <strong>'+(a.user_answer||'?')+'</strong>';
-          if(!a.is_correct&&a.correct_answer)html+=' (Correct: '+a.correct_answer+')';
-          html+='</div></div></div>';
-        });
-      }
-      if(postA.length>0){
-        html+='<div style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin:16px 0 8px">Post-Assessment ('+postC+'/'+postT+')</div>';
-        postA.forEach(function(a){
-          var icon=a.is_correct?'<div class="q-icon q-correct">✓</div>':'<div class="q-icon q-wrong">✗</div>';
-          html+='<div class="q-row">'+icon+'<div><div class="q-text">'+(a.question_text||a.question_key)+'</div>';
-          html+='<div class="q-answer">Answered: <strong>'+(a.user_answer||'?')+'</strong>';
-          if(!a.is_correct&&a.correct_answer)html+=' (Correct: '+a.correct_answer+')';
-          html+='</div></div></div>';
-        });
-      }
-      html+='</div>';
-    }
-    html+='</div>';
-  });
+    // Section-by-section time (visible by default)
+    h+='<div class="sub-title">Section-by-Section Breakdown</div>';
+    if(cp.length>0){cp.forEach(function(sp){
+      var name=SN[sp.section_key]||sp.section_title||sp.section_key;
+      h+='<div class="section-row"><span class="section-row-name">'+name+'</span><span class="section-row-time">'+fm(sp.time_spent_seconds)+'</span></div>'})}
+    else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No sections visited yet')+'</div>'}
 
-  // TOOL USAGE
-  if(tools.length>0){
-    html+='<div class="block"><div class="block-title">Tool Usage</div>';
-    var tg={};
-    tools.forEach(function(t){
-      if(!tg[t.tool])tg[t.tool]={count:0,totalDuration:0,questionsAsked:0,doors:{},actionsModelled:0};
-      var g=tg[t.tool];g.count++;
-      if(t.duration_seconds)g.totalDuration+=t.duration_seconds;
-      if(t.questions_asked)g.questionsAsked+=t.questions_asked;
-      if(t.actions_modelled)g.actionsModelled+=t.actions_modelled;
-      if(t.calculator_door){if(!g.doors[t.calculator_door])g.doors[t.calculator_door]=0;g.doors[t.calculator_door]++}
-    });
+    // Pre-assessment detail
+    h+='<div class="sub-title">Pre-Assessment Detail</div>';
+    if(preA.length>0){preA.forEach(function(a){
+      var icon=a.is_correct?'<div class="q-icon q-correct">✓</div>':'<div class="q-icon q-wrong">✗</div>';
+      h+='<div class="q-row">'+icon+'<div><div class="q-text">'+(a.question_text||a.question_key)+'</div><div class="q-answer">Answered: <strong>'+(a.user_answer||'?')+'</strong>';
+      if(!a.is_correct&&a.correct_answer)h+=' (Correct: '+a.correct_answer+')';h+='</div></div></div>'})}
+    else{h+='<div class="detail-label" style="padding:8px 0">'+ef('Not taken yet')+'</div>'}
+
+    // Course activities detail
+    h+='<div class="sub-title">Course Activity Results</div>';
+    if(secA.length>0){secA.forEach(function(a){
+      var icon=a.is_correct?'<div class="q-icon q-correct">✓</div>':'<div class="q-icon q-wrong">✗</div>';
+      h+='<div class="q-row">'+icon+'<div><div class="q-text">'+(a.question_text||'Activity '+a.question_key)+'</div><div class="q-answer">Answered: <strong>'+(a.user_answer||'?')+'</strong>';
+      if(!a.is_correct&&a.correct_answer)h+=' (Correct: '+a.correct_answer+')';h+='</div></div></div>'})}
+    else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No activity responses yet')+'</div>'}
+
+    // Post-assessment detail
+    h+='<div class="sub-title">Post-Assessment Detail</div>';
+    if(postA.length>0){postA.forEach(function(a){
+      var icon=a.is_correct?'<div class="q-icon q-correct">✓</div>':'<div class="q-icon q-wrong">✗</div>';
+      h+='<div class="q-row">'+icon+'<div><div class="q-text">'+(a.question_text||a.question_key)+'</div><div class="q-answer">Answered: <strong>'+(a.user_answer||'?')+'</strong>';
+      if(!a.is_correct&&a.correct_answer)h+=' (Correct: '+a.correct_answer+')';h+='</div></div></div>'})}
+    else{h+='<div class="detail-label" style="padding:8px 0">'+ef('Not taken yet')+'</div>'}
+
+    h+='</div>'});
+
+  // ═══ TOOL USAGE ═══
+  h+='<div class="block"><div class="block-title">Tool Usage Detail</div>';
+  if(!tools.length){h+='<div class="detail-label">'+ef('No tool sessions yet')+'</div>'}
+  else{
+    var tg={};tools.forEach(function(t){if(!tg[t.tool])tg[t.tool]={count:0,dur:0,qs:0,doors:{},actions:0,sessions:[]};var g=tg[t.tool];g.count++;if(t.duration_seconds)g.dur+=t.duration_seconds;if(t.questions_asked)g.qs+=t.questions_asked;if(t.actions_modelled)g.actions+=t.actions_modelled;if(t.calculator_door){if(!g.doors[t.calculator_door])g.doors[t.calculator_door]=0;g.doors[t.calculator_door]++}g.sessions.push(t)});
     Object.keys(tg).sort().forEach(function(t){
-      var g=tg[t];
-      html+='<div class="tool-row"><div class="tool-icon">'+(toolIcons[t]||'🔧')+'</div>';
-      html+='<div class="tool-info"><div class="tool-name">'+(toolNames[t]||t)+'</div>';
-      var d=[];d.push(g.count+' session'+(g.count!==1?'s':''));
-      if(g.totalDuration>0)d.push(fmtMins(g.totalDuration)+' total');
-      if(g.questionsAsked>0)d.push(g.questionsAsked+' questions asked');
-      if(g.actionsModelled>0)d.push(g.actionsModelled+' actions modelled');
-      var dl=Object.keys(g.doors);
-      if(dl.length>0){var dn={'offer':'Before You Sign','debt':'After You\'ve Signed','strength':'Strengthen My Credit'};var dt=dl.map(function(dd){return(dn[dd]||dd)+' ('+g.doors[dd]+'x)'});d.push('Doors: '+dt.join(', '))}
-      html+='<div class="tool-detail">'+d.join(' · ')+'</div></div></div>';
-    });
+      var g=tg[t];h+='<div class="tool-row"><div class="tool-icon">'+(TI[t]||'🔧')+'</div><div class="tool-info"><div class="tool-name">'+(TN[t]||t)+'</div>';
+      var d=[];d.push(g.count+' session'+(g.count!==1?'s':''));if(g.dur>0)d.push(fm(g.dur)+' total');if(g.qs>0)d.push(g.qs+' questions asked');if(g.actions>0)d.push(g.actions+' actions modelled');
+      var dl=Object.keys(g.doors);if(dl.length>0){var dn={'offer':'Before You Sign','debt':'After You\'ve Signed','strength':'Strengthen My Credit'};d.push('Doors: '+dl.map(function(dd){return(dn[dd]||dd)+' ('+g.doors[dd]+'x)'}).join(', '))}
+      h+='<div class="tool-detail">'+d.join(' · ')+'</div></div></div>'});
     // Session detail
-    var tsid='tool-sessions-detail';
-    html+='<div class="toggle-link" onclick="toggleSection(\''+tsid+'\')">View session-by-session detail ▾</div>';
-    html+='<div class="toggle-content" id="'+tsid+'">';
+    h+='<div class="sub-title">Session-by-Session</div>';
     tools.forEach(function(t){
-      html+='<div class="section-row"><span class="section-row-name">'+(toolNames[t.tool]||t.tool);
-      if(t.calculator_door)html+=' ('+t.calculator_door+')';
-      html+='</span><span class="section-row-time">'+fmtMins(t.duration_seconds)+' · '+fmtTime(t.started_at)+'</span></div>';
-    });
-    html+='</div></div>';
-  }
+      h+='<div class="section-row"><span class="section-row-name">'+(TN[t.tool]||t.tool);if(t.calculator_door)h+=' ('+t.calculator_door+')';
+      h+='</span><span class="section-row-time">'+fm(t.duration_seconds)+' · '+ft(t.started_at)+'</span></div>'})}
+  h+='</div>';
 
-  // COMPLIANCE
-  html+='<div class="block"><div class="block-title">Compliance and Consent</div>';
-  if(emailPrefs.length>0){
-    var ep=emailPrefs[0];
-    html+='<div class="compliance-row"><span class="compliance-label">Marketing Emails</span><span class="compliance-value">'+(ep.marketing_opted_in?'<span class="badge badge-green">Opted In</span>':'<span class="badge badge-muted">Opted Out</span>')+'</span></div>';
-    if(ep.opted_in_at)html+='<div class="compliance-row"><span class="compliance-label">Opted In</span><span class="compliance-value">'+fmtTime(ep.opted_in_at)+'</span></div>';
-    if(ep.opted_out_at)html+='<div class="compliance-row"><span class="compliance-label">Opted Out</span><span class="compliance-value">'+fmtTime(ep.opted_out_at)+'</span></div>';
-    html+='<div class="compliance-row"><span class="compliance-label">Last Updated</span><span class="compliance-value">'+fmtTime(ep.updated_at)+'</span></div>';
-  }else{html+='<div class="compliance-row"><span class="compliance-label">Marketing Emails</span><span class="compliance-value"><span class="badge badge-muted">No record</span></span></div>'}
-  if(consents.length>0){
-    var cid='consent-detail';
-    html+='<div class="toggle-link" onclick="toggleSection(\''+cid+'\')">View consent audit trail ('+consents.length+' records) ▾</div>';
-    html+='<div class="toggle-content" id="'+cid+'">';
-    consents.forEach(function(c){
-      html+='<div class="compliance-row"><span class="compliance-label">'+(c.consent_type||'Unknown')+'</span>';
-      html+='<span class="compliance-value">'+(c.granted?'<span class="badge badge-green">Granted</span>':'<span class="badge badge-red">Denied</span>');
-      if(c.version)html+=' <span style="font-size:11px;color:var(--text-muted)">v'+c.version+'</span>';
-      html+='<div class="compliance-date">'+fmtTime(c.recorded_at)+'</div></span></div>';
-    });
-    html+='</div>';
-  }
-  html+='</div>';
+  // ═══ COMPLIANCE ═══
+  h+='<div class="block"><div class="block-title">Compliance and Consent</div>';
 
-  report.innerHTML=html;
-}
+  // Email prefs
+  h+='<div class="sub-title" style="border-top:none;margin-top:0;padding-top:0">Email Preferences</div>';
+  if(eprefs.length>0){var ep=eprefs[0];
+    h+='<div class="compliance-row"><span class="compliance-label">Marketing Emails</span><span class="compliance-value">'+(ep.marketing_opted_in?'<span class="badge badge-green">Opted In</span>':'<span class="badge badge-muted">Opted Out</span>')+'</span></div>';
+    if(ep.opted_in_at)h+='<div class="compliance-row"><span class="compliance-label">Opted In Date</span><span class="compliance-value">'+ft(ep.opted_in_at)+'</span></div>';
+    if(ep.opted_out_at)h+='<div class="compliance-row"><span class="compliance-label">Opted Out Date</span><span class="compliance-value">'+ft(ep.opted_out_at)+'</span></div>';
+    h+='<div class="compliance-row"><span class="compliance-label">Last Updated</span><span class="compliance-value">'+ft(ep.updated_at)+'</span></div>'}
+  else{h+='<div class="compliance-row"><span class="compliance-label">Marketing Emails</span><span class="compliance-value">'+ef('No record')+'</span></div>'}
 
-function closeReport(){document.getElementById('report').className='report';document.getElementById('report').innerHTML='';window.scrollTo({top:0,behavior:'smooth'})}
+  // Consents
+  h+='<div class="sub-title">Consent Audit Trail</div>';
+  if(consents.length>0){consents.forEach(function(c){
+    h+='<div class="compliance-row"><span class="compliance-label">'+(c.consent_type||'Unknown')+'</span>';
+    h+='<span class="compliance-value">'+(c.granted?'<span class="badge badge-green">Granted</span>':'<span class="badge badge-red">Denied</span>');
+    if(c.version)h+=' <span style="font-size:11px;color:var(--text-muted)">v'+c.version+'</span>';
+    h+='<div class="compliance-date">'+ft(c.recorded_at)+'</div></span></div>'})}
+  else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No consent records found')+'</div>'}
+  h+='</div>';
+
+  R.innerHTML=h}
+
+function closeReport(){var R=document.getElementById('report');R.className='report';R.innerHTML='';window.scrollTo({top:0,behavior:'smooth'})}
 function toggleSection(id){document.getElementById(id).classList.toggle('open')}
 initAdmin();
 </script>

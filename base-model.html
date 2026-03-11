@@ -2904,6 +2904,7 @@ var cbEnrollmentId = null;
 var courseKey = 'foundation';
 var screenEnteredAt = Date.now();
 var cbResumeScreen = null;
+var cbAnsweredQuizzes = {};
 
 // Section map: screen prefix to section key and title
 var sectionMap = {
@@ -3349,6 +3350,20 @@ function answerQuiz(qid, idx, clickedEl) {
   btns.forEach(function(b) { b.classList.remove('selected', 'wrong', 'correct-reveal'); });
   // Apply correct or wrong styling to the CLICKED element
   var st = data.style[idx] || 'green';
+  // Log first answer to Supabase
+  if (!cbAnsweredQuizzes[qid]) {
+    cbAnsweredQuizzes[qid] = true;
+    var isCorrect = st === 'green';
+    var qText = '';
+    var qEl = wrap.querySelector('.quiz-question, p');
+    if (qEl) qText = qEl.textContent;
+    var userAns = clickedEl.textContent.trim();
+    var correctAns = '';
+    for (var ci = 0; ci < data.style.length; ci++) {
+      if (data.style[ci] === 'green' && btns[ci]) { correctAns = btns[ci].textContent.trim(); break; }
+    }
+    cbLogAssessment('section', qid, qText, userAns, correctAns, isCorrect);
+  }
   if (st === 'green') {
     clickedEl.classList.add('selected');
   } else {

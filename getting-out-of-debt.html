@@ -1095,6 +1095,7 @@ var courseKey = 'getting_out_of_debt';
 var currentScreen = 'welcome';
 var screenEnteredAt = Date.now();
 var cbResumeScreen = null;
+var cbAnsweredQuizzes = {};
 
 var sectionMap = {
   'welcome': { key: 'welcome', title: 'Welcome' },
@@ -1364,6 +1365,18 @@ function answerQuiz(qid, ai, clickedEl) {
     b.classList.remove('selected', 'wrong', 'correct-reveal');
   });
   var isCorrect = ai === data.correct;
+  // Log first answer to Supabase
+  if (!cbAnsweredQuizzes[qid]) {
+    cbAnsweredQuizzes[qid] = true;
+    var qText = '';
+    var qEl = wrap.querySelector('.quiz-question, p');
+    if (qEl) qText = qEl.textContent;
+    var userAns = clickedEl.textContent.trim();
+    var correctAns = '';
+    var correctBtn = wrap.querySelector('[data-answer-index="' + data.correct + '"]');
+    if (correctBtn) correctAns = correctBtn.textContent.trim();
+    cbLogAssessment('section', qid, qText, userAns, correctAns, isCorrect);
+  }
   // Style the CLICKED element
   clickedEl.classList.add(isCorrect ? 'selected' : 'wrong');
   // If wrong, reveal the correct one by data-answer-index
