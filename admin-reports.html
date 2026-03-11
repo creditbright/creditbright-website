@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright: Student Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg:#FAFAF8;--bg-dark:#1B2A1F;--card:#FFFFFF;--border:#E8E5DE;
+  --text:#1A1D1A;--text-secondary:#5A5F58;--text-muted:#6A6E67;
+  --green:#2E7D4F;--green-light:#E8F5EC;--green-glow:#43A66A;--green-dark:#1B5E3A;
+  --gold:#E6A817;--gold-light:#FEF8E7;--red:#C62828;--red-light:#FDEAEA;
+  --blue:#3BA4D9;--blue-light:#E6F4FB;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── Header ── */
+.header{background:var(--bg-dark);padding:24px 32px;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-logo svg{width:24px;height:24px}
+.header-brand{font-weight:600;font-size:14px;color:rgba(255,255,255,0.8);letter-spacing:0.1em}
+.header-title{font-family:'Instrument Serif',serif;font-size:22px;color:#fff;font-weight:400}
+.header-back{font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;border:1px solid rgba(255,255,255,0.15);padding:6px 14px;border-radius:8px;transition:all 0.2s}
+.header-back:hover{color:#fff;border-color:rgba(255,255,255,0.4)}
+
+/* ── Student List ── */
+.container{max-width:960px;margin:0 auto;padding:32px 24px}
+.section-label{font-size:12px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:16px}
+.student-list{display:flex;flex-direction:column;gap:8px;margin-bottom:40px}
+.student-card{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;cursor:pointer;transition:all 0.2s}
+.student-card:hover{border-color:var(--green);box-shadow:0 2px 12px rgba(46,125,79,0.08)}
+.student-card.active{border-color:var(--green);background:var(--green-light)}
+.student-name{font-weight:600;font-size:15px}
+.student-email{font-size:13px;color:var(--text-muted);margin-top:2px}
+.student-meta{text-align:right}
+.student-courses{font-size:13px;color:var(--text-secondary)}
+.student-status{font-size:12px;color:var(--green);font-weight:500;margin-top:2px}
+
+/* ── Report ── */
+.report{display:none;animation:fadeIn 0.4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.report.visible{display:block}
+.report-header{background:var(--bg-dark);border-radius:20px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
+.report-header::after{content:'';position:absolute;top:0;right:0;bottom:0;width:40%;background:radial-gradient(ellipse at 80% 50%,rgba(46,125,79,0.2),transparent);pointer-events:none}
+.report-student-name{font-family:'Instrument Serif',serif;font-size:32px;color:#fff;font-weight:400;margin-bottom:4px}
+.report-student-email{font-size:14px;color:rgba(255,255,255,0.5)}
+.report-student-joined{font-size:13px;color:rgba(255,255,255,0.35);margin-top:8px}
+.report-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-size:18px;width:36px;height:36px;border-radius:50%;cursor:pointer;z-index:1;transition:all 0.2s}
+.report-close:hover{background:rgba(255,255,255,0.2);color:#fff}
+
+/* ── Report Cards ── */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:640px){.report-grid{grid-template-columns:1fr}}
+.report-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.2s}
+.report-card-full{grid-column:1/-1}
+.report-card-label{font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+.report-card-value{font-family:'Instrument Serif',serif;font-size:36px;color:var(--text);font-weight:400}
+.report-card-sub{font-size:13px;color:var(--text-muted);margin-top:4px}
+
+/* ── Course Blocks ── */
+.course-block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.course-title{font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.course-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:0.03em}
+.status-completed{background:var(--green-light);color:var(--green)}
+.status-progress{background:var(--gold-light);color:#7D6608}
+.score-row{display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap}
+.score-item{flex:1;min-width:100px}
+.score-label{font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px}
+.score-value{font-size:28px;font-family:'Instrument Serif',serif}
+.score-value.green{color:var(--green)}
+.score-value.gold{color:var(--gold)}
+.score-value.red{color:var(--red)}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:12px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-glow));border-radius:3px;transition:width 0.6s ease}
+.detail-label{font-size:13px;color:var(--text-muted);margin-top:8px}
+
+/* ── Questions Detail ── */
+.questions-toggle{font-size:13px;color:var(--green);cursor:pointer;font-weight:500;margin-top:12px;display:inline-block}
+.questions-toggle:hover{text-decoration:underline}
+.questions-detail{display:none;margin-top:12px}
+.questions-detail.open{display:block}
+.q-row{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
+.q-row:last-child{border-bottom:none}
+.q-icon{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:2px}
+.q-correct{background:var(--green-light);color:var(--green)}
+.q-wrong{background:var(--red-light);color:var(--red)}
+.q-text{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.q-answer{font-size:12px;color:var(--text-muted);margin-top:4px}
+.q-answer strong{color:var(--text)}
+
+/* ── Tool Usage ── */
+.tool-row{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+.tool-row:last-child{border-bottom:none}
+.tool-icon{font-size:20px}
+.tool-name{font-weight:500;font-size:14px;flex:1}
+.tool-stat{font-size:13px;color:var(--text-muted)}
+
+/* ── Loading ── */
+.loading{text-align:center;padding:60px;color:var(--text-muted);font-size:15px}
+.empty-state{text-align:center;padding:40px;color:var(--text-muted);font-size:14px;background:var(--card);border:1px solid var(--border);border-radius:16px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    <span class="header-brand">CREDIT BRIGHT</span>
+    <span class="header-title">Student Reports</span>
+  </div>
+  <a href="website-dashboard.html" class="header-back">&larr; Dashboard</a>
+</div>
+
+<div class="container">
+  <div id="student-list-section">
+    <div class="section-label">Select a student</div>
+    <div id="student-list" class="student-list">
+      <div class="loading">Loading students...</div>
+    </div>
+  </div>
+
+  <div id="report" class="report"></div>
+</div>
+
+<script>
+var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+var courseNames = {
+  'foundation': 'Foundation Course',
+  'getting_out_of_debt': 'Getting Out of Debt',
+  'negotiating_better_deals': 'Negotiating Better Deals'
+};
+var toolNames = {
+  'calculator': 'Credit Calculator',
+  'simulator': 'Credit Simulator',
+  'ai_advisor': 'AI Credit Advisor'
+};
+var toolIcons = {
+  'calculator': '🧮',
+  'simulator': '📊',
+  'ai_advisor': '💬'
+};
+
+async function loadStudents() {
+  var { data: profiles } = await sb.from('profiles').select('id, full_name, email, created_at').order('full_name');
+  if (!profiles || profiles.length === 0) {
+    document.getElementById('student-list').innerHTML = '<div class="empty-state">No students yet.</div>';
+    return;
+  }
+
+  // Get enrollment counts per user
+  var { data: enrollments } = await sb.from('enrollments').select('user_id, product');
+
+  var enrollMap = {};
+  if (enrollments) {
+    enrollments.forEach(function(e) {
+      if (!enrollMap[e.user_id]) enrollMap[e.user_id] = [];
+      if (enrollMap[e.user_id].indexOf(e.product) === -1) enrollMap[e.user_id].push(e.product);
+    });
+  }
+
+  var html = '';
+  profiles.forEach(function(p) {
+    var courses = enrollMap[p.id] || [];
+    var courseCount = courses.filter(function(c) { return c !== 'bundle'; }).length;
+    var hasBundle = courses.indexOf('bundle') !== -1;
+    var label = hasBundle ? 'Bundle (all courses)' : courseCount + ' course' + (courseCount !== 1 ? 's' : '');
+
+    html += '<div class="student-card" onclick="loadReport(\'' + p.id + '\')">';
+    html += '<div><div class="student-name">' + (p.full_name || 'Unnamed') + '</div>';
+    html += '<div class="student-email">' + (p.email || '') + '</div></div>';
+    html += '<div class="student-meta"><div class="student-courses">' + label + '</div></div>';
+    html += '</div>';
+  });
+  document.getElementById('student-list').innerHTML = html;
+}
+
+async function loadReport(userId) {
+  var report = document.getElementById('report');
+  report.className = 'report visible';
+  report.innerHTML = '<div class="loading">Building report...</div>';
+  window.scrollTo({ top: report.offsetTop - 20, behavior: 'smooth' });
+
+  // Fetch all data in parallel
+  var [profileRes, enrollRes, progressRes, assessRes, toolRes, certRes] = await Promise.all([
+    sb.from('profiles').select('*').eq('id', userId).single(),
+    sb.from('enrollments').select('*').eq('user_id', userId),
+    sb.from('section_progress').select('*').eq('user_id', userId),
+    sb.from('assessment_responses').select('*').eq('user_id', userId).order('answered_at'),
+    sb.from('tool_sessions').select('*').eq('user_id', userId),
+    sb.from('certificates').select('*').eq('user_id', userId)
+  ]);
+
+  var profile = profileRes.data;
+  var enrollments = enrollRes.data || [];
+  var progress = progressRes.data || [];
+  var assessments = assessRes.data || [];
+  var tools = toolRes.data || [];
+  var certs = certRes.data || [];
+
+  if (!profile) {
+    report.innerHTML = '<div class="empty-state">Student not found.</div>';
+    return;
+  }
+
+  // ── Build the report ──
+  var html = '';
+
+  // Header
+  var joinedDate = profile.created_at ? new Date(profile.created_at).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+  html += '<div class="report-header">';
+  html += '<button class="report-close" onclick="closeReport()">&times;</button>';
+  html += '<div class="report-student-name">' + (profile.full_name || 'Unnamed') + '</div>';
+  html += '<div class="report-student-email">' + (profile.email || '') + '</div>';
+  html += '<div class="report-student-joined">Joined ' + joinedDate + '</div>';
+  html += '</div>';
+
+  // Summary cards
+  var coursesEnrolled = enrollments.filter(function(e) { return e.product !== 'bundle'; }).length;
+  var hasBundle = enrollments.some(function(e) { return e.product === 'bundle'; });
+  if (hasBundle) coursesEnrolled = 3;
+  var totalMinutes = 0;
+  progress.forEach(function(sp) {
+    if (sp.section_key !== '_resume' && sp.time_spent_seconds) totalMinutes += sp.time_spent_seconds;
+  });
+  totalMinutes = Math.round(totalMinutes / 60);
+
+  html += '<div class="report-grid">';
+  html += '<div class="report-card"><div class="report-card-label">Courses Enrolled</div><div class="report-card-value">' + coursesEnrolled + '</div></div>';
+  html += '<div class="report-card"><div class="report-card-label">Certificates Earned</div><div class="report-card-value">' + certs.length + '</div></div>';
+  html += '<div class="report-card"><div class="report-card-label">Time in Courses</div><div class="report-card-value">' + totalMinutes + '<span style="font-family:DM Sans;font-size:16px;color:var(--text-muted)"> min</span></div></div>';
+  html += '<div class="report-card"><div class="report-card-label">Tool Sessions</div><div class="report-card-value">' + tools.length + '</div></div>';
+  html += '</div>';
+
+  // Course blocks
+  var courseKeys = ['foundation', 'getting_out_of_debt', 'negotiating_better_deals'];
+  courseKeys.forEach(function(ck) {
+    var enrolled = enrollments.some(function(e) { return e.product === ck || e.product === 'bundle'; });
+    if (!enrolled) return;
+
+    var courseProgress = progress.filter(function(sp) { return sp.course === ck && sp.section_key !== '_resume'; });
+    var courseAssess = assessments.filter(function(a) { return a.course === ck; });
+    var courseCert = certs.find(function(c) { return c.certificate_type === ck; });
+
+    var preAssess = courseAssess.filter(function(a) { return a.assessment_type === 'pre'; });
+    var postAssess = courseAssess.filter(function(a) { return a.assessment_type === 'post'; });
+
+    var preCorrect = preAssess.filter(function(a) { return a.is_correct; }).length;
+    var postCorrect = postAssess.filter(function(a) { return a.is_correct; }).length;
+    var preTotal = preAssess.length;
+    var postTotal = postAssess.length;
+    var prePct = preTotal > 0 ? Math.round(preCorrect / preTotal * 100) : null;
+    var postPct = postTotal > 0 ? Math.round(postCorrect / postTotal * 100) : null;
+
+    var status = courseCert ? 'Completed' : (courseProgress.length > 0 ? 'In Progress' : 'Not Started');
+    var statusClass = courseCert ? 'status-completed' : 'status-progress';
+
+    var courseMins = 0;
+    courseProgress.forEach(function(sp) { if (sp.time_spent_seconds) courseMins += sp.time_spent_seconds; });
+    courseMins = Math.round(courseMins / 60);
+
+    html += '<div class="course-block">';
+    html += '<div class="course-title">' + (courseNames[ck] || ck) + ' <span class="course-status ' + statusClass + '">' + status + '</span></div>';
+
+    // Scores
+    html += '<div class="score-row">';
+    if (prePct !== null) {
+      html += '<div class="score-item"><div class="score-label">Pre-Assessment</div><div class="score-value">' + prePct + '%</div><div class="detail-label">' + preCorrect + ' of ' + preTotal + ' correct</div></div>';
+    }
+    if (postPct !== null) {
+      var postColor = postPct >= 70 ? 'green' : postPct >= 50 ? 'gold' : 'red';
+      html += '<div class="score-item"><div class="score-label">Post-Assessment</div><div class="score-value ' + postColor + '">' + postPct + '%</div><div class="detail-label">' + postCorrect + ' of ' + postTotal + ' correct</div></div>';
+    }
+    if (prePct !== null && postPct !== null) {
+      var improvement = postPct - prePct;
+      var impColor = improvement > 0 ? 'green' : improvement === 0 ? 'gold' : 'red';
+      var impSign = improvement > 0 ? '+' : '';
+      html += '<div class="score-item"><div class="score-label">Improvement</div><div class="score-value ' + impColor + '">' + impSign + improvement + '%</div></div>';
+    }
+    html += '<div class="score-item"><div class="score-label">Time Spent</div><div class="score-value">' + courseMins + '<span style="font-family:DM Sans;font-size:14px;color:var(--text-muted)"> min</span></div></div>';
+    html += '</div>';
+
+    // Progress bar
+    var maxSections = ck === 'foundation' ? 13 : 6;
+    var pctDone = Math.min(Math.round(courseProgress.length / maxSections * 100), 100);
+    html += '<div class="progress-bar"><div class="progress-fill" style="width:' + pctDone + '%"></div></div>';
+    html += '<div class="detail-label">' + courseProgress.length + ' sections visited</div>';
+
+    // Certificate
+    if (courseCert) {
+      html += '<div style="margin-top:16px;padding:14px 18px;background:var(--gold-light);border-radius:12px;font-size:13px;color:#7D6608;">';
+      html += '🎓 Certificate <strong>' + (courseCert.certificate_number || '') + '</strong>';
+      if (courseCert.issued_at) html += ' issued ' + new Date(courseCert.issued_at).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+      html += '</div>';
+    }
+
+    // Questions detail toggle
+    if (courseAssess.length > 0) {
+      var detailId = 'detail-' + ck;
+      html += '<div class="questions-toggle" onclick="toggleDetail(\'' + detailId + '\')">View question-by-question detail ▾</div>';
+      html += '<div class="questions-detail" id="' + detailId + '">';
+
+      if (preAssess.length > 0) {
+        html += '<div style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin:12px 0 8px">Pre-Assessment</div>';
+        preAssess.forEach(function(a) {
+          var icon = a.is_correct ? '<div class="q-icon q-correct">✓</div>' : '<div class="q-icon q-wrong">✗</div>';
+          html += '<div class="q-row">' + icon + '<div><div class="q-text">' + (a.question_text || a.question_key) + '</div>';
+          html += '<div class="q-answer">Answered: <strong>' + (a.user_answer || '?') + '</strong>';
+          if (!a.is_correct && a.correct_answer) html += ' (Correct: ' + a.correct_answer + ')';
+          html += '</div></div></div>';
+        });
+      }
+
+      if (postAssess.length > 0) {
+        html += '<div style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin:16px 0 8px">Post-Assessment</div>';
+        postAssess.forEach(function(a) {
+          var icon = a.is_correct ? '<div class="q-icon q-correct">✓</div>' : '<div class="q-icon q-wrong">✗</div>';
+          html += '<div class="q-row">' + icon + '<div><div class="q-text">' + (a.question_text || a.question_key) + '</div>';
+          html += '<div class="q-answer">Answered: <strong>' + (a.user_answer || '?') + '</strong>';
+          if (!a.is_correct && a.correct_answer) html += ' (Correct: ' + a.correct_answer + ')';
+          html += '</div></div></div>';
+        });
+      }
+
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  // Tool usage
+  if (tools.length > 0) {
+    html += '<div class="course-block">';
+    html += '<div class="course-title">Tool Usage</div>';
+
+    // Group by tool
+    var toolGroups = {};
+    tools.forEach(function(t) {
+      if (!toolGroups[t.tool]) toolGroups[t.tool] = { count: 0 };
+      toolGroups[t.tool].count++;
+    });
+
+    Object.keys(toolGroups).forEach(function(t) {
+      var g = toolGroups[t];
+      html += '<div class="tool-row">';
+      html += '<div class="tool-icon">' + (toolIcons[t] || '🔧') + '</div>';
+      html += '<div class="tool-name">' + (toolNames[t] || t) + '</div>';
+      html += '<div class="tool-stat">' + g.count + ' session' + (g.count !== 1 ? 's' : '') + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+  }
+
+  report.innerHTML = html;
+}
+
+function closeReport() {
+  var report = document.getElementById('report');
+  report.className = 'report';
+  report.innerHTML = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleDetail(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// Admin emails: only these users can access this page
+var ADMIN_EMAILS = [
+  'ykarov@creditbright.com',
+  'matt@creditbright.com'
+];
+
+async function initAdmin() {
+  try {
+    var { data: { user }, error } = await sb.auth.getUser();
+    if (error || !user) {
+      window.location.href = 'website-login.html';
+      return;
+    }
+    var email = (user.email || '').toLowerCase();
+    var isAdmin = ADMIN_EMAILS.some(function(a) { return a.toLowerCase() === email; });
+    if (!isAdmin) {
+      window.location.href = 'website-dashboard.html';
+      return;
+    }
+    loadStudents();
+  } catch (e) {
+    window.location.href = 'website-login.html';
+  }
+}
+
+// Initialize
+initAdmin();
+</script>
+</body>
+</html>
