@@ -2900,6 +2900,7 @@ var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
 var SUPABASE_ANON_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
 var sb = null;
 var cbUser = null;
+var cbEnrollmentId = null;
 var courseKey = 'foundation';
 var screenEnteredAt = Date.now();
 var cbResumeScreen = null;
@@ -2944,7 +2945,7 @@ async function cbInit() {
 
     // Check enrollment: user must have 'foundation' or 'bundle'
     var { data: enrollments, error: enrollErr } = await sb.from('enrollments')
-      .select('product')
+      .select('id, product')
       .eq('user_id', user.id)
       .in('product', ['foundation', 'bundle']);
 
@@ -2952,6 +2953,10 @@ async function cbInit() {
       window.location.href = 'website-dashboard.html';
       return;
     }
+
+    // Prefer foundation-specific enrollment, fall back to bundle
+    var foundationEnroll = enrollments.find(function(e) { return e.product === 'foundation'; });
+    cbEnrollmentId = foundationEnroll ? foundationEnroll.id : enrollments[0].id;
 
     // Check for resume bookmark
     var { data: progress } = await sb.from('section_progress')
@@ -3000,6 +3005,7 @@ function cbSaveProgress(fromScreen, toScreen) {
   // Update the section the student is leaving (accumulate time)
   sb.from('section_progress').upsert({
     user_id: cbUser.id,
+    enrollment_id: cbEnrollmentId,
     course: courseKey,
     section_key: fromSection.key,
     section_title: fromSection.title,
@@ -3010,6 +3016,7 @@ function cbSaveProgress(fromScreen, toScreen) {
   // Save resume bookmark: special row that tracks exact screen position
   sb.from('section_progress').upsert({
     user_id: cbUser.id,
+    enrollment_id: cbEnrollmentId,
     course: courseKey,
     section_key: '_resume',
     section_title: toScreen,
