@@ -309,12 +309,13 @@ async function loadReport(uid){
   else{h+='<div class="compliance-row"><span class="compliance-label">Marketing Emails</span><span class="compliance-value">'+ef('No record')+'</span></div>'}
 
   // Consents
+  var consentLabels={'terms_and_privacy':'Terms of Service and Privacy Policy','age_confirmation':'Age Confirmation (16+)','casl_marketing':'CASL Marketing Consent'};
   h+='<div class="sub-title">Consent Audit Trail</div>';
   if(consents.length>0){consents.forEach(function(c){
-    h+='<div class="compliance-row"><span class="compliance-label">'+(c.consent_type||'Unknown')+'</span>';
+    var cLabel=consentLabels[c.consent_type]||c.consent_type||'Unknown';
+    h+='<div class="compliance-row"><span class="compliance-label">'+cLabel+'</span>';
     h+='<span class="compliance-value">'+(c.granted?'<span class="badge badge-green">Granted</span>':'<span class="badge badge-red">Denied</span>');
-    if(c.version)h+=' <span style="font-size:11px;color:var(--text-muted)">v'+c.version+'</span>';
-    h+='<div class="compliance-date">'+ft(c.recorded_at)+'</div></span></div>'})}
+    h+='<div class="compliance-date">'+fd(c.recorded_at)+'</div></span></div>'})}
   else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No consent records found')+'</div>'}
   h+='</div>';
 
