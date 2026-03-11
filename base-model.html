@@ -2944,9 +2944,9 @@ async function cbInit() {
 
     // Check enrollment: user must have 'foundation' or 'bundle'
     var { data: enrollments, error: enrollErr } = await sb.from('enrollments')
-      .select('product_key')
+      .select('product')
       .eq('user_id', user.id)
-      .in('product_key', ['foundation', 'bundle']);
+      .in('product', ['foundation', 'bundle']);
 
     if (enrollErr || !enrollments || enrollments.length === 0) {
       window.location.href = 'website-dashboard.html';
@@ -3054,7 +3054,7 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
     await sb.from('enrollments')
       .update({ completed_at: new Date().toISOString() })
       .eq('user_id', cbUser.id)
-      .eq('product_key', 'foundation');
+      .eq('product', 'foundation');
 
     // Send certificate notification email via Netlify Function
     await fetch('/.netlify/functions/send-email', {
