@@ -3031,6 +3031,7 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
   if (!sb || !cbUser) return;
   sb.from('assessment_responses').insert({
     user_id: cbUser.id,
+    enrollment_id: cbEnrollmentId,
     course: courseKey,
     assessment_type: assessmentType,
     question_key: courseKey + '_' + assessmentType + '_q' + questionIndex,
@@ -3049,11 +3050,11 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
     // Insert certificate record
     await sb.from('certificates').insert({
       user_id: cbUser.id,
-      course: courseKey,
-      certificate_id: certId,
-      holder_name: certName,
-      pre_score: preScore,
-      post_score: postScore,
+      enrollment_id: cbEnrollmentId,
+      certificate_type: courseKey,
+      certificate_number: certId,
+      pre_assessment_score: preScore,
+      post_assessment_score: postScore,
       issued_at: new Date().toISOString()
     });
 
