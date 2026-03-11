@@ -622,6 +622,27 @@ async function handleSignup(e) {
   if (error) {
     showMessage(error.message, 'error');
   } else if (data.session) {
+    // Write consent records to consents table
+    try {
+      var userId = data.session.user.id;
+      await sb.from('consents').insert([
+        { user_id: userId, consent_type: 'terms_and_privacy', granted: true, version: '2026-03-02', recorded_at: now },
+        { user_id: userId, consent_type: 'age_confirmation', granted: true, version: '2026-03-02', recorded_at: now }
+      ]);
+      if (marketingConsent) {
+        await sb.from('consents').insert({
+          user_id: userId, consent_type: 'casl_marketing', granted: true, version: '2026-03-02', recorded_at: now
+        });
+      }
+      // Write email preferences
+      await sb.from('email_preferences').upsert({
+        user_id: userId,
+        marketing_opted_in: marketingConsent,
+        opted_in_at: marketingConsent ? now : null,
+        updated_at: now
+      }, { onConflict: 'user_id' });
+    } catch (e) { /* consent write failure should not block signup */ }
+
     // Send welcome email
     try {
       fetch('/.netlify/functions/send-email', {
@@ -636,6 +657,28 @@ async function handleSignup(e) {
     } catch (e) { /* email failure should not block signup */ }
     window.location.href = 'website-dashboard.html';
   } else {
+    // Write consent records even if confirmation required
+    try {
+      var userId = data.user ? data.user.id : null;
+      if (userId) {
+        await sb.from('consents').insert([
+          { user_id: userId, consent_type: 'terms_and_privacy', granted: true, version: '2026-03-02', recorded_at: now },
+          { user_id: userId, consent_type: 'age_confirmation', granted: true, version: '2026-03-02', recorded_at: now }
+        ]);
+        if (marketingConsent) {
+          await sb.from('consents').insert({
+            user_id: userId, consent_type: 'casl_marketing', granted: true, version: '2026-03-02', recorded_at: now
+          });
+        }
+        await sb.from('email_preferences').upsert({
+          user_id: userId,
+          marketing_opted_in: marketingConsent,
+          opted_in_at: marketingConsent ? now : null,
+          updated_at: now
+        }, { onConflict: 'user_id' });
+      }
+    } catch (e) { /* consent write failure should not block signup */ }
+
     // Send welcome email even if confirmation required
     try {
       fetch('/.netlify/functions/send-email', {
