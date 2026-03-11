@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright: Negotiating Better Deals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+.cb-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center}
+.cb-overlay.visible{display:flex}
+.cb-modal{background:#fff;border-radius:20px;padding:36px 28px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.cb-modal h3{font-family:'Instrument Serif',serif;font-size:24px;font-weight:400;margin-bottom:12px;color:#1A1D1A}
+.cb-modal p{font-size:15px;color:#5A5F58;line-height:1.6;margin-bottom:24px}
+.cb-modal-btns{display:flex;gap:12px;justify-content:center}
+.cb-modal-btns button{padding:12px 24px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;border:none}
+.cb-btn-resume{background:linear-gradient(135deg,#2E7D4F,#43A66A);color:#fff}
+.cb-btn-restart{background:#F4F3F0;color:#1A1D1A}
+.cb-loading-gate{position:fixed;top:0;left:0;width:100%;height:100%;background:#1B2A1F;z-index:9998;display:flex;justify-content:center;align-items:center}
+.cb-loading-gate .spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.2);border-top-color:#43A66A;border-radius:50%;animation:cbspin 0.8s linear infinite}
+@keyframes cbspin{to{transform:rotate(360deg)}}
+:root {
+  --bg:#FAFAF8;--bg-dark:#1B2A1F;--bg-dark-2:#243028;--card:#FFFFFF;--card-hover:#FCFCFA;
+  --border:#E8E5DE;--border-light:#F0EDE6;--text:#1A1D1A;--text-secondary:#5A5F58;
+  --text-muted:#6A6E67;--green:#2E7D4F;--green-light:#E8F5EC;--green-glow:#43A66A;
+  --green-dark:#1B5E3A;--red:#C62828;--red-light:#FDEAEA;--red-glow:#E53935;
+  --blue:#3BA4D9;--blue-light:#E6F4FB;--gold:#E6A817;--gold-light:#FEF8E7;
+  --orange:#F5A623;--orange-light:#FEF3E0;--pink:#E44271;--purple:#7B61C4;--purple-light:#F0ECFA;--muted-bg:#F4F3F0;
+  --accent:#3BA4D9;--card-bg:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg-dark);min-height:100vh;position:relative}
+.phone-frame{width:100%;max-width:700px;margin:0 auto;background:var(--bg);position:relative}
+.desktop-brand-top,.desktop-brand-bottom{display:none}
+@media(max-width:540px){
+  .phone-frame{max-width:100%}
+}
+.screen{display:none;flex-direction:column;min-height:100vh;opacity:0;transition:opacity 0.5s ease}
+.screen.active{display:flex;opacity:1}
+.screen-scroll{}
+.screen-scroll::-webkit-scrollbar{width:0}
+.logo-bar{padding:16px 24px 8px;display:flex;align-items:center;gap:8px}
+.logo-text{font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;color:var(--text);letter-spacing:0.06em}
+.top-bar{padding:20px 24px 12px;display:flex;justify-content:space-between;align-items:center}
+.top-bar-left{display:flex;align-items:center;gap:12px}
+.back-arrow{width:44px;height:44px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.back-arrow:hover{border-color:var(--green);background:var(--green-light)}
+.back-arrow svg{width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back-arrow:hover svg{stroke:var(--green-dark)}
+.top-bar-section{font-size:12px;letter-spacing:0.15em;color:var(--text-muted);text-transform:uppercase;font-weight:500}
+.top-bar-step{font-size:12px;color:var(--text-muted);font-weight:400}
+.progress-wrap{padding:0 24px 20px}
+.progress-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-glow));border-radius:3px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.content{padding:0 24px 32px;flex:1}
+h1.section-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:30px;line-height:1.2;color:#fff;margin-bottom:20px}
+h2.concept-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;line-height:1.25;color:var(--text);margin-bottom:20px}
+p{font-size:17px;line-height:1.72;color:var(--text-secondary);margin-bottom:16px}
+p.emphasis{color:var(--text);font-weight:500}
+.divider{height:1px;background:var(--border-light);margin:20px 0}
+.resource-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px}
+.resource-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.resource-card-desc{font-size:14px;color:var(--text-secondary);line-height:1.55}
+p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
+.section-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(67,166,106,0.1);color:var(--green);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:6px 12px;border-radius:8px;margin-bottom:16px}
+.intro-screen{background:linear-gradient(165deg,var(--bg-dark) 0%,var(--bg-dark-2) 100%);padding:0;justify-content:space-between}
+.intro-content{padding:60px 28px 40px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.intro-label{font-size:12px;letter-spacing:0.2em;color:var(--green-glow);text-transform:uppercase;margin-bottom:16px;font-weight:500;opacity:0;transform:translateY(12px);animation:fadeUp 0.6s ease 0.3s forwards}
+.intro-desc{font-size:16px;line-height:1.7;color:rgba(255,255,255,0.65);margin-bottom:16px;opacity:0;transform:translateY(16px);animation:fadeUp 0.6s ease 0.7s forwards}
+.intro-bottom{padding:28px}
+.transition-content{padding:48px 28px}
+.transition-content p{color:rgba(255,255,255,0.7);font-size:16px;line-height:1.7}
+.transition-content .next-label{font-size:12px;letter-spacing:0.2em;color:var(--green-glow);text-transform:uppercase;margin-bottom:12px;font-weight:500}
+.transition-content h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:#fff;line-height:1.3;margin-bottom:20px}
+.btn-primary{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--green),var(--green-glow));color:white;border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;letter-spacing:0.01em;box-shadow:0 4px 16px rgba(46,125,79,0.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(46,125,79,0.35)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{opacity:0.5;cursor:default;transform:none;box-shadow:none}
+.btn-secondary{display:block;width:100%;padding:14px;background:transparent;color:rgba(255,255,255,0.8);border:1.5px solid rgba(255,255,255,0.2);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s}
+.btn-secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.35)}
+.quiz-wrap{margin:20px 0}
+.quiz-question{font-size:16px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.5}
+.quiz-option{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;margin-bottom:8px;transition:all 0.2s;line-height:1.5}
+.quiz-option:hover:not(:disabled){border-color:var(--green);background:var(--green-light)}
+.quiz-option.selected{border-color:var(--green);background:var(--green-light);color:var(--green-dark);font-weight:500}
+.quiz-option.wrong{border-color:#D64545;background:#FEE;color:#B91C1C;font-weight:500}
+.quiz-option.correct-reveal{border-color:var(--green);background:var(--green-light);color:var(--green-dark);font-weight:500;opacity:0.7}
+.quiz-option:disabled{cursor:default;opacity:0.5}
+.quiz-option.selected:disabled{opacity:1}
+.feedback-box{background:var(--green-light);border-radius:12px;padding:18px;margin-top:16px;animation:fadeUp 0.4s ease forwards}
+.feedback-box p{font-size:15px;color:var(--green-dark);margin:0;line-height:1.65}
+.feedback-box.gold{background:var(--gold-light)}
+.feedback-box.gold p{color:#7D6608}
+.insight-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:16px 18px;margin:20px 0}
+.insight-box p{font-size:15px;color:#7D6608;line-height:1.65;margin:0}
+.script-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;margin:20px 0}
+.script-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
+.script-line{font-size:15px;line-height:1.65;color:var(--text);margin-bottom:12px;padding-left:14px;border-left:2px solid var(--green-light)}
+.script-line:last-child{margin-bottom:0}
+.script-note{font-size:13px;color:var(--text-muted);line-height:1.5;margin-top:12px;font-style:italic}
+.neg-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.neg-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neg-card-title{font-size:16px;font-weight:600;color:var(--text)}
+.neg-badge{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+.neg-badge.high{background:var(--green-light);color:var(--green-dark)}
+.neg-badge.moderate{background:var(--gold-light);color:#8B6914}
+.neg-badge.low{background:var(--muted-bg);color:var(--text-muted)}
+.neg-card-body{font-size:15px;color:var(--text-secondary);line-height:1.6}
+.confidence-item{margin-bottom:20px}
+.confidence-text{font-size:15px;color:var(--text);font-weight:500;margin-bottom:8px}
+.confidence-options{display:flex;gap:8px}
+.confidence-btn{flex:1;padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;text-align:center}
+.confidence-btn[data-val="1"]{border-left:3px solid #D64545}
+.confidence-btn[data-val="2"]{border-left:3px solid #E6A817}
+.confidence-btn[data-val="3"]{border-left:3px solid var(--green)}
+.confidence-btn[data-val="1"]:hover{border-color:#D64545;color:#B91C1C}
+.confidence-btn[data-val="2"]:hover{border-color:#E6A817;color:#7D6608}
+.confidence-btn[data-val="3"]:hover{border-color:var(--green);color:var(--green)}
+.confidence-btn[data-val="1"].selected{border-color:#D64545;background:#FEE;color:#B91C1C;font-weight:600}
+.confidence-btn[data-val="2"].selected{border-color:#E6A817;background:var(--gold-light);color:#7D6608;font-weight:600}
+.confidence-btn[data-val="3"].selected{border-color:var(--green);background:var(--green-light);color:var(--green-dark);font-weight:600}
+.cost-box{background:var(--red-light);border:1.5px solid rgba(198,40,40,0.15);border-radius:14px;padding:20px;margin:20px 0;text-align:center}
+.cost-box .cost-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.cost-box .cost-amount{font-family:'Instrument Serif',serif;font-size:36px;color:var(--red);font-weight:400;margin-bottom:6px}
+.cost-box .cost-desc{font-size:14px;color:var(--text-secondary);line-height:1.5}
+.capability-box{background:var(--green-light);border-radius:14px;padding:18px;margin:24px 0;text-align:center}
+.capability-box p{font-size:15px;font-weight:600;color:var(--green-dark);margin:0;line-height:1.5}
+.scenario-card{background:var(--blue-light);border:1.5px solid rgba(59,164,217,0.2);border-radius:14px;padding:18px;margin:20px 0}
+.scenario-card .scenario-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.scenario-card .scenario-text{font-size:15px;color:var(--text);line-height:1.65;margin:0}
+.certificate-prompt{background:linear-gradient(135deg,var(--green),var(--green-glow));border-radius:20px;padding:28px;text-align:center;margin-top:28px;box-shadow:0 8px 32px rgba(46,125,79,0.3)}
+.certificate-prompt .cert-icon{font-size:36px;margin-bottom:12px}
+.certificate-prompt .cert-title{font-family:'Instrument Serif',serif;font-size:22px;color:#fff;font-weight:400;margin-bottom:8px}
+.certificate-prompt .cert-desc{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px}
+.certificate-display{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:40px 28px;text-align:center;margin:20px 0}
+.cert-logo{font-size:12px;letter-spacing:0.2em;color:var(--green);font-weight:600;text-transform:uppercase;margin-bottom:20px}
+.cert-main-title{font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);margin-bottom:8px}
+.cert-subtitle{font-size:14px;color:var(--text-muted);margin-bottom:24px}
+.cert-name{font-family:'Instrument Serif',serif;font-size:28px;color:var(--green-dark);margin-bottom:24px;padding:12px 0;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)}
+.cert-detail{font-size:13px;color:var(--text-muted);margin-bottom:4px}
+.score-summary{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;margin:20px 0;text-align:center}
+.score-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.score-display{font-family:'Instrument Serif',serif;font-size:48px;color:var(--green);font-weight:400}
+.score-sub{font-size:14px;color:var(--text-muted);margin-top:4px}
+.score-compare{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light)}
+.score-compare-item{text-align:center}
+.score-compare-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.score-compare-val{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400}
+.name-input{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text);background:var(--card);outline:none;transition:border-color 0.2s;text-align:center;margin-top:12px}
+.name-input:focus{border-color:var(--green)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.logo-icon{flex-shrink:0}
+.screen-scroll::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:center;padding:20px 24px 24px;font-size:12px;color:var(--text-muted);letter-spacing:0.06em;opacity:0.5}
+
+/* ── Mobile Polish ── */
+@media(max-width:400px){
+  /* Score compare - stack */
+  .score-compare{grid-template-columns:1fr;gap:8px;text-align:center}
+  .score-compare .arrow{transform:rotate(90deg)}
+  
+  /* Confidence options - tighter */
+  .confidence-options{gap:4px}
+  .confidence-btn{padding:8px 4px;font-size:11px}
+  
+  /* Quiz options */
+  .quiz-option{padding:12px 14px;font-size:14px}
+  
+  /* Negotiation cards */
+  .neg-card{padding:18px}
+  .neg-card-header{flex-direction:column;align-items:flex-start;gap:8px}
+  
+  /* Resource cards */
+  .resource-card{padding:14px}
+  
+  /* General typography */
+  h2.section-title{font-size:22px}
+  p{font-size:16px}
+  
+  /* Score compare values */
+  .score-compare-val{font-size:24px}
+}
+
+@media print {
+  body, .phone-frame { background: #fff !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  .screen { display: none !important; }
+  #cert-1 { display: flex !important; opacity: 1 !important; }
+  .logo-bar, .top-bar, .progress-wrap, .btn-primary, .screen-scroll::after, p.small { display: none !important; }
+  #cert-1 .logo-bar { display: none !important; }
+  #cert-1 .content > *:not(.certificate-display) { display: none !important; }
+  .certificate-display { border: 2px solid var(--gold) !important; padding: 60px 40px !important; margin: 40px auto !important; max-width: 600px !important; box-shadow: none !important; }
+  .cert-name { font-size: 32px !important; }
+  .cert-main-title { font-size: 26px !important; }
+}
+
+</style>
+</head>
+<body>
+<div id="cb-loading-gate" class="cb-loading-gate"><div class="spinner"></div></div>
+<div id="cb-resume-overlay" class="cb-overlay">
+  <div class="cb-modal">
+    <h3>Welcome back</h3>
+    <p id="cb-resume-text">Resume where you left off?</p>
+    <div class="cb-modal-btns">
+      <button class="cb-btn-restart" onclick="cbDismissResume()">Start Over</button>
+      <button class="cb-btn-resume" onclick="cbResume()">Resume</button>
+    </div>
+  </div>
+</div>
+
+<div class="phone-frame">
+
+<!-- WELCOME -->
+<div id="welcome" class="screen active intro-screen">
+  <div class="intro-content">
+    <div class="intro-label">Credit Bright Deep Dive</div>
+    <h1 class="section-title" style="opacity:0;transform:translateY(16px);animation:fadeUp 0.6s ease 0.5s forwards;">Negotiating<br>Better Deals</h1>
+    <p class="intro-desc">In the Foundation Course, you learned the six key terms inside every credit agreement. Interest rate. Loan term. APR. Loan amount. Collateral. Repayment terms.</p>
+    <p class="intro-desc" style="animation-delay:0.9s;">Most people accept those terms as fixed. They are not.</p>
+    <p class="intro-desc" style="animation-delay:1.1s;">This course teaches you which terms are negotiable, when to ask, and exactly what to say.</p>
+    <p class="intro-desc" style="animation-delay:1.3s;">About 30 minutes. Four sections.</p>
+  </div>
+  <div class="intro-bottom">
+    <button class="btn-secondary" onclick="goTo('pre-0')">Begin</button>
+  </div>
+</div>
+
+<!-- PRE-TEST -->
+<div id="pre-0" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">PRE-ASSESSMENT</div>
+      <h2 class="concept-title">Before We Start</h2>
+      <p>Five questions. Answer based on what you know right now. There is no penalty for guessing. This is just a starting point so we can measure what you learn.</p>
+      <div id="pre-quiz-area"></div>
+      <div id="pre-nav" style="display:none;margin-top:24px;">
+        <button class="btn-primary" onclick="goTo('pre-1')">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pre-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">PRE-ASSESSMENT</div>
+      <h2 class="concept-title">How confident do you feel?</h2>
+      <p>Rate yourself on each of these. Be honest. There are no wrong answers here.</p>
+      <div class="confidence-item">
+        <p class="confidence-text">I know which credit terms are negotiable.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('pre',0,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('pre',0,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('pre',0,this)">Confident</button>
+        </div>
+      </div>
+      <div class="confidence-item">
+        <p class="confidence-text">I could call my bank right now and ask for a lower rate.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('pre',1,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('pre',1,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('pre',1,this)">Confident</button>
+        </div>
+      </div>
+      <div class="confidence-item">
+        <p class="confidence-text">I know the best time to negotiate credit terms.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('pre',2,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('pre',2,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('pre',2,this)">Confident</button>
+        </div>
+      </div>
+      <div id="conf-pre-nav" style="display:none;margin-top:20px;">
+        <button class="btn-primary" onclick="goTo('s1-0')">Start the Course</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1: AWARENESS ═══ -->
+<div id="s1-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 1 OF 4</div>
+      <h2>The Negotiation<br>Mindset</h2>
+      <p>Most Canadians walk into their bank and accept whatever they are offered. They sign the agreement, take the rate, pay the fees.</p>
+      <p>They do not ask for better terms. Not because they are foolish. Because it never occurs to them that they can.</p>
+      <p>That changes now.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s1-1')">Begin Section 1</button>
+    </div>
+  </div>
+</div>
+
+<div id="s1-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">1 of 3</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:8%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Why Lenders Will Negotiate</h2>
+      <p>Here is something the Canadian banking industry does not advertise: it costs a lender five to ten times more to acquire a new customer than to keep an existing one.</p>
+      <p>Think about what goes into winning your business. Marketing. Branch staff. Application processing. Credit checks. Underwriting. All of that costs real money. Once you are a customer, the lender has already invested in you.</p>
+      <p>If you call and ask for a better rate, the person on the other end of the phone is doing a simple calculation: is it cheaper to give this customer a small concession, or risk losing them to a competitor?</p>
+      <p>Most of the time, the concession wins. Not because the lender is generous. Because the math works in your favour.</p>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Scenario</div>
+        <div class="scenario-text">Imagine you have had a Visa card with one of the Big Five banks for four years. You have always paid on time. You call and ask for a two-percentage-point rate reduction. The bank can either give you the reduction and keep your account, or say no and risk you moving your balance to a competitor. Which outcome do you think the bank prefers?</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-1-1">
+        <p class="quiz-question">You have been a loyal cardholder for four years with a clean payment history. You call your bank and ask for a better rate. From the bank&rsquo;s perspective, what is the most likely reason they would agree?</p>
+        <button class="quiz-option" onclick="answerQuiz('1-1',0,this)">They are legally required to reduce rates for long-term customers.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-1',1,this)">Keeping you is cheaper than the cost of finding a replacement customer.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-1',2,this)">They have a fixed quarterly budget for customer discounts.</button>
+      </div>
+      <div id="feedback-1-1" style="display:none;"></div>
+      <div id="nav-1-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s1-2')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s1-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-1')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">2 of 3</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:16%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Cost of Not Asking</h2>
+      <p>Before we go further, let us look at what silence costs you.</p>
+      <p>The average Canadian credit card carries an interest rate around 19.99%. That is standard across most major banks. Suppose you carry a $5,000 balance and make only the minimum payment.</p>
+
+      <div class="cost-box">
+        <div class="cost-label">Cost of Accepting 19.99%</div>
+        <div class="cost-amount">$3,810</div>
+        <div class="cost-desc">Total interest paid over 3 years on a $5,000 balance at 19.99%, minimum payments only.</div>
+      </div>
+
+      <p>Now suppose you make one phone call and negotiate that rate down to 14.99%. Same balance. Same payment behaviour.</p>
+
+      <div class="cost-box" style="background:var(--green-light);border-color:rgba(46,125,79,0.15);">
+        <div class="cost-label" style="color:var(--green-dark);">Cost at 14.99% (After One Call)</div>
+        <div class="cost-amount" style="color:var(--green-dark);">$2,680</div>
+        <div class="cost-desc">Same balance, same payments. One phone call. $1,130 saved.</div>
+      </div>
+
+      <p class="emphasis">That is $1,130 you keep. For a phone call that takes five minutes. The person who does not call pays that difference. Every month. For years.</p>
+
+      <div class="quiz-wrap" id="quiz-1-2">
+        <p class="quiz-question">A Canadian with a $5,000 credit card balance at 19.99% negotiates the rate down to 14.99%. Over three years, roughly how much do they save?</p>
+        <button class="quiz-option" onclick="answerQuiz('1-2',0,this)">About $200</button>
+        <button class="quiz-option" onclick="answerQuiz('1-2',1,this)">About $1,100</button>
+        <button class="quiz-option" onclick="answerQuiz('1-2',2,this)">About $5,000</button>
+      </div>
+      <div id="feedback-1-2" style="display:none;"></div>
+      <div id="nav-1-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s1-3')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s1-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-2')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">3 of 3</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:25%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Four Pillars</h2>
+      <p>Credit negotiation, like all negotiation, rests on four pillars. Every tactic, every script, every strategy in this course maps back to these four things.</p>
+      <div class="neg-card" style="border-left:3px solid var(--green);">
+        <div class="neg-card-header"><div class="neg-card-title">Awareness</div></div>
+        <div class="neg-card-body">Knowing that negotiation is even an option. Most people never ask. That is the single biggest barrier, and you have already cleared it by being here.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--blue);">
+        <div class="neg-card-header"><div class="neg-card-title">Knowledge</div></div>
+        <div class="neg-card-body">Knowing what is on the table. Which of the six key terms can move and which ones cannot. You learned them in the Foundation Course. Now you learn which ones bend.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--purple);">
+        <div class="neg-card-header"><div class="neg-card-title">Technique</div></div>
+        <div class="neg-card-body">Knowing what to say. The actual words, the framing, the ability to handle a no and keep going. This is the skill that transfers well beyond credit.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--orange);">
+        <div class="neg-card-header"><div class="neg-card-title">Timing</div></div>
+        <div class="neg-card-body">Knowing when you have leverage and when you do not. The best script in the world does not help if you are calling at the wrong moment with nothing to back it up.</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-1-3">
+        <p class="quiz-question">You want to negotiate a lower rate on your credit card but you have no idea what other banks are offering. Which pillar are you missing?</p>
+        <button class="quiz-option" onclick="answerQuiz('1-3',0,this)">Awareness</button>
+        <button class="quiz-option" onclick="answerQuiz('1-3',1,this)">Knowledge</button>
+        <button class="quiz-option" onclick="answerQuiz('1-3',2,this)">Timing</button>
+      </div>
+      <div id="feedback-1-3" style="display:none;"></div>
+      <div id="nav-1-3" style="display:none;margin-top:20px;">
+        <div class="capability-box"><p>You now understand why lenders negotiate and what silence costs you. That awareness alone puts you ahead of most Canadians.</p></div>
+        <button class="btn-primary" onclick="goTo('s2-0')">Continue to Section 2</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: KNOWLEDGE ═══ -->
+<div id="s2-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 2 OF 4</div>
+      <h2>Which Terms<br>Are Negotiable</h2>
+      <p>In the Foundation Course, you learned the six key terms inside every credit agreement. Loan amount, loan term, interest rate, APR, collateral, and repayment terms.</p>
+      <p>Not all six are equally negotiable. Some move easily. Some barely move at all. Knowing the difference tells you where to focus your energy.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s2-1')">Begin Section 2</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">1 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:18%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Big Three</h2>
+      <p>Of the six terms, three are highly negotiable. These are where you focus your energy.</p>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Interest Rate</div><div class="neg-badge high">Highly Negotiable</div></div>
+        <div class="neg-card-body">This is the most negotiable term in Canadian consumer credit. Credit card rates, personal loan rates, even mortgage rates have room to move. The rate you are offered is rarely the bottom of the lender&rsquo;s range. A single phone call can sometimes drop your rate by two or more percentage points. On a $10,000 balance, that is hundreds of dollars a year.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">APR (Fees)</div><div class="neg-badge high">Highly Negotiable</div></div>
+        <div class="neg-card-body">Remember from the Foundation Course: APR includes the interest rate plus fees. Annual fees on Canadian credit cards, application fees on loans, even some closing costs on mortgages can be waived or reduced. Many Canadians pay annual card fees of $99 to $150 year after year without ever questioning them. A five-minute call can eliminate them entirely, especially if you mention cancelling the card. But annual fees are just the beginning. There is a whole landscape of fees worth challenging.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Repayment Terms</div><div class="neg-badge high">Highly Negotiable</div></div>
+        <div class="neg-card-body">Payment schedules, minimum payment amounts, due dates, and grace periods all have more flexibility than most people realise. If you are going through a difficult period, lenders would rather adjust your terms than have you miss payments. Every major Canadian bank has a formal hardship program. Payment deferrals and restructured schedules exist for exactly this reason.</div>
+      </div>
+      <div class="quiz-wrap" id="quiz-2-1">
+        <p class="quiz-question">You have been paying a $120 annual fee on your credit card for three years without questioning it. That fee is part of which key term from the Foundation Course?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-1',0,this)">Interest rate</button>
+        <button class="quiz-option" onclick="answerQuiz('2-1',1,this)">APR</button>
+        <button class="quiz-option" onclick="answerQuiz('2-1',2,this)">Repayment terms</button>
+      </div>
+      <div id="feedback-2-1" style="display:none;"></div>
+      <div id="nav-2-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-2')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s2-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-1')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">2 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:23%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Other Three</h2>
+      <p>The remaining three terms are less negotiable, but they are not fixed either.</p>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Loan Term</div><div class="neg-badge moderate">Moderate</div></div>
+        <div class="neg-card-body">In Canada, mortgage terms typically run one to five years, while amortization can stretch to twenty-five years. Those are separate numbers and there is flexibility in both. On personal loans and lines of credit, choosing a shorter or longer term is more about selecting the right product than negotiating with one lender. The leverage here is in shopping between institutions.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Rate Type</div><div class="neg-badge moderate">Moderate</div></div>
+        <div class="neg-card-body">In Canada, this is often the first mortgage decision you make. A fixed rate locks your interest for the full term, giving you certainty. A variable rate moves with the Bank of Canada&rsquo;s overnight rate, which means your payments can rise or fall with the market. A hybrid mortgage splits your balance between the two, giving you partial protection and partial exposure. None of these is objectively better. Fixed costs more upfront but protects you if rates climb. Variable has historically been cheaper over time in Canada, but carries risk if rates spike. The negotiation angle: your choice of rate type shapes your leverage at every renewal. A borrower on a variable rate in a falling market is in a very different position than someone locked into a five-year fixed.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Loan Amount</div><div class="neg-badge low">Low</div></div>
+        <div class="neg-card-body">How much you can borrow is determined by your income, your debt service ratios, and the lender&rsquo;s guidelines. In Canada, federal regulators set stress-test requirements that cap how much a bank can lend you for a mortgage. There is very little room to negotiate a higher amount. The way to improve this number is not negotiation. It is improving your financial profile first.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Collateral</div><div class="neg-badge low">Low</div></div>
+        <div class="neg-card-body">A secured loan requires collateral. An unsecured loan does not. You cannot negotiate your way from one to the other. But you can choose between them, and understanding that trade-off &mdash; a lower rate in exchange for pledging an asset &mdash; is itself a form of negotiation through product selection.</div>
+      </div>
+      <div class="quiz-wrap" id="quiz-2-2">
+        <p class="quiz-question">Your Canadian mortgage is coming up for its five-year renewal. Which of the six key terms has the most room to move at this moment?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-2',0,this)">The loan amount</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2',1,this)">The interest rate</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2',2,this)">The collateral</button>
+      </div>
+      <div id="feedback-2-2" style="display:none;"></div>
+      <div id="nav-2-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-2b')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="s2-2b" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-2')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">3 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:27%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Mortgage Decision</h2>
+      <p>Before you negotiate a mortgage rate, you need to understand what kind of rate you are negotiating. In Canada, this is the fork in the road.</p>
+      <div class="neg-card" style="border-left:3px solid var(--green);">
+        <div class="neg-card-header"><div class="neg-card-title">Fixed Rate</div></div>
+        <div class="neg-card-body">Your interest rate is locked for the entire term &mdash; typically one to five years. If the Bank of Canada raises rates, yours stays the same. If rates drop, yours also stays the same. You are paying for certainty. In Canada, the five-year fixed rate is the most common mortgage choice. On a $400,000 mortgage at 5.0% fixed over five years, your monthly payment is roughly $2,326. That number does not change for sixty months, no matter what happens in the market.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--blue);">
+        <div class="neg-card-header"><div class="neg-card-title">Variable Rate</div></div>
+        <div class="neg-card-body">Your rate moves with the Bank of Canada&rsquo;s overnight rate. When the BoC cuts, your rate drops. When they hike, your rate rises. Historically, variable rates have been cheaper than fixed rates in Canada over the long run, but they come with real risk. That same $400,000 mortgage might start at 4.4% variable &mdash; a monthly payment of roughly $2,192 &mdash; but if the BoC raises rates by 1.5%, you are suddenly paying $2,537 a month. That swing is not theoretical. Canadian borrowers experienced exactly this in 2022&ndash;2023.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--purple);">
+        <div class="neg-card-header"><div class="neg-card-title">Hybrid (Split) Mortgage</div></div>
+        <div class="neg-card-body">Some Canadian lenders let you split your mortgage: half fixed, half variable. You get partial protection if rates rise and partial benefit if rates fall. It is a hedge. On that same $400,000, you might put $200,000 at 5.0% fixed and $200,000 at 4.4% variable. Your blended starting payment is lower than full fixed, and your worst-case scenario is better than full variable.</div>
+      </div>
+      <div class="insight-box"><p><strong>The negotiation angle.</strong> Your choice of rate type shapes every future negotiation. A borrower on a variable rate in a falling market has different leverage than someone locked into a five-year fixed. At renewal, knowing your rate type &mdash; and knowing what competing lenders are offering for that type &mdash; is the foundation of your ask. Do not choose a rate type without understanding how it affects your position at the table.</p></div>
+      <div class="quiz-wrap" id="quiz-2-2b">
+        <p class="quiz-question">Rates have fallen 1% since you signed a five-year fixed mortgage two years ago. Your neighbour on a variable rate is paying less than you. What is the most important thing to consider?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-2b',0,this)">You made a mistake choosing fixed. Switch to variable immediately.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2b',1,this)">Breaking a fixed mortgage early carries a prepayment penalty, possibly thousands of dollars. The better move is to prepare your case for renewal in three years, when you can switch without penalty.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2b',2,this)">Fixed and variable rates always balance out, so it does not matter.</button>
+      </div>
+      <div id="feedback-2-2b" style="display:none;"></div>
+      <div id="nav-2-2b" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-2c')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="s2-2c" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-2b')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">4 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:32%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Fees You Can Challenge</h2>
+      <p>Interest rates get all the attention. But fees are where Canadians lose money without even noticing. Here are the six most common fee types in Canadian consumer credit and what you can do about each one.</p>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Credit Card Annual Fee</div><div class="neg-badge high">Highly Negotiable</div></div>
+        <div class="neg-card-body">Ranges from $0 to $699 in Canada depending on the card. Even premium travel cards with high fees can be waived or reduced with a single call. If you have held the card for two or more years and paid on time, you have leverage. This is the easiest fee win in Canadian credit.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Late Payment Fee</div><div class="neg-badge moderate">Moderate</div></div>
+        <div class="neg-card-body">Typically $25 to $49 per occurrence. If it is your first late payment, most Canadian banks will waive it if you call and ask. The cost to them of processing your call is close to what the fee is worth. After multiple late payments, your leverage drops sharply.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Balance Transfer Fee</div><div class="neg-badge moderate">Moderate</div></div>
+        <div class="neg-card-body">Usually 1% to 3% of the transferred amount. On a $10,000 transfer, that is $100 to $300 you pay for the privilege of moving your balance. Some promotional offers waive this fee entirely. Always ask: is the transfer fee included in this offer, or is it on top?</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Mortgage Prepayment Penalty</div><div class="neg-badge low">Difficult</div></div>
+        <div class="neg-card-body">This is the big one. If you break a fixed-rate mortgage early, the penalty is typically the greater of three months&rsquo; interest or the Interest Rate Differential (IRD). On a large mortgage, IRD can run into the tens of thousands of dollars. Variable-rate mortgages usually cap the penalty at three months&rsquo; interest. You cannot negotiate this away after signing &mdash; but you can choose a mortgage product that minimises it before you sign. Ask about the penalty formula upfront.</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">Mortgage Discharge Fee</div><div class="neg-badge moderate">Moderate</div></div>
+        <div class="neg-card-body">When you switch mortgage lenders, your current lender charges $200 to $350 to discharge (release) your mortgage. Some competing lenders will cover this cost to win your business. Always ask the new lender: will you cover my discharge fee?</div>
+      </div>
+      <div class="neg-card">
+        <div class="neg-card-header"><div class="neg-card-title">NSF (Returned Payment) Fee</div><div class="neg-badge moderate">Moderate</div></div>
+        <div class="neg-card-body">Charged when a payment bounces. Typically $45 to $48 at Canadian banks. Like late fees, a first offence can often be reversed with a polite phone call. After the second or third, you are unlikely to get it waived.</div>
+      </div>
+      <div class="insight-box"><p>The pattern is clear: <strong>fees that are routine and automated are the most negotiable.</strong> Annual fees, first-time late fees, and NSF charges can often be reversed because the cost of losing you as a customer exceeds the fee. Contractual fees like prepayment penalties are much harder to change after you have signed. The best time to negotiate those is before the ink is dry.</p></div>
+      <div class="quiz-wrap" id="quiz-2-2c">
+        <p class="quiz-question">You are considering breaking your fixed-rate mortgage two years early to take advantage of lower rates elsewhere. Which fee should you investigate first?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-2c',0,this)">The discharge fee from your current lender.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2c',1,this)">The prepayment penalty, which on a fixed-rate mortgage could be thousands of dollars under the IRD calculation.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2c',2,this)">The annual fee on your credit card.</button>
+      </div>
+      <div id="feedback-2-2c" style="display:none;"></div>
+      <div id="nav-2-2c" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-3')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s2-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-2c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">5 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:36%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Pick Your Battles</h2>
+      <p>Now you know the map. Here it is at a glance.</p>
+      <div class="neg-card" style="background:var(--green-light);border-color:var(--green);">
+        <div style="font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:6px;">FOCUS HERE</div>
+        <div class="neg-card-body" style="color:var(--green-dark);">Interest Rate, Fees (APR), Repayment Terms. These are worth a phone call. These are worth preparing for. These are where the money is.</div>
+      </div>
+      <div class="neg-card" style="background:var(--gold-light);border-color:var(--gold);">
+        <div style="font-size:13px;font-weight:700;color:#8B6914;margin-bottom:6px;">SOME FLEXIBILITY</div>
+        <div class="neg-card-body" style="color:#7D6608;">Loan Term and Rate Type. More about product selection than direct negotiation. Compare offers from different lenders, especially at mortgage renewal. Your choice of fixed, variable, or hybrid shapes your leverage going forward.</div>
+      </div>
+      <div class="neg-card" style="background:var(--muted-bg);border-color:var(--border);">
+        <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">LIMITED ROOM</div>
+        <div class="neg-card-body">Loan Amount and Collateral. Governed by your financial profile, federal stress-test rules, and product type. Improve the inputs and the outputs improve.</div>
+      </div>
+      <div class="quiz-wrap" id="quiz-2-3">
+        <p class="quiz-question">You want to reduce the total cost of your Canadian credit card. Which approach is most likely to succeed?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-3',0,this)">Ask for a higher credit limit to lower your utilization ratio.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-3',1,this)">Call and ask for a lower interest rate and a waiver on the annual fee.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-3',2,this)">Ask to switch from unsecured to secured to change the collateral requirement.</button>
+      </div>
+      <div id="feedback-2-3" style="display:none;"></div>
+      <div id="nav-2-3" style="display:none;margin-top:20px;">
+        <div class="capability-box"><p>You now know exactly which terms move and which ones do not. You can look at any credit product in Canada and identify where the negotiation room is.</p></div>
+        <button class="btn-primary" onclick="goTo('s3-0')">Continue to Section 3</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: TECHNIQUE ═══ -->
+<div id="s3-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 3 OF 4</div>
+      <h2>How to Ask</h2>
+      <p>You know why lenders negotiate. You know which of the six key terms are on the table. Now comes the part most people fear: the actual conversation.</p>
+      <p>This section gives you scripts. Not rigid formulas, but frameworks you can adapt. Specific enough that you know what to say. Flexible enough that you sound like yourself.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s3-1')">Begin Section 3</button>
+    </div>
+  </div>
+</div>
+
+<div id="s3-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">1 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:41%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Asking for a Lower Interest Rate</h2>
+      <p>This is the most common and most valuable negotiation in Canadian consumer credit. Here is a script that works.</p>
+      <div class="script-card">
+        <div class="script-label">Script &mdash; Rate Reduction Call</div>
+        <div class="script-line">&ldquo;Hi, I&rsquo;ve been a cardholder for [X years] and I&rsquo;ve always paid on time. My current rate is [your rate], and I&rsquo;ve been looking at other offers and I&rsquo;m seeing rates around [lower rate]. I&rsquo;d like to stay, but I&rsquo;d need you to bring my rate closer to that. Is that something you can do?&rdquo;</div>
+        <div class="script-note">Why this works: It leads with loyalty (retention value). It states your current rate so both sides know the starting point. It introduces a competing offer (urgency). It names a specific target number (anchoring). And it ends with a direct ask.</div>
+      </div>
+      <p><strong>&ldquo;I&rsquo;ve been a cardholder for [X years].&rdquo;</strong> This is not small talk. You are reminding them of your retention value. The longer you have been a customer, the more it costs them to replace you.</p>
+      <p><strong>&ldquo;My current rate is [your rate].&rdquo;</strong> Stating your existing rate shows you know your terms. It establishes the gap between what you are paying and what competitors are offering. That gap is your negotiation space.</p>
+      <p><strong>&ldquo;I&rsquo;ve been looking at other offers.&rdquo;</strong> You are signalling that you have alternatives. In Canada&rsquo;s competitive banking market, every Big Five bank wants the other four&rsquo;s customers. You do not need a formal offer in hand, though it helps.</p>
+      <p><strong>&ldquo;I&rsquo;m seeing rates around [lower rate].&rdquo;</strong> This is your anchor. It gives the representative a target. Without a number, they have no direction. A quick search for competing Canadian credit card rates before you call gives you this number.</p>
+      <p><strong>&ldquo;Is that something you can do?&rdquo;</strong> A direct, polite ask. Not aggressive. Not pleading. Just a clear question that requires a clear answer.</p>
+      <div class="quiz-wrap" id="quiz-3-1">
+        <p class="quiz-question">You are about to call your bank to ask for a rate reduction. You have been a customer for five years with a perfect payment record. Your current rate is 19.99%. You checked online and found a competitor offering 12.99%. In the script, what role does mentioning 12.99% play?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-1',0,this)">It proves you have already been approved elsewhere.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-1',1,this)">It anchors the conversation and gives the representative a specific target.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-1',2,this)">It is a legal requirement under Canadian consumer protection rules.</button>
+      </div>
+      <div id="feedback-3-1" style="display:none;"></div>
+      <div id="nav-3-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-1b')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="s3-1b" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-1')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">2 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:45%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Negotiating Your Line of Credit</h2>
+      <p>Lines of credit work differently from credit cards. In Canada, personal lines of credit and home equity lines of credit (HELOCs) are priced relative to the prime rate. Each bank sets its own prime rate, but in practice they move in lockstep. Prime typically tracks the Bank of Canada&rsquo;s overnight rate plus a margin of roughly 2%. When the BoC moves, prime follows. Your bank then prices your line of credit as prime plus (or, for strong borrowers on secured products, sometimes prime minus) a spread. That spread is set by your bank based on your credit profile. And the spread is where your negotiation lives.</p>
+      <p>A typical unsecured personal line of credit in Canada might be priced at prime plus 2% to prime plus 5%, depending on your credit profile. A HELOC, because it is secured by your home, is usually priced much closer to prime, often prime plus 0.5% to prime plus 1%. Top-tier borrowers with strong credit and long banking relationships can sometimes negotiate even tighter spreads. The difference between those spreads, on a $30,000 balance, can be over $1,000 a year.</p>
+      <div class="script-card">
+        <div class="script-label">Script &mdash; Line of Credit Rate Reduction</div>
+        <div class="script-line">&ldquo;Hi, I have a personal line of credit with you at prime plus [X%]. I&rsquo;ve been a customer for [X years] and my credit score is [score]. I&rsquo;ve been looking at what other banks are offering and I&rsquo;m seeing prime plus [lower spread]. Can we look at bringing my spread down closer to that?&rdquo;</div>
+        <div class="script-note">Why this works: You are naming the specific component you want changed (the spread, not the prime rate). You are showing you understand how the product is priced. And you are anchoring with a competing offer. Banks expect this call from mortgage holders. They do not expect it from LOC holders, which often means less resistance.</div>
+      </div>
+      <p><strong>The consolidation angle.</strong> If you are carrying credit card debt at 19.99% and your LOC is at prime plus 3% (roughly 8% total), moving the balance to your LOC saves you more than 10 percentage points. But be careful: if you do this and keep spending on the credit card, you end up with two balances instead of one. The discipline has to come with the strategy.</p>
+      <p><strong>HELOC caution.</strong> A HELOC uses your home as collateral. The rate is lower precisely because the bank has a claim on your property if you cannot pay. That is a real risk, not a technicality. Use a HELOC strategically, not as a convenience account.</p>
+      <div class="quiz-wrap" id="quiz-3-1b">
+        <p class="quiz-question">Your personal line of credit is at prime plus 3%. A competitor is advertising prime plus 1.5%. On a $20,000 balance, roughly how much would lowering your spread save you per year?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-1b',0,this)">About $100</button>
+        <button class="quiz-option" onclick="answerQuiz('3-1b',1,this)">About $300</button>
+        <button class="quiz-option" onclick="answerQuiz('3-1b',2,this)">About $1,500</button>
+      </div>
+      <div id="feedback-3-1b" style="display:none;"></div>
+      <div id="nav-3-1b" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-2')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s3-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-1b')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">3 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:50%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Fee Waivers and Hardship Requests</h2>
+      <p>Annual fees are one of the easiest wins in Canadian credit negotiation. Many Canadians pay $99 to $150 a year without ever questioning it.</p>
+      <div class="script-card">
+        <div class="script-label">Script &mdash; Annual Fee Waiver</div>
+        <div class="script-line">&ldquo;Hi, I noticed my annual fee of [$X] just posted. I enjoy the card, but I&rsquo;m not sure the fee is worth it anymore given what other cards are offering with no annual fee. Is there anything you can do about the fee this year?&rdquo;</div>
+        <div class="script-note">Why this works: The phrase &ldquo;this year&rdquo; gives them a face-saving way to waive it as a one-time gesture, which makes it easier to say yes.</div>
+      </div>
+      <p><strong>If they say no to the full waiver,</strong> ask for a partial reduction. &ldquo;Could you reduce it to half?&rdquo; Getting a $120 fee down to $60 is still $60 saved for a two-minute conversation.</p>
+      <p><strong>If they still say no,</strong> ask what additional benefits you could get to justify the fee. Sometimes they will add travel credits, bonus points, or a temporary rate reduction.</p>
+      <div class="script-card">
+        <div class="script-label">Script &mdash; Hardship Repayment Request</div>
+        <div class="script-line">&ldquo;I&rsquo;m going through a difficult period financially. I want to keep paying, but I need some help with the terms. Do you have a hardship program or any options for temporarily reducing my payments?&rdquo;</div>
+        <div class="script-note">Every major Canadian bank has a formal hardship program. A restructured payment is always better for them than a default. You are not asking for charity. You are asking for a path to keep paying.</div>
+      </div>
+      <div class="quiz-wrap" id="quiz-3-2">
+        <p class="quiz-question">You have lost your job and are worried about your credit card payments. You have not missed a payment yet. What should you do?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-2',0,this)">Wait until you actually miss a payment, then call.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-2',1,this)">Call now and ask about the bank&rsquo;s hardship program before you fall behind.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-2',2,this)">Cancel the card immediately to avoid future charges.</button>
+      </div>
+      <div id="feedback-3-2" style="display:none;"></div>
+      <div id="nav-3-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-3')">Continue</button></div>
+    </div>
+  </div>
+</div>
+<div id="s3-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-2')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">4 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:55%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Negotiating Your Mortgage Renewal</h2>
+      <p>For most Canadians, a mortgage is the largest financial commitment they will ever make. And the single best moment to negotiate it is when your term comes up for renewal.</p>
+      <p>Here is what most people do not realise: <strong>at the end of your mortgage term, you can switch to a different lender with no prepayment penalty.</strong> That is enormous leverage. Your current bank knows this. They expect to lose a percentage of customers at renewal. They would rather give you a better rate than become that statistic.</p>
+      <p>Your bank will typically send a renewal offer well before your term expires. Federally regulated lenders must send a renewal statement at least 21 days before maturity. That offer is a starting point. It is not the finish line.</p>
+
+      <div class="insight-box"><p>A mortgage broker can be one of your most powerful tools here. Brokers work with multiple lenders and can get you competing quotes in a single conversation. In Canada, the borrower typically does not pay the broker directly &mdash; the lender does. Use a broker to gather competing rates, then decide whether to switch or use those rates to negotiate with your current bank.</p></div>
+
+      <div class="script-card">
+        <div class="script-label">Script &mdash; Mortgage Renewal Negotiation</div>
+        <div class="script-line">&ldquo;Hi, I received my renewal offer at [X%]. I&rsquo;ve been speaking with a mortgage broker and I&rsquo;m seeing rates around [lower rate] from other lenders. I&rsquo;d prefer to stay with you, but I need a rate closer to what I&rsquo;m being offered elsewhere. What can you do?&rdquo;</div>
+        <div class="script-note">Why this works: You have a concrete competing rate (anchoring). You have signalled you are actively shopping (urgency). And you have expressed a preference to stay (giving them a reason to act). The phrase &ldquo;what can you do&rdquo; puts the ball in their court.</div>
+      </div>
+
+      <p><strong>Be prepared to switch.</strong> Sometimes the best deal genuinely is with another lender. Switching involves legal and discharge fees, so factor those in. But on a mortgage of $400,000 or more, even a quarter-point rate difference can save you thousands over the term. Do the math. The Credit Calculator can help.</p>
+
+      <div class="quiz-wrap" id="quiz-3-3">
+        <p class="quiz-question">Your five-year mortgage term is ending. Your bank sends a renewal offer at 5.1%. A mortgage broker has found you 4.7% at another lender. What gives you the most leverage in this situation?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-3',0,this)">The fact that you have always made your payments on time.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-3',1,this)">The fact that you can switch lenders at renewal with no prepayment penalty.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-3',2,this)">The fact that mortgage rates are set by the Bank of Canada.</button>
+      </div>
+      <div id="feedback-3-3" style="display:none;"></div>
+      <div id="nav-3-3" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-4')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="s3-4" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-3')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">5 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:59%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Handling a No</h2>
+      <p>You will hear no. Expect it. The first no is not the end of the conversation. It is the beginning of it.</p>
+      <p><strong>Ask why.</strong> &ldquo;I understand. Can you tell me what would need to change for me to qualify for a better rate?&rdquo; This turns a rejection into information.</p>
+      <p><strong>Ask for a supervisor.</strong> The first person you speak to may not have the authority. &ldquo;I understand you can&rsquo;t do that. Is there someone else I could speak to about this?&rdquo; Retention departments at Canadian banks exist for exactly this kind of call.</p>
+      <p><strong>Ask for something else.</strong> If they cannot lower the rate, can they waive a fee? Extend a grace period? Add a benefit?</p>
+      <p><strong>Call back another time.</strong> Different day, different representative, different result. You can try again in a week, a month, or after strengthening your position.</p>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Scenario &mdash; Your Turn</div>
+        <div class="scenario-text">You call your bank and ask for a rate reduction on your Visa. The representative says: &ldquo;I&rsquo;m sorry, I&rsquo;m not able to change the rate on your account.&rdquo; What do you say next?</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-3-4">
+        <p class="quiz-question">The representative has said no to your rate reduction request. Which response keeps the negotiation alive?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-4',0,this)">&ldquo;OK, thanks anyway.&rdquo; Then hang up.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-4',1,this)">&ldquo;I understand. Can you tell me what would need to change for me to qualify? And if not, is there someone in your retention department I could speak with?&rdquo;</button>
+        <button class="quiz-option" onclick="answerQuiz('3-4',2,this)">&ldquo;That&rsquo;s unacceptable. I&rsquo;m going to file a complaint with FCAC.&rdquo;</button>
+      </div>
+      <div id="feedback-3-4" style="display:none;"></div>
+      <div id="nav-3-4" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-4b')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s3-4b" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-4')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">6 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:64%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Retention Department</h2>
+      <p>When the first representative says no, they are often telling you the truth &mdash; from their perspective. Front-line agents at Canadian banks have limited authority. They can look up your account, answer questions, and process standard requests. But they usually cannot override pricing, waive fees beyond a small threshold, or create custom offers.</p>
+      <p>The retention department can. These are specialised teams whose entire job is to keep customers from leaving. They exist at every major Canadian bank, though they go by different names: loyalty, retention, customer solutions, or account management. Their toolbox is bigger. They can offer unadvertised rates, multi-year fee waivers, bonus rewards, temporary rate reductions, and product upgrades that the front line simply does not have access to.</p>
+      <div class="script-card">
+        <div class="script-label">Script &mdash; Asking for Retention</div>
+        <div class="script-line">&ldquo;I appreciate your help with this. I have been thinking seriously about moving my accounts to [competitor]. Before I do that, I would like to speak with your retention or loyalty team to see if there is anything that would make it worth staying. Could you transfer me?&rdquo;</div>
+        <div class="script-note">Why this works: You are not being rude to the first agent. You are acknowledging their help while making it clear that your decision is about leaving, not about complaining. Retention teams are activated by the prospect of losing a customer. Give them that prospect.</div>
+      </div>
+      <p><strong>What to expect.</strong> The retention agent will usually ask why you are thinking of leaving. Be honest and specific: the rate is too high, the fee is not justified, a competitor has made you a better offer. They may put you on hold while they check what they can do. That hold time is a good sign &mdash; it means they are building an offer.</p>
+      <p><strong>The &ldquo;cancel to save&rdquo; path.</strong> If you call and say you want to cancel a credit card, most Canadian banks will route you directly to retention before processing the cancellation. This is the fastest way to reach the team with the most authority. You do not actually have to cancel. You just have to be credibly willing to.</p>
+      <div class="quiz-wrap" id="quiz-3-4b">
+        <p class="quiz-question">What gives the retention department more authority than the first representative you speak with?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-4b',0,this)">They are more senior employees with higher pay grades.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-4b',1,this)">Their specific role is to prevent customer departures, so they have access to unadvertised rates, fee waivers, and custom offers that front-line agents do not.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-4b',2,this)">They have the legal authority to override bank policy.</button>
+      </div>
+      <div id="feedback-3-4b" style="display:none;"></div>
+      <div id="nav-3-4b" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-5')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s3-5" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-4b')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">7 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:68%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">When They Counter</h2>
+      <p>A flat no is easy to handle. You learned that in the last screen. The more dangerous response is a counter-offer that sounds better but might not be.</p>
+      <p>When you ask for a lower rate or a fee waiver, the representative may come back with an alternative. Not what you asked for. Something else entirely. This is where most people get redirected into a worse deal dressed up as a better one.</p>
+      <p>Here are the three most common counter-offers and how to evaluate each one.</p>
+
+      <div class="neg-card" style="border-left:3px solid var(--blue);">
+        <div class="neg-card-header"><div class="neg-card-title">Balance Transfer Card</div><div class="neg-badge moderate">Watch Carefully</div></div>
+        <div class="neg-card-body">&ldquo;We can move your balance to a card with 0% interest for 12 months.&rdquo; Sounds great. But what is the rate after the promotional period? If it jumps to 22.99%, and you have not paid off the balance by then, you could end up paying more than you would have at your current rate. Ask: what is the rate after the promotion ends? What happens to any remaining balance? Are there transfer fees?</div>
+      </div>
+
+      <div class="neg-card" style="border-left:3px solid var(--purple);">
+        <div class="neg-card-header"><div class="neg-card-title">Product Switch</div><div class="neg-badge moderate">Watch Carefully</div></div>
+        <div class="neg-card-body">&ldquo;I can move you to our Premium card with a lower rate.&rdquo; Check the full picture. Does the new card come with a higher annual fee? Does it have lower rewards? A different grace period? A lower rate with a $150 annual fee may cost you more than your current card. Ask: what is the total annual cost of the new card versus my current one?</div>
+      </div>
+
+      <div class="neg-card" style="border-left:3px solid var(--orange);">
+        <div class="neg-card-header"><div class="neg-card-title">Line of Credit Offer</div><div class="neg-badge moderate">Watch Carefully</div></div>
+        <div class="neg-card-body">&ldquo;Have you considered a personal line of credit to pay off your card?&rdquo; A line of credit usually has a lower rate than a credit card. But it is a new credit product with its own terms. If you do not close or stop using the card, you could end up with two balances instead of one. Ask: what is the rate, is it fixed or variable, and will I close the card once the balance is transferred?</div>
+      </div>
+
+      <div class="insight-box"><p>The rule is simple: never say yes on the call. Tell them you need to review the details and compare. &ldquo;That sounds interesting. Can you send me the full terms so I can look them over?&rdquo; A good deal will still be a good deal tomorrow. A bad deal relies on you saying yes right now.</p></div>
+
+      <div class="quiz-wrap" id="quiz-3-5">
+        <p class="quiz-question">You ask for a rate reduction. The representative offers to switch you to a card with a lower rate but a $120 annual fee. Your current card has no annual fee. What should you do?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-5',0,this)">Accept immediately. A lower rate is always better.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-5',1,this)">Compare the total annual cost of both cards before deciding.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-5',2,this)">Decline and hang up. Counter-offers are always worse.</button>
+      </div>
+      <div id="feedback-3-5" style="display:none;"></div>
+      <div id="nav-3-5" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-6')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="s3-6" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-5')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">8 of 8</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:73%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Pattern Behind Every Script</h2>
+      <p>Look back at the scripts you just learned. Rate reduction. Fee waiver. Hardship request. Mortgage renewal. They look different on the surface. Underneath, they follow the same pattern every time.</p>
+      <p><strong>Lead with your relationship.</strong> How long you have been a customer, your payment history. This is your retention value.</p>
+      <p><strong>Signal your alternatives.</strong> Competing offers, other banks, the option to cancel. This is your leverage.</p>
+      <p><strong>Make a specific ask.</strong> A number. A waiver. A program. Not &ldquo;can you help me&rdquo; but &ldquo;can you do this specific thing.&rdquo;</p>
+      <p><strong>Stay calm.</strong> Polite and firm. The person on the phone did not set your rate. They are doing a job. People help people they like.</p>
+      <div class="insight-box"><p>The person who asks once and gives up saves nothing. The person who asks, hears no, asks differently, and comes back later &mdash; that person pays less for credit over their lifetime than someone who never asks at all.</p></div>
+
+      <div class="capability-box"><p>You now have four scripts, a pattern you can adapt to any situation, and the ability to evaluate counter-offers. You can pick up the phone and negotiate with any lender in Canada.</p></div>
+
+      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-0')">Continue to Section 4</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 4: TIMING ═══ -->
+<div id="s4-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 4 OF 4</div>
+      <h2>Timing and<br>Preparation</h2>
+      <p>You have the mindset. You know which of the six key terms move. You have the scripts. Now you learn the final pillar: when to negotiate and what to have ready before you do.</p>
+      <p>Timing is the difference between a successful ask and a wasted one.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s4-1')">Begin Section 4</button>
+    </div>
+  </div>
+</div>
+
+<div id="s4-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">1 of 6</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:77%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">When to Negotiate</h2>
+      <p>There are five moments when your leverage is strongest.</p>
+      <p><strong>Before you sign.</strong> This is your maximum leverage. You have something the lender wants: a new account. Once you sign, that leverage is gone. Compare at least two offers before committing. Use the weaker offer to improve the stronger one.</p>
+      <p><strong>At renewal time.</strong> This is especially powerful in Canada, where mortgages typically renew every one to five years. When your term is up, the bank knows you might walk. They expect you to negotiate. The same applies when a promotional credit card rate expires or an annual fee is about to post.</p>
+      <p><strong>After improving your credit.</strong> If your score has gone up, your utilization has dropped, or your income has increased, you have a reason to ask. &ldquo;My credit profile has improved since I got this card. I&rsquo;d like my rate to reflect that.&rdquo;</p>
+      <p><strong>When you have a competing offer.</strong> A pre-approval from another Canadian lender, a balance transfer offer in the mail, even a rate comparison from a website. Having an alternative is the most powerful tool in any negotiation.</p>
+      <p><strong>When you are struggling.</strong> If you are falling behind, call before you miss a payment. Every major Canadian bank has a hardship program. Calling proactively puts you in a very different position than calling after a missed payment has already hit your credit report.</p>
+      <div class="quiz-wrap" id="quiz-4-1">
+        <p class="quiz-question">Your five-year fixed mortgage is coming up for renewal in 60 days. Your bank sends you a renewal offer at 5.2%. You have seen other lenders advertising 4.8%. What do you do?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-1',0,this)">Sign the renewal. Your bank knows best.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-1',1,this)">Call your bank with the 4.8% competing rate and ask them to match or beat it before you sign.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-1',2,this)">Ignore the renewal letter and hope they offer a better rate later.</button>
+      </div>
+      <div id="feedback-4-1" style="display:none;"></div>
+      <div id="nav-4-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-1b')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="s4-1b" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-1')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">2 of 6</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:82%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Canadian Calendar</h2>
+      <p>Timing is not just about your personal situation. In Canada, the financial system runs on a calendar, and certain moments create natural leverage for borrowers.</p>
+      <div class="neg-card" style="border-left:3px solid var(--green);">
+        <div class="neg-card-header"><div class="neg-card-title">Bank of Canada Rate Announcements</div></div>
+        <div class="neg-card-body">The BoC makes rate decisions eight times a year on a fixed schedule. When they cut the overnight rate, variable-rate products get cheaper immediately &mdash; but your fixed-rate credit card and fixed-rate mortgage stay the same. That gap is a reason to call. &ldquo;I see that rates have come down. My card is still at 19.99%. Can we revisit that?&rdquo; Conversely, after a rate hike, lenders may be more willing to offer promotional fixed rates to attract borrowers nervous about further increases.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--blue);">
+        <div class="neg-card-header"><div class="neg-card-title">Bank Fiscal Year-End</div></div>
+        <div class="neg-card-body">Most of Canada&rsquo;s Big Five banks end their fiscal year on October 31. In September and October, branches and departments are pushing to meet annual targets for new accounts, mortgage volume, and customer retention. This pressure can work in your favour. A branch that needs two more mortgage renewals to hit its target may be more flexible on rate than the same branch in February.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--purple);">
+        <div class="neg-card-header"><div class="neg-card-title">Promotional Windows</div></div>
+        <div class="neg-card-body">Canadian banks typically launch balance transfer promotions and new card offers in January (post-holiday debt season) and September (back-to-school, new financial year planning). Watch your mail and email during these windows. Even if you do not take the offer, a competing promotion is ammunition for your next call to your current bank.</div>
+      </div>
+      <div class="neg-card" style="border-left:3px solid var(--orange);">
+        <div class="neg-card-header"><div class="neg-card-title">Regulatory Changes</div></div>
+        <div class="neg-card-body">When OSFI changes the mortgage stress test &mdash; as it has done several times &mdash; it shifts what lenders can offer and what borrowers qualify for. When new consumer protection rules take effect, banks sometimes adjust products and pricing. These moments create temporary flexibility. If you hear about a regulatory change affecting mortgages or credit, that is a signal to review your own terms.</div>
+      </div>
+      <div class="insight-box"><p>You do not need to memorise rate announcement dates. Just know they exist and that they matter. Set a reminder to check the Bank of Canada website before your next mortgage renewal. Look at what promotions arrive in January and September. And if you are negotiating in October, know that you might be talking to someone with a target to hit by the 31st.</p></div>
+      <div class="quiz-wrap" id="quiz-4-1b">
+        <p class="quiz-question">It is October 25th. Your variable-rate mortgage payment just dropped after a BoC rate cut last week. Why might this actually be a good time to also call about your fixed-rate credit card?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-1b',0,this)">Credit card rates automatically follow the Bank of Canada rate.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-1b',1,this)">The BoC rate cut gives you a reason to ask why your fixed card rate has not moved, and the bank is approaching its October 31 fiscal year-end, adding extra pressure to retain customers.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-1b',2,this)">Banks always lower all rates in October.</button>
+      </div>
+      <div id="feedback-4-1b" style="display:none;"></div>
+      <div id="nav-4-1b" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-2')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s4-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-1b')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">3 of 6</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:86%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Your Pre-Call Checklist</h2>
+      <p>Before you pick up the phone, have these five things ready.</p>
+      <p><strong>Your account history.</strong> How long you have been a customer. Whether you have paid on time. Your current rate, limit, and any fees. This is your ammunition.</p>
+      <p><strong>A competing offer.</strong> Even a quick search for &ldquo;best credit card rates Canada&rdquo; or &ldquo;lowest mortgage rates Canada&rdquo; gives you a number to reference. A pre-approval from another bank is even stronger.</p>
+      <p><strong>A specific ask.</strong> Do not call and say &ldquo;can you give me a better deal?&rdquo; Call and say &ldquo;I would like my rate reduced to X&rdquo; or &ldquo;I would like my annual fee waived.&rdquo; Specificity makes it easy for the representative to act.</p>
+      <p><strong>A fallback.</strong> If they say no to your main ask, what is your second ask? A partial fee reduction? A temporary rate drop? A benefit addition? Always have a plan B.</p>
+      <p><strong>A calm tone.</strong> The person you are speaking to did not set your rate. They are doing a job. Being polite and respectful does not weaken your position. It strengthens it.</p>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Quick Check</div>
+        <div class="scenario-text">Think about your own credit products right now. A credit card, a loan, a mortgage. Which one has the most negotiation room based on what you have learned? What would your specific ask be? What competing rate could you reference?</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-4-2">
+        <p class="quiz-question">You are preparing to call your bank about your credit card rate. You have your account history and a calm tone. But you forgot to look up competing rates. Which part of your checklist is missing?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-2',0,this)">A specific ask</button>
+        <button class="quiz-option" onclick="answerQuiz('4-2',1,this)">A competing offer</button>
+        <button class="quiz-option" onclick="answerQuiz('4-2',2,this)">A fallback</button>
+      </div>
+      <div id="feedback-4-2" style="display:none;"></div>
+      <div id="nav-4-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-3')">Continue</button></div>
+    </div>
+  </div>
+</div>
+<div id="s4-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-2')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">4 of 6</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:91%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Build Your Call Plan</h2>
+      <p>Time to put it all together. Read the scenario, then answer three questions to build your negotiation approach.</p>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Your Situation</div>
+        <div class="scenario-text">You have had a Visa card with TD for six years. You have never missed a payment. Your current rate is 19.99% with a $99 annual fee. You recently checked and your credit score is 740, which is higher than when you first got the card. You found that CIBC is advertising a no-fee card at 15.99%. You want to reduce your costs.</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-4-3a">
+        <p class="quiz-question">Step 1: What is your strongest leverage point in this scenario?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-3a',0,this)">You have been a customer for six years with a perfect payment record.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-3a',1,this)">Your credit score has improved since you got the card.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-3a',2,this)">All of the above. Your loyalty, improved profile, and competing offer each strengthen your position.</button>
+      </div>
+      <div id="feedback-4-3a" style="display:none;"></div>
+      <div id="nav-4-3a" style="display:none;"></div>
+
+      <div id="plan-step-2" style="display:none;">
+        <div class="quiz-wrap" id="quiz-4-3b">
+          <p class="quiz-question">Step 2: What is your specific ask?</p>
+          <button class="quiz-option" onclick="answerQuiz('4-3b',0,this)">&ldquo;Can you give me a better deal?&rdquo;</button>
+          <button class="quiz-option" onclick="answerQuiz('4-3b',1,this)">&ldquo;I&rsquo;d like my rate reduced to 15.99% to match what CIBC is offering, and I&rsquo;d like this year&rsquo;s annual fee waived.&rdquo;</button>
+          <button class="quiz-option" onclick="answerQuiz('4-3b',2,this)">&ldquo;I want to cancel my card immediately.&rdquo;</button>
+        </div>
+        <div id="feedback-4-3b" style="display:none;"></div>
+      <div id="nav-4-3b" style="display:none;"></div>
+      </div>
+
+      <div id="plan-step-3" style="display:none;">
+        <div class="quiz-wrap" id="quiz-4-3c">
+          <p class="quiz-question">Step 3: They say they can lower your rate to 17.99% but cannot waive the fee. What is your fallback?</p>
+          <button class="quiz-option" onclick="answerQuiz('4-3c',0,this)">Accept the 17.99% and stop there.</button>
+          <button class="quiz-option" onclick="answerQuiz('4-3c',1,this)">Accept the rate reduction, then ask if they can reduce the fee to $50 or add a benefit to justify it. If not, ask for the retention department.</button>
+          <button class="quiz-option" onclick="answerQuiz('4-3c',2,this)">Refuse anything less than your full ask and hang up.</button>
+        </div>
+        <div id="feedback-4-3c" style="display:none;"></div>
+      <div id="nav-4-3c" style="display:none;"></div>
+      </div>
+
+      <div id="plan-complete" style="display:none;margin-top:20px;">
+        <div class="capability-box"><p>You just built a real call plan. Leverage points, a specific ask with an anchor, and a fallback. This is exactly how you prepare for any credit negotiation in Canada.</p></div>
+        <button class="btn-primary" onclick="goTo('s4-3b')" style="margin-top:16px;">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="s4-3b" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-3')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">5 of 6</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:95%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">After the Call</h2>
+      <p>You made the call. They agreed to lower your rate, waive your fee, or adjust your terms. The negotiation is not over. What you do in the next 48 hours determines whether the win actually sticks.</p>
+      <p><strong>Get a reference number.</strong> Before you hang up, ask: &ldquo;Can I get a confirmation or reference number for this change?&rdquo; Write it down. If the change does not appear on your next statement, that number is your proof that it was agreed to.</p>
+      <p><strong>Ask when the change takes effect.</strong> Some changes are immediate. Some take one to two billing cycles. Knowing the timeline prevents you from calling back in a panic when your next statement looks the same.</p>
+      <p><strong>Check your next statement.</strong> Verify that the rate, fee, or term actually changed. Banks process thousands of account changes daily. Errors happen. A two-minute check ensures your negotiation was not lost in the system.</p>
+      <p><strong>Track your wins.</strong> Keep a simple record: the date, what you asked for, what you got, the reference number, and how much it saves you per year. Over time, this record does two things. It shows you the compounding value of regular negotiation. And it gives you ammunition for future calls: &ldquo;Last year you waived my fee. I&rsquo;d like to do the same this year.&rdquo;</p>
+
+      <div class="scenario-card">
+        <div class="scenario-label">The Bigger Picture</div>
+        <div class="scenario-text">One call saves $120 on an annual fee. Another saves $400 a year on a rate reduction. A mortgage renewal negotiation saves $2,000 over the term. None of these required special knowledge or aggressive tactics. Just preparation, a calm tone, and the willingness to ask. Over a decade, the person who makes these calls regularly can save tens of thousands of dollars. The person who never calls pays full price for everything, forever.</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-4-ac">
+        <p class="quiz-question">The representative agrees to waive your $120 annual fee. What should you do before hanging up?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-ac',0,this)">Say thank you and hang up immediately before they change their mind.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-ac',1,this)">Ask for a confirmation or reference number, and ask when the change will appear on your statement.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-ac',2,this)">Ask to speak with a supervisor to get an even better deal.</button>
+      </div>
+      <div id="feedback-4-ac" style="display:none;"></div>
+      <div id="nav-4-ac" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-4')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s4-4" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-3b')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">6 of 6</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:100%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Awareness. Knowledge.<br>Technique. Timing.</h2>
+      <p>You now have all four pillars.</p>
+      <p>You know that lenders will negotiate because the math favours retention. You know that interest rates, fees, and repayment terms are the Big Three &mdash; the terms with real room to move. You have scripts for the three most common conversations. And you know that timing, preparation, and a calm tone are what separate a good outcome from a wasted call.</p>
+      <p>Most Canadians will never pick up the phone. They will accept the first rate they are given and pay it for years. That is no longer you.</p>
+      <p class="emphasis">The next time you see a rate, a fee, or a payment schedule on a credit product, ask yourself: is this negotiable? More often than you think, the answer is yes.</p>
+
+      <div class="capability-box"><p>You can now read any credit agreement in Canada, identify which terms have room to move, prepare your case, and make the call. That is a skill most people never develop. You just did.</p></div>
+
+      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('resources')">Your Resources</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCES                                -->
+<!-- ════════════════════════════════════════ -->
+<div id="resources" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-4')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Resources</span></div></div>
+    <div class="content">
+      <div class="section-badge">YOUR TOOLKIT</div>
+      <h2 class="concept-title">Your Resources</h2>
+      <p>Everything referenced throughout the course, in one place. Bookmark this page. Come back whenever you need it.</p>
+
+      <p class="emphasis" style="margin-top:24px;">Check Your Credit</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">Equifax &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from one of Canada&rsquo;s two credit bureaus. Check it at least once a year for errors or accounts you don&rsquo;t recognise.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">TransUnion &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from Canada&rsquo;s other credit bureau. Comparing both reports can catch errors one bureau may have that the other doesn&rsquo;t.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/product/consumer-disclosure" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📱</div><div><div class="resource-card-name">Credit Karma</div><div class="resource-card-desc">Check your credit score for free, anytime. Also provides alerts when something changes on your credit file.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditkarma.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditkarma.ca &rarr;</a></div></div></div></div>
+
+      <div class="divider"></div>
+      <p class="emphasis">Build Your Credit</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏠</div><div><div class="resource-card-name">FrontLobby &ndash; Rent Reporting</div><div class="resource-card-desc">Report your rent payments to the credit bureaus. Turn a payment you&rsquo;re already making into a credit-building tool.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.frontlobby.com" target="_blank" style="color:var(--green);text-decoration:none;">frontlobby.com &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏠</div><div><div class="resource-card-name">Borrowell RentAdvantage</div><div class="resource-card-desc">Another option for reporting rent payments to build your credit history. Sign up directly &mdash; no landlord opt-in required.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://borrowell.com/rent-advantage" target="_blank" style="color:var(--green);text-decoration:none;">borrowell.com &rarr;</a></div></div></div></div>
+
+      <div class="divider"></div>
+      <p class="emphasis">Dispute Errors &amp; Report Fraud</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">Equifax &ndash; Dispute a Credit Report Error</div><div class="resource-card-desc">Found something wrong on your Equifax report? File a dispute. They must investigate within 30 days.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/dispute-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca/dispute &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">TransUnion &ndash; Fraud Victim Resources</div><div class="resource-card-desc">If you suspect identity theft, TransUnion provides tools to place a fraud alert and begin the resolution process.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/assistance/fraud-victims-resources" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca/fraud &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🛡️</div><div><div class="resource-card-name">Canadian Anti-Fraud Centre</div><div class="resource-card-desc">Canada&rsquo;s central agency for reporting fraud and identity theft. If someone has used your identity, this is where you report it.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://antifraudcentre-centreantifraude.ca/index-eng.htm" target="_blank" style="color:var(--green);text-decoration:none;">antifraudcentre-centreantifraude.ca &rarr;</a></div></div></div></div>
+
+      <div class="divider"></div>
+      <p class="emphasis">Get Help</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal body that oversees banks and financial institutions. Educational tools, complaint handling, and a database of your rights.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🤝</div><div><div class="resource-card-name">Credit Counselling Canada</div><div class="resource-card-desc">A national network of non-profit agencies offering free or low-cost help with budgeting, debt management, and financial planning.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditcounsellingcanada.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditcounsellingcanada.ca &rarr;</a></div></div></div></div>
+
+      <p style="margin-top:20px;" class="small">You don&rsquo;t need to memorise these. Just know they&rsquo;re here. Come back whenever you need them.</p>
+      <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('post-0')">Take the Final Assessment</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- POST-TEST -->
+<div id="post-0" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">POST-ASSESSMENT</div>
+      <h2 class="concept-title">Same Five Questions</h2>
+      <p>You saw these at the start. Now answer them again. Let us see what changed.</p>
+      <div id="post-quiz-area"></div>
+      <div id="post-nav" style="display:none;margin-top:24px;">
+        <button class="btn-primary" onclick="goTo('post-1')">See Your Results</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="post-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">RESULTS</div>
+      <h2 class="concept-title">Your Score</h2>
+      <div class="score-summary">
+        <div class="score-label">Post-Assessment Score</div>
+        <div class="score-display" id="post-score-display"></div>
+        <div class="score-sub">score</div>
+        <div class="score-compare">
+          <div class="score-compare-item"><div class="score-compare-label">Before</div><div class="score-compare-val" id="pre-score-compare" style="color:var(--text-muted);"></div></div>
+          <div style="display:flex;align-items:center;padding-top:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="opacity:0.25;"><polyline points="9 6 15 12 9 18" stroke="#43A66A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="score-compare-item"><div class="score-compare-label">After</div><div class="score-compare-val" id="post-score-compare" style="color:var(--green);"></div></div>
+        </div>
+      </div>
+      <div id="results-message"></div>
+      <div id="cert-gate"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="cert-0" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="certificate-prompt">
+        <div class="cert-icon">&#127942;</div>
+        <div class="cert-title">You Earned It</div>
+        <div class="cert-desc">Enter your name below to generate your certificate of completion.</div>
+      </div>
+      <input type="text" class="name-input" id="cert-name" placeholder="Your full name" oninput="toggleCertBtn()">
+      <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" disabled onclick="generateCert()">Generate Certificate</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="cert-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="certificate-display" id="cert-printable">
+        <div style="margin-bottom:16px;text-align:center;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="cert-logo">CREDIT BRIGHT</div>
+        <div class="cert-main-title">Negotiating Better Deals</div>
+        <div class="cert-subtitle">Certificate of Completion</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom:8px;">This certifies that</div>
+        <div class="cert-name" id="cert-display-name"></div>
+        <div class="cert-detail">has successfully completed the Credit Bright</div>
+        <div class="cert-detail">Negotiating Better Deals course</div>
+        <div class="cert-detail" style="margin-top:16px;font-size:12px;color:var(--text-secondary);line-height:1.8;">Demonstrating understanding of the four pillars of credit negotiation:<br>Knowledge &middot; Leverage &middot; Technique &middot; Timing</div>
+        <div class="cert-detail" style="margin-top:16px;">Knowledge Score: <strong id="cert-score"></strong></div>
+        <div class="cert-detail" style="font-size:11px;color:var(--text-muted);">Minimum score of 80% required</div>
+        <div class="cert-detail" id="cert-date" style="margin-top:12px;"></div>
+        <div class="cert-detail" style="margin-top:8px;font-size:11px;color:var(--text-muted);letter-spacing:0.05em;">Certificate ID: <span id="cert-id"></span></div>
+      </div>
+      <div style="text-align:center;margin-top:20px;"><button class="btn-primary" onclick="window.print()">Save as PDF</button></div>
+      <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted);">Use your browser&rsquo;s &ldquo;Save as PDF&rdquo; option in the print dialog.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- phone-frame -->
+
+<script>
+// ═══════════════════════════════════════
+// SUPABASE INTEGRATION
+// ═══════════════════════════════════════
+var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb = null;
+var cbUser = null;
+var cbEnrollmentId = null;
+var courseKey = 'negotiating_better_deals';
+var currentScreen = 'welcome';
+var screenEnteredAt = Date.now();
+var cbResumeScreen = null;
+
+var sectionMap = {
+  'welcome': { key: 'welcome', title: 'Welcome' },
+  'pre': { key: 'pre_assessment', title: 'Pre-Assessment' },
+  's1': { key: 'section_1', title: 'The Negotiation Mindset' },
+  's2': { key: 'section_2', title: 'Which Terms Are Negotiable' },
+  's3': { key: 'section_3', title: 'How to Ask' },
+  's4': { key: 'section_4', title: 'Timing and Preparation' },
+  'post': { key: 'post_assessment', title: 'Post-Assessment' },
+  'cert': { key: 'certificate', title: 'Certificate' }
+};
+
+function getSectionPrefix(screenId) {
+  var m = screenId.match(/^(welcome|pre|s\d+|post|cert)/);
+  return m ? m[1] : screenId;
+}
+function getSectionInfo(screenId) {
+  var prefix = getSectionPrefix(screenId);
+  return sectionMap[prefix] || { key: screenId, title: screenId };
+}
+
+async function cbInit() {
+  try {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var { data: { user }, error } = await sb.auth.getUser();
+    if (error || !user) { window.location.href = 'website-login.html'; return; }
+    cbUser = user;
+    var { data: enrollments, error: enrollErr } = await sb.from('enrollments')
+      .select('id, product').eq('user_id', user.id).in('product', ['negotiating_better_deals', 'bundle']);
+    if (enrollErr || !enrollments || enrollments.length === 0) { window.location.href = 'website-dashboard.html'; return; }
+    var specific = enrollments.find(function(e) { return e.product === 'negotiating_better_deals'; });
+    cbEnrollmentId = specific ? specific.id : enrollments[0].id;
+    var { data: progress } = await sb.from('section_progress')
+      .select('section_title').eq('user_id', user.id).eq('course', courseKey).eq('section_key', '_resume').maybeSingle();
+    var gate = document.getElementById('cb-loading-gate');
+    if (gate) gate.style.display = 'none';
+    if (progress && progress.section_title && progress.section_title !== 'welcome') {
+      cbResumeScreen = progress.section_title;
+      var sInfo = getSectionInfo(cbResumeScreen);
+      document.getElementById('cb-resume-text').textContent = 'You were in: ' + sInfo.title + '. Pick up where you left off?';
+      document.getElementById('cb-resume-overlay').classList.add('visible');
+    }
+  } catch (e) {
+    console.error('CB init error:', e);
+    var gate = document.getElementById('cb-loading-gate');
+    if (gate) gate.style.display = 'none';
+  }
+}
+function cbResume() {
+  document.getElementById('cb-resume-overlay').classList.remove('visible');
+  if (cbResumeScreen) goTo(cbResumeScreen);
+}
+function cbDismissResume() {
+  document.getElementById('cb-resume-overlay').classList.remove('visible');
+}
+function cbSaveProgress(fromScreen, toScreen) {
+  if (!sb || !cbUser) return;
+  var now = new Date().toISOString();
+  var timeSpent = Math.round((Date.now() - screenEnteredAt) / 1000);
+  var fromSection = getSectionInfo(fromScreen);
+  sb.from('section_progress').upsert({
+    user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
+    section_key: fromSection.key, section_title: fromSection.title,
+    time_spent_seconds: timeSpent, completed_at: now
+  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+  sb.from('section_progress').upsert({
+    user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
+    section_key: '_resume', section_title: toScreen, completed_at: now
+  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+  screenEnteredAt = Date.now();
+}
+function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer, correctAnswer, isCorrect) {
+  if (!sb || !cbUser) return;
+  sb.from('assessment_responses').insert({
+    user_id: cbUser.id, course: courseKey, assessment_type: assessmentType,
+    question_key: courseKey + '_' + assessmentType + '_q' + questionIndex,
+    question_text: questionText, user_answer: userAnswer,
+    correct_answer: correctAnswer, is_correct: isCorrect,
+    answered_at: new Date().toISOString()
+  }).then(function() {});
+}
+async function cbIssueCertificate(certName, certId, preScore, postScore) {
+  if (!sb || !cbUser) return;
+  try {
+    await sb.from('certificates').insert({
+      user_id: cbUser.id, course: courseKey, certificate_id: certId,
+      holder_name: certName, pre_score: preScore, post_score: postScore,
+      issued_at: new Date().toISOString()
+    });
+    await sb.from('enrollments').update({ completed_at: new Date().toISOString() })
+      .eq('user_id', cbUser.id).eq('product', 'negotiating_better_deals');
+    await fetch('/.netlify/functions/send-email', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'certificate', email: cbUser.email, name: certName,
+        course: 'Credit Bright: Negotiating Better Deals',
+        preScore: Math.round((preScore / 5) * 100) + '%',
+        postScore: Math.round((postScore / 5) * 100) + '%',
+        certificateId: certId
+      })
+    });
+  } catch (e) { console.error('Certificate error:', e); }
+}
+</script>
+
+<script>
+function goTo(id) {
+  cbSaveProgress(currentScreen, id);
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById(id);
+  if (el) { 
+    el.classList.add('active'); 
+    var sc = el.querySelector('.screen-scroll'); 
+    if(sc) sc.scrollTop = 0;
+    document.body.style.background = el.classList.contains('intro-screen') ? 'var(--bg-dark)' : 'var(--bg)';
+  }
+  window.scrollTo(0,0);
+  currentScreen = id;
+}
+
+var confData = { pre: [null,null,null], post: [null,null,null] };
+function setConfidence(phase, idx, btn) {
+  var btns = btn.parentElement.querySelectorAll('.confidence-btn');
+  btns.forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  confData[phase][idx] = btn.textContent;
+  if (confData[phase].every(function(v) { return v !== null; })) {
+    var nav = document.getElementById('conf-' + phase + '-nav');
+    if (nav) nav.style.display = 'block';
+  }
+}
+
+var quizQuestions = [
+  { q: "Which of the six key terms from the Foundation Course is most negotiable for existing customers?", opts: ["Collateral", "Interest rate", "Loan amount"], correct: 1, fb_right: "Interest rate is the most negotiable term. A single phone call can sometimes lower it by two or more percentage points.", fb_wrong: "Interest rate is the most negotiable term for existing customers. Collateral and loan amount are largely determined by product type and your financial profile." },
+  { q: "Your bank offers you a credit card at 19.99%. A competitor is advertising 14.99%. What is the strongest negotiation move?", opts: ["Accept 19.99% because your bank knows your history", "Call your bank, mention the 14.99% competing rate, and ask them to match it", "Apply for the competitor card without telling your bank"], correct: 1, fb_right: "Right. Using a competing rate as an anchor while leveraging your existing relationship is the strongest move. It combines Knowledge, Technique, and Timing.", fb_wrong: "The strongest move is to call your bank with the competing rate. You keep your relationship while using the competitor as leverage. That is the core of the Technique pillar." },
+  { q: "Your five-year Canadian mortgage is up for renewal. Why is this moment powerful for negotiation?", opts: ["The bank must legally offer you a lower rate at renewal", "The bank knows you can walk to a competitor, so your leverage is at its peak", "Mortgage rates always drop at renewal time in Canada"], correct: 1, fb_right: "Exactly. Renewal is a natural decision point. The bank knows you might leave. That is Timing at its most powerful.", fb_wrong: "Mortgage renewal is powerful because the bank knows you can walk. There is no legal requirement to lower your rate, and rates do not automatically drop. Your leverage comes from the credible threat of switching lenders." },
+  { q: "A representative says no to your rate reduction request. What should you do?", opts: ["Accept the decision and hang up", "Ask what would need to change to qualify, or ask to speak with the retention department", "Threaten to file a complaint with FCAC immediately"], correct: 1, fb_right: "Right. A no from one person is not final. Ask why, ask for a supervisor, ask for something else, or call back another time.", fb_wrong: "The best response is to keep the conversation going. Ask what would need to change, or ask for the retention department. The first no is rarely the last word." },
+  { q: "Before calling your bank to negotiate, which of these is the most important thing to prepare?", opts: ["A written complaint in case they say no", "A competing offer or rate to reference as your anchor", "The name of the bank CEO to escalate to"], correct: 1, fb_right: "A competing offer gives the representative a target and signals you have alternatives. That is the most powerful tool in any negotiation call.", fb_wrong: "A competing rate is your anchor. It gives the representative a specific number to work toward and signals that you have options. That is the foundation of effective preparation." }
+];
+var preScore = 0, postScore = 0;
+
+function buildQuiz(phase) {
+  var area = document.getElementById(phase + '-quiz-area');
+  var html = '';
+  quizQuestions.forEach(function(qq, i) {
+    html += '<div class="quiz-wrap" id="' + phase + '-q-' + i + '">';
+    html += '<p class="quiz-question">' + qq.q + '</p>';
+    qq.opts.forEach(function(opt, j) {
+      html += '<button class="quiz-option" onclick="answerPrePost(\'' + phase + '\',' + i + ',' + j + ')">' + opt + '</button>';
+    });
+    html += '</div>';
+    html += '<div id="' + phase + '-fb-' + i + '" style="display:none;"></div>';
+  });
+  area.innerHTML = html;
+}
+// Shuffle pre/post quiz options so correct answer is not always in the same position
+quizQuestions.forEach(function(qq) {
+  var indices = qq.opts.map(function(_, i) { return i; });
+  for (var i = indices.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp;
+  }
+  var newOpts = indices.map(function(idx) { return qq.opts[idx]; });
+  qq.correct = indices.indexOf(qq.correct);
+  qq.opts = newOpts;
+});
+buildQuiz('pre');
+buildQuiz('post');
+
+var preAnswered = 0, postAnswered = 0;
+var preAnswers = {}, postAnswers = {};
+function answerPrePost(phase, qi, ai) {
+  var wrap = document.getElementById(phase + '-q-' + qi);
+  var btns = wrap.querySelectorAll('.quiz-option');
+  var correct = quizQuestions[qi].correct;
+  var isCorrect = ai === correct;
+  var answers = phase === 'pre' ? preAnswers : postAnswers;
+  var isNew = !(qi in answers);
+  answers[qi] = ai;
+  // Clear previous styling
+  btns.forEach(function(b) {
+    b.classList.remove('selected', 'wrong', 'correct-reveal');
+  });
+  // Style chosen answer: post-test shows green/red, pre-test is neutral
+  if (phase === 'post') {
+    btns[ai].classList.add(isCorrect ? 'selected' : 'wrong');
+    if (!isCorrect) {
+      btns[correct].classList.add('correct-reveal');
+    }
+  } else {
+    btns[ai].classList.add('selected');
+  }
+  // Show feedback for post-test
+  if (phase === 'post') {
+    var fbEl = document.getElementById(phase + '-fb-' + qi);
+    fbEl.style.display = 'block';
+    fbEl.innerHTML = '<div class="feedback-box' + (isCorrect ? '' : ' gold') + '"><p>' + (isCorrect ? quizQuestions[qi].fb_right : quizQuestions[qi].fb_wrong) + '</p></div>';
+  }
+  if (isNew) {
+    if (phase === 'pre') preAnswered++;
+    else postAnswered++;
+    cbLogAssessment(phase, qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
+  }
+  // Recompute score from all answers
+  var score = 0;
+  var answersObj = phase === 'pre' ? preAnswers : postAnswers;
+  for (var k in answersObj) {
+    if (answersObj[k] === quizQuestions[k].correct) score++;
+  }
+  if (phase === 'pre') preScore = score;
+  else postScore = score;
+  var total = quizQuestions.length;
+  var answeredCount = phase === 'pre' ? preAnswered : postAnswered;
+  if (answeredCount === total) {
+    document.getElementById(phase + '-nav').style.display = 'block';
+    if (phase === 'post') {
+      var pct = Math.round((postScore / total) * 100);
+      document.getElementById('post-score-display').textContent = pct + '%';
+      document.getElementById('pre-score-compare').textContent = Math.round((preScore / total) * 100) + '%';
+      document.getElementById('post-score-compare').textContent = pct + '%';
+      var msg = '';
+      if (postScore > preScore) msg = '<p style="text-align:center;margin-top:16px;">Your score improved from ' + Math.round((preScore / total) * 100) + '% to ' + pct + '%. That is real learning.</p>';
+      else if (postScore === total) msg = '<p style="text-align:center;margin-top:16px;">Perfect score. You came in strong and you are leaving stronger.</p>';
+      else msg = '<p style="text-align:center;margin-top:16px;">You scored ' + pct + '%. Review the sections above to strengthen any areas you missed.</p>';
+      document.getElementById('results-message').innerHTML = msg;
+      // Certificate gate: 80% required
+      var gateEl = document.getElementById('cert-gate');
+      if (postScore >= 4) {
+        gateEl.innerHTML = '<div style="margin-top:28px;"><button class="btn-primary" onclick="goTo(\'cert-0\')">Get Your Certificate</button></div>';
+      } else {
+        gateEl.innerHTML = '<div style="margin-top:28px;background:var(--gold-light);border-radius:14px;padding:24px;text-align:center;"><p style="font-weight:600;color:#7D6608;margin-bottom:8px;">You need 80% to earn your certificate.</p><p style="font-size:15px;color:#7D6608;margin-bottom:16px;">You scored ' + pct + '%. Review the sections you found challenging and retake the assessment when you are ready. There is no limit on attempts.</p><button class="btn-primary" onclick="resetPost()" style="background:linear-gradient(135deg,#E6A817,#F5C542);">Retake Assessment</button></div>';
+      }
+    }
+  }
+}
+
+function resetPost() {
+  postScore = 0;
+  postAnswered = 0;
+  postAnswers = {};
+  document.getElementById('post-nav').style.display = 'none';
+  buildQuiz('post');
+  goTo('post-0');
+}
+
+var sectionQuizData = {
+
+  '2-2b': { correct: 1, fb_right: "Right. Breaking a fixed mortgage early can cost thousands in prepayment penalties. The smart move is to note the lesson, prepare your case, and negotiate hard at renewal when you can switch without penalty. That is Timing.", fb_wrong: "Breaking a fixed mortgage early carries a prepayment penalty that can cost thousands of dollars. The better strategy is to wait for renewal, when you can renegotiate or switch lenders without penalty. Rates do not always balance out either &mdash; the choice matters." },
+  '2-2c': { correct: 1, fb_right: "The prepayment penalty is the biggest potential cost. On a fixed-rate mortgage, the IRD calculation can result in a penalty of thousands or even tens of thousands of dollars. Always calculate this before deciding to break a mortgage early.", fb_wrong: "The prepayment penalty is the first thing to check. On a fixed-rate mortgage, the Interest Rate Differential (IRD) can result in a penalty far larger than a discharge fee or credit card annual fee. That penalty could wipe out any savings from switching." },
+  '3-1b': { correct: 1, fb_right: "About $300 per year. A 1.5% reduction on $20,000 is $300. That is a meaningful saving for what is typically a five-minute phone call.", fb_wrong: "The answer is about $300 per year. 1.5% of $20,000 is $300. Not $100 (that would be only 0.5%) and not $1,500 (that would require a 7.5% reduction). Every percentage point on a line of credit translates directly to dollars." },
+  '3-4b': { correct: 1, fb_right: "Exactly. Retention teams have a specific mandate to prevent customer departures, which gives them access to tools, rates, and offers that front-line agents simply cannot access. It is not about seniority or legal authority &mdash; it is about their role.", fb_wrong: "Retention teams are not necessarily more senior, and they cannot override bank policy. Their authority comes from their specific role: preventing customer departures. That mandate gives them access to unadvertised rates, fee waivers, and custom offers." },
+  '4-1b': { correct: 1, fb_right: "You are stacking two sources of leverage. The BoC rate cut gives you a factual reason to question your fixed card rate, and the October timing means the bank is pushing to hit year-end targets. That combination makes them more likely to say yes.", fb_wrong: "Credit card rates do not automatically follow the Bank of Canada rate, and banks do not lower all rates in October. But a BoC cut gives you a reason to call and ask, and October puts you near the bank\u2019s fiscal year-end when they are pushing to retain customers. Those two factors together create real leverage." },
+  '4-ac': { correct: 1, fb_right: "A confirmation number is your proof. If the change does not appear on your next statement, you have a reference to point to. Asking when the change takes effect prevents unnecessary follow-up calls. These two steps turn a verbal agreement into a trackable commitment.", fb_wrong: "Never hang up without a reference number. Verbal agreements can get lost in the system. A confirmation number is your proof, and knowing the timeline prevents unnecessary worry when your next statement arrives. And pushing for more after they have said yes risks souring the goodwill you just built." },
+
+  '3-3': { correct: 1, fb_right: "Right. At renewal, you can switch lenders with no prepayment penalty. That is your ultimate leverage. Your bank knows you can walk, and they would rather match a competing rate than lose your mortgage entirely.", fb_wrong: "Your payment history helps, but your strongest leverage is the ability to switch lenders at renewal with no penalty. The bank knows this. That credible threat of leaving is what moves the rate." },
+  '3-5': { correct: 1, fb_right: "Right. A lower rate with a new annual fee might cost you more overall. Always compare the total annual cost &mdash; rate plus fees &mdash; before accepting any counter-offer. Never say yes on the call.", fb_wrong: "Never accept or reject a counter-offer on the spot. A lower rate sounds better, but a $120 annual fee could wipe out the saving. Compare total costs first. And counter-offers are not always worse &mdash; they just need to be evaluated carefully." },
+  '4-3a': { correct: 2, fb_right: "Right. You do not pick just one. Your six-year history, improved credit score, and competing CIBC offer all work together. Stack your leverage.", fb_wrong: "Each of those is strong on its own, but the best answer is all three. Your loyalty, improved profile, and competing offer each strengthen your position. Stack your leverage." },
+  '4-3b': { correct: 1, fb_right: "Specific, anchored, and it targets both of the Big Three &mdash; interest rate and fees. You gave the representative a clear target and a reason to act.", fb_wrong: "A vague ask gives the representative nothing to work with. A cancellation threat is premature. The strongest ask is specific: match the competing rate, waive the fee. Clear targets get clear results." },
+  '4-3c': { correct: 1, fb_right: "Perfect. You banked the rate reduction, then kept negotiating on the fee. If the first person cannot help, the retention department can. You never leave value on the table, and you never burn the bridge.", fb_wrong: "Accepting without pushing further leaves money on the table. Refusing everything and hanging up wastes the progress you made. The best move is to bank the win on the rate, then keep working on the fee. Always have a next ask." },
+  '1-1': { correct: 1, fb_right: "Exactly. Retention is cheaper than acquisition. The math works in your favour. That is why lenders will negotiate &mdash; not generosity, economics.", fb_wrong: "Lenders negotiate because retaining you is cheaper than finding a new customer. There is no legal requirement or fixed discount budget. It is pure economics." },
+  '1-2': { correct: 1, fb_right: "About $1,130 saved over three years. That is the cost of not asking. One phone call, five minutes, over a thousand dollars.", fb_wrong: "The saving is roughly $1,130 over three years. Not pocket change &mdash; and not $5,000 either. But enough to make one five-minute phone call very much worth your time." },
+  '1-3': { correct: 1, fb_right: "Knowledge. You have the awareness that negotiation is possible, but without knowing what competitors are offering, you have no anchor. You need information before you can negotiate effectively.", fb_wrong: "You are missing Knowledge. Without knowing competing rates, you have nothing to anchor your ask. Awareness gets you to the phone. Knowledge gives you something to say when you get there." },
+  '2-1': { correct: 1, fb_right: "Right. Annual fees are part of APR &mdash; the total cost of borrowing, which includes the interest rate plus all fees. That is exactly why APR is one of the Big Three negotiable terms.", fb_wrong: "Annual fees fall under APR. Remember from the Foundation Course: APR captures the interest rate plus fees. That is why APR, not just the interest rate alone, is one of the Big Three to negotiate." },
+  '2-2': { correct: 1, fb_right: "At mortgage renewal, the interest rate has the most room to move. The bank knows you can walk to a competitor. Your loan amount and collateral are already set.", fb_wrong: "The interest rate is what moves at renewal. The loan amount and collateral are already established. Renewal is your strongest window to negotiate a better mortgage rate." },
+  '2-3': { correct: 1, fb_right: "Right. Interest rate and annual fee are both in the Big Three. Targeting them directly is the most effective approach to reducing your total cost.", fb_wrong: "The most effective approach targets the Big Three directly: interest rate and fees (APR). Utilization helps your credit score but does not reduce your cost. Switching collateral types is not a typical negotiation." },
+  '3-1': { correct: 1, fb_right: "A specific number anchors the conversation. Without it, the representative has no target. Your anchor shapes the outcome &mdash; that is why you research competing Canadian rates before you call.", fb_wrong: "Mentioning a specific rate anchors the conversation and gives the representative a target. It is not proof of approval or a legal requirement. It is a negotiation technique that works." },
+  '3-2': { correct: 1, fb_right: "Call before you fall behind. Every major Canadian bank has a hardship program. Proactive contact puts you in a much stronger position than calling after a missed payment hits your credit report.", fb_wrong: "Always call before you miss a payment. Waiting makes it worse. Cancelling the card does not help either. Every major Canadian bank has a hardship program designed for exactly this situation." },
+  '3-4': { correct: 1, fb_right: "Right. You turned a no into a conversation. Asking why gives you information. Asking for retention gives you someone with authority. The negotiation continues.", fb_wrong: "Accepting and hanging up leaves money on the table. Threatening a complaint is aggressive and counterproductive. The best response keeps the conversation going: ask why, ask for retention, try a different ask." },
+  '4-1': { correct: 1, fb_right: "Perfect. You have a competing rate (Knowledge), you are at a natural decision point (Timing), and you know to call and ask (Technique). All four pillars working together.", fb_wrong: "Mortgage renewal is the strongest negotiation moment in Canadian credit. You have a competing rate, the bank knows you can leave, and you have 60 days to negotiate. Never sign the first offer." },
+  '4-2': { correct: 1, fb_right: "A competing offer. Without a number to reference, your ask has no anchor. Even a five-minute online search gives you a rate to mention on the call.", fb_wrong: "The missing piece is a competing offer. It is your anchor &mdash; the number that gives the representative a target and signals you have alternatives." }
+};
+
+function answerQuiz(qid, ai, clickedEl) {
+  var wrap = document.getElementById('quiz-' + qid);
+  var btns = wrap.querySelectorAll('.quiz-option');
+  var data = sectionQuizData[qid];
+  // Clear previous selection styling
+  btns.forEach(function(b) {
+    b.classList.remove('selected', 'wrong', 'correct-reveal');
+  });
+  var isCorrect = ai === data.correct;
+  // Style the CLICKED element
+  clickedEl.classList.add(isCorrect ? 'selected' : 'wrong');
+  // If wrong, reveal the correct one by data-answer-index
+  if (!isCorrect) {
+    var correctBtn = wrap.querySelector('[data-answer-index="' + data.correct + '"]');
+    if (correctBtn) correctBtn.classList.add('correct-reveal');
+  }
+  var fbEl = document.getElementById('feedback-' + qid);
+  fbEl.style.display = 'block';
+  fbEl.innerHTML = '<div class="feedback-box' + (isCorrect ? '' : ' gold') + '"><p>' + (isCorrect ? data.fb_right : data.fb_wrong) + '</p></div>';
+  document.getElementById('nav-' + qid).style.display = 'block';
+}
+
+function toggleCertBtn() {
+  document.getElementById('cert-gen-btn').disabled = document.getElementById('cert-name').value.trim() === '';
+}
+function generateCert() {
+  var name = document.getElementById('cert-name').value.trim();
+  if (!name) return;
+  document.getElementById('cert-display-name').textContent = name;
+  document.getElementById('cert-score').textContent = Math.round((postScore / quizQuestions.length) * 100) + '%';
+  document.getElementById('cert-date').textContent = new Date().toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' });
+  var d = new Date();
+  var dateStr = d.getFullYear().toString() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var rand = '';
+  for (var i = 0; i < 4; i++) rand += chars.charAt(Math.floor(Math.random() * chars.length));
+  var certId = 'CB-NBD-' + dateStr + '-' + rand;
+  document.getElementById('cert-id').textContent = certId;
+  cbIssueCertificate(name, certId, preScore, postScore);
+  goTo('cert-1');
+}
+
+// Shuffle in-section quiz option order on page load
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.quiz-wrap').forEach(function(wrap) {
+    // Skip dynamically built pre/post test wraps
+    if (wrap.id.indexOf('pre-') === 0 || wrap.id.indexOf('post-') === 0) return;
+    var btns = Array.from(wrap.querySelectorAll('.quiz-option'));
+    if (btns.length < 2) return;
+    // Add data-answer-index before shuffling to track original position
+    btns.forEach(function(b, i) { b.setAttribute('data-answer-index', i); });
+    // Fisher-Yates shuffle
+    for (var i = btns.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = btns[i]; btns[i] = btns[j]; btns[j] = tmp;
+    }
+    btns.forEach(function(b) { wrap.appendChild(b); });
+  });
+  cbInit();
+});
+
+// Multi-step build-your-approach handler
+var origAnswerQuiz = answerQuiz;
+answerQuiz = function(qid, ai, clickedEl) {
+  origAnswerQuiz(qid, ai, clickedEl);
+  if (qid === '4-3a') { setTimeout(function(){ document.getElementById('plan-step-2').style.display = 'block'; }, 400); }
+  if (qid === '4-3b') { setTimeout(function(){ document.getElementById('plan-step-3').style.display = 'block'; }, 400); }
+  if (qid === '4-3c') { setTimeout(function(){ document.getElementById('plan-complete').style.display = 'block'; }, 400); }
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright: Getting Out of Debt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* Resume Modal */
+.cb-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center}
+.cb-overlay.visible{display:flex}
+.cb-modal{background:#fff;border-radius:20px;padding:36px 28px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.cb-modal h3{font-family:'Instrument Serif',serif;font-size:24px;font-weight:400;margin-bottom:12px;color:#1A1D1A}
+.cb-modal p{font-size:15px;color:#5A5F58;line-height:1.6;margin-bottom:24px}
+.cb-modal-btns{display:flex;gap:12px;justify-content:center}
+.cb-modal-btns button{padding:12px 24px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;border:none}
+.cb-btn-resume{background:linear-gradient(135deg,#2E7D4F,#43A66A);color:#fff}
+.cb-btn-restart{background:#F4F3F0;color:#1A1D1A}
+.cb-loading-gate{position:fixed;top:0;left:0;width:100%;height:100%;background:#1B2A1F;z-index:9998;display:flex;justify-content:center;align-items:center}
+.cb-loading-gate .spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.2);border-top-color:#43A66A;border-radius:50%;animation:cbspin 0.8s linear infinite}
+@keyframes cbspin{to{transform:rotate(360deg)}}
+:root {
+  --bg:#FAFAF8;--bg-dark:#1B2A1F;--bg-dark-2:#243028;--card:#FFFFFF;--card-hover:#FCFCFA;
+  --border:#E8E5DE;--border-light:#F0EDE6;--text:#1A1D1A;--text-secondary:#5A5F58;
+  --text-muted:#6A6E67;--green:#2E7D4F;--green-light:#E8F5EC;--green-glow:#43A66A;
+  --green-dark:#1B5E3A;--red:#C62828;--red-light:#FDEAEA;--red-glow:#E53935;
+  --blue:#3BA4D9;--blue-light:#E6F4FB;--gold:#E6A817;--gold-light:#FEF8E7;
+  --orange:#F5A623;--orange-light:#FEF3E0;--pink:#E44271;--purple:#7B61C4;--purple-light:#F0ECFA;--muted-bg:#F4F3F0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg-dark);min-height:100vh;position:relative}
+
+.phone-frame{width:100%;max-width:700px;margin:0 auto;background:var(--bg);position:relative}
+.screen{display:none;flex-direction:column;min-height:100vh;opacity:0;transition:opacity 0.5s ease}
+.screen.active{display:flex;opacity:1}
+.screen-scroll{overflow-y:auto}
+.screen-scroll::-webkit-scrollbar{width:0}
+.logo-bar{padding:16px 24px 8px;display:flex;align-items:center;gap:8px}
+.logo-text{font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;color:var(--text);letter-spacing:0.06em}
+.top-bar{padding:20px 24px 12px;display:flex;justify-content:space-between;align-items:center}
+.top-bar-left{display:flex;align-items:center;gap:12px}
+.back-arrow{width:44px;height:44px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.back-arrow:hover{border-color:var(--green);background:var(--green-light)}
+.back-arrow svg{width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back-arrow:hover svg{stroke:var(--green-dark)}
+.top-bar-section{font-size:12px;letter-spacing:0.15em;color:var(--text-muted);text-transform:uppercase;font-weight:500}
+.top-bar-step{font-size:12px;color:var(--text-muted);font-weight:400}
+.progress-wrap{padding:0 24px 20px}
+.progress-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-glow));border-radius:3px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.content{padding:0 24px 32px;flex:1}
+h1.section-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:30px;line-height:1.2;color:#fff;margin-bottom:20px}
+h2.concept-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;line-height:1.25;color:var(--text);margin-bottom:20px}
+p{font-size:17px;line-height:1.72;color:var(--text-secondary);margin-bottom:16px}
+p.emphasis{color:var(--text);font-weight:500}
+.divider{height:1px;background:var(--border-light);margin:20px 0}
+.resource-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px}
+.resource-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.resource-card-desc{font-size:14px;color:var(--text-secondary);line-height:1.55}
+p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
+.section-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(67,166,106,0.1);color:var(--green);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:6px 12px;border-radius:8px;margin-bottom:16px}
+.intro-screen{background:linear-gradient(165deg,var(--bg-dark) 0%,var(--bg-dark-2) 100%);padding:0;justify-content:space-between}
+.intro-content{padding:60px 28px 40px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.intro-label{font-size:12px;letter-spacing:0.2em;color:var(--green-glow);text-transform:uppercase;margin-bottom:16px;font-weight:500;opacity:0;transform:translateY(12px);animation:fadeUp 0.6s ease 0.3s forwards}
+.intro-desc{font-size:16px;line-height:1.7;color:rgba(255,255,255,0.65);margin-bottom:16px;opacity:0;transform:translateY(16px);animation:fadeUp 0.6s ease 0.7s forwards}
+.intro-bottom{padding:28px}
+.transition-content{padding:48px 28px}
+.transition-content p{color:rgba(255,255,255,0.7);font-size:16px;line-height:1.7}
+.transition-content .next-label{font-size:12px;letter-spacing:0.2em;color:var(--green-glow);text-transform:uppercase;margin-bottom:12px;font-weight:500}
+.transition-content h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:#fff;line-height:1.3;margin-bottom:20px}
+.btn-primary{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--green),var(--green-glow));color:white;border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;letter-spacing:0.01em;box-shadow:0 4px 16px rgba(46,125,79,0.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(46,125,79,0.35)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{opacity:0.5;cursor:default;transform:none;box-shadow:none}
+.btn-secondary{display:block;width:100%;padding:14px;background:transparent;color:rgba(255,255,255,0.8);border:1.5px solid rgba(255,255,255,0.2);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s}
+.btn-secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.35)}
+.quiz-wrap{margin:20px 0}
+.quiz-question{font-size:16px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.5}
+.quiz-option{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;margin-bottom:8px;transition:all 0.2s;line-height:1.5}
+.quiz-option:hover:not(:disabled){border-color:var(--green);background:var(--green-light)}
+.quiz-option.selected{border-color:var(--green);background:var(--green-light);color:var(--green-dark);font-weight:500}
+.quiz-option.wrong{border-color:#D64545;background:#FEE;color:#B91C1C;font-weight:500}
+.quiz-option.correct-reveal{border-color:var(--green);background:var(--green-light);color:var(--green-dark);font-weight:500;opacity:0.7}
+.quiz-option:disabled{cursor:default;opacity:0.5}
+.quiz-option.selected:disabled{opacity:1}
+.feedback-box{background:var(--green-light);border-radius:12px;padding:18px;margin-top:16px;animation:fadeUp 0.4s ease forwards}
+.feedback-box p{font-size:15px;color:var(--green-dark);margin:0;line-height:1.65}
+.feedback-box.gold{background:var(--gold-light)}
+.feedback-box.gold p{color:#7D6608}
+.insight-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:16px 18px;margin:20px 0}
+.insight-box p{font-size:15px;color:#7D6608;line-height:1.65;margin:0}
+.cost-box{background:var(--red-light);border:1.5px solid rgba(198,40,40,0.15);border-radius:14px;padding:20px;margin:20px 0;text-align:center}
+.cost-box .cost-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.cost-box .cost-amount{font-family:'Instrument Serif',serif;font-size:36px;color:var(--red);font-weight:400;margin-bottom:6px}
+.cost-box .cost-desc{font-size:14px;color:var(--text-secondary);line-height:1.5}
+.capability-box{background:var(--green-light);border-radius:14px;padding:18px;margin:24px 0;text-align:center}
+.capability-box p{font-size:15px;font-weight:600;color:var(--green-dark);margin:0;line-height:1.5}
+.scenario-card{background:var(--blue-light);border:1.5px solid rgba(59,164,217,0.2);border-radius:14px;padding:18px;margin:20px 0}
+.scenario-card .scenario-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.scenario-card .scenario-text{font-size:15px;color:var(--text);line-height:1.65;margin:0}
+.calc-prompt{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:14px;padding:18px;margin:20px 0}
+.calc-prompt .calc-prompt-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--green-glow);margin-bottom:8px}
+.calc-prompt .calc-prompt-text{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.65;margin:0}
+.strategy-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.strategy-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.strategy-card-title{font-size:16px;font-weight:600;color:var(--text)}
+.strategy-badge{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+.strategy-badge.green{background:var(--green-light);color:var(--green-dark)}
+.strategy-badge.gold{background:var(--gold-light);color:#8B6914}
+.strategy-badge.red{background:var(--red-light);color:var(--red)}
+.strategy-card-body{font-size:15px;color:var(--text-secondary);line-height:1.6}
+.danger-card{background:var(--red-light);border:1.5px solid rgba(198,40,40,0.12);border-radius:14px;padding:16px;margin-bottom:12px}
+.danger-card .danger-title{font-size:15px;font-weight:600;color:var(--red);margin-bottom:6px}
+.danger-card .danger-body{font-size:15px;color:var(--text-secondary);line-height:1.6}
+.confidence-item{margin-bottom:20px}
+.confidence-text{font-size:15px;color:var(--text);font-weight:500;margin-bottom:8px}
+.confidence-options{display:flex;gap:8px}
+.confidence-btn{flex:1;padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;text-align:center}
+.confidence-btn[data-val="1"]{border-left:3px solid #D64545}
+.confidence-btn[data-val="2"]{border-left:3px solid #E6A817}
+.confidence-btn[data-val="3"]{border-left:3px solid var(--green)}
+.confidence-btn[data-val="1"]:hover{border-color:#D64545;color:#B91C1C}
+.confidence-btn[data-val="2"]:hover{border-color:#E6A817;color:#7D6608}
+.confidence-btn[data-val="3"]:hover{border-color:var(--green);color:var(--green)}
+.confidence-btn[data-val="1"].selected{border-color:#D64545;background:#FEE;color:#B91C1C;font-weight:600}
+.confidence-btn[data-val="2"].selected{border-color:#E6A817;background:var(--gold-light);color:#7D6608;font-weight:600}
+.confidence-btn[data-val="3"].selected{border-color:var(--green);background:var(--green-light);color:var(--green-dark);font-weight:600}
+.certificate-prompt{background:linear-gradient(135deg,var(--green),var(--green-glow));border-radius:20px;padding:28px;text-align:center;margin-top:28px;box-shadow:0 8px 32px rgba(46,125,79,0.3)}
+.certificate-prompt .cert-icon{font-size:36px;margin-bottom:12px}
+.certificate-prompt .cert-title{font-family:'Instrument Serif',serif;font-size:22px;color:#fff;font-weight:400;margin-bottom:8px}
+.certificate-prompt .cert-desc{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px}
+.certificate-display{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:40px 28px;text-align:center;margin:20px 0}
+.cert-logo{font-size:12px;letter-spacing:0.2em;color:var(--green);font-weight:600;text-transform:uppercase;margin-bottom:20px}
+.cert-main-title{font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);margin-bottom:8px}
+.cert-subtitle{font-size:14px;color:var(--text-muted);margin-bottom:24px}
+.cert-name{font-family:'Instrument Serif',serif;font-size:28px;color:var(--green-dark);margin-bottom:24px;padding:12px 0;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)}
+.cert-detail{font-size:13px;color:var(--text-muted);margin-bottom:4px}
+.score-summary{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;margin:20px 0;text-align:center}
+.score-label{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.score-display{font-family:'Instrument Serif',serif;font-size:48px;color:var(--green);font-weight:400}
+.score-sub{font-size:14px;color:var(--text-muted);margin-top:4px}
+.score-compare{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light)}
+.score-compare-item{text-align:center}
+.score-compare-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.score-compare-val{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400}
+.name-input{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text);background:var(--card);outline:none;transition:border-color 0.2s;text-align:center;margin-top:12px}
+.name-input:focus{border-color:var(--green)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.screen-scroll::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:center;padding:20px 24px 24px;font-size:12px;color:var(--text-muted);letter-spacing:0.06em;opacity:0.5}
+
+
+.calc-embed{padding:0}
+.calc-embed .calc-header{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));padding:16px 24px}
+.calc-embed .calc-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
+.calc-embed .calc-header-back:hover{color:rgba(255,255,255,0.8)}
+.calc-embed .calc-header-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.calc-embed .calc-header-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:20px;color:#fff;line-height:1.2;margin-bottom:4px}
+.calc-embed .calc-header-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.5}
+.calc-embed .calc-body{padding:20px 24px}
+.calc-embed .input-group{margin-bottom:16px}
+.calc-embed .input-label{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.calc-embed .input-row{display:flex;align-items:center;gap:8px}
+.calc-embed .input-field{flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:var(--text);background:var(--card);outline:none;transition:border-color 0.2s;-moz-appearance:textfield}
+.calc-embed .input-field::-webkit-outer-spin-button,.calc-embed .input-field::-webkit-inner-spin-button{-webkit-appearance:none}
+.calc-embed .input-field:focus{border-color:var(--green)}
+.calc-embed .input-unit{font-size:12px;font-weight:600;color:var(--text-muted);flex-shrink:0}
+.calc-embed .input-prefix{font-size:15px;font-weight:600;color:var(--text-muted);flex-shrink:0}
+.calc-embed .big-result{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:16px;padding:22px 20px;margin-bottom:14px;text-align:center}
+.calc-embed .big-result-label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.calc-embed .big-result-number{font-family:'Instrument Serif',serif;font-size:36px;color:#fff;font-weight:400;line-height:1.1}
+.calc-embed .big-result-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
+.calc-embed .result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.calc-embed .result-grid.two-col{grid-template-columns:1fr 1fr}
+.calc-embed .compare-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
+.calc-embed .compare-card.green-card{border-color:var(--green);background:var(--green-light)}
+.calc-embed .compare-card.red-card{border-color:rgba(198,40,40,0.2);background:var(--red-light)}
+.calc-embed .compare-card-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:6px}
+.calc-embed .compare-card.green-card .compare-card-label{color:var(--green-dark)}
+.calc-embed .compare-card.red-card .compare-card-label{color:var(--red)}
+.calc-embed .compare-card-number{font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;color:var(--text);line-height:1.2}
+.calc-embed .compare-card.green-card .compare-card-number{color:var(--green-dark)}
+.calc-embed .compare-card.red-card .compare-card-number{color:var(--red)}
+.calc-embed .compare-card-sub{font-size:11px;color:var(--text-muted);margin-top:3px}
+.calc-embed .insight-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 16px;margin:14px 0}
+.calc-embed .insight-box p{font-size:13px;color:var(--text-secondary);line-height:1.55;margin:0}
+.calc-embed .savings-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green-light);border-radius:10px;padding:12px 14px;margin:14px 0}
+.calc-embed .savings-badge-text{font-size:14px;font-weight:600;color:var(--green-dark)}
+.calc-embed .slider-wrap{margin-top:4px}
+.calc-embed .slider-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.calc-embed .slider-value{font-family:'Instrument Serif',serif;font-size:24px;color:var(--text);font-weight:400}
+.calc-embed input[type="range"]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--border);outline:none}
+.calc-embed input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 2px 8px rgba(46,125,79,0.3)}
+.calc-embed input[type="range"]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:none}
+.calc-embed .slider-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text-muted)}
+.calc-embed .strat-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.calc-embed .strat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s}
+.calc-embed .strat-card.active{border-color:var(--green);background:var(--green-light)}
+.calc-embed .strat-card-title{font-size:13px;font-weight:700;margin-bottom:6px}
+.calc-embed .strat-card.active .strat-card-title{color:var(--green-dark)}
+.calc-embed .strat-card-stat{font-family:'Instrument Serif',serif;font-size:18px;font-weight:400;color:var(--text)}
+.calc-embed .strat-card.active .strat-card-stat{color:var(--green-dark)}
+.calc-embed .strat-card-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
+.calc-embed .paydown-timeline{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.calc-embed .paydown-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border-light);gap:10px}
+.calc-embed .paydown-row:last-child{border-bottom:none}
+.calc-embed .paydown-order{width:22px;height:22px;border-radius:50%;background:var(--green-light);color:var(--green-dark);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.calc-embed .paydown-info{flex:1}
+.calc-embed .paydown-name{font-size:13px;font-weight:600;color:var(--text)}
+.calc-embed .paydown-detail{font-size:11px;color:var(--text-muted);margin-top:1px}
+.calc-embed .paydown-focus{font-size:12px;font-weight:600;color:var(--green)}
+.calc-embed .tool-disclaimer{font-size:11px;color:var(--text-muted);margin-top:16px;padding-top:12px;border-top:1px solid var(--border-light);line-height:1.5;font-style:italic}
+.calc-embed .divider{height:1px;background:var(--border);margin:16px 0}
+.calc-embed .card-entry{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.calc-embed .card-entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.calc-embed .card-entry-name{font-size:14px;font-weight:600;color:var(--text)}
+.calc-embed .card-entry-remove{font-size:12px;color:var(--text-muted);cursor:pointer;padding:3px 6px;border-radius:6px}
+.calc-embed .card-entry-remove:hover{background:var(--red-light);color:var(--red)}
+.calc-embed .card-entry-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;overflow:hidden}
+.calc-embed .card-entry-inputs .input-group{min-width:0;margin-bottom:0}
+.calc-embed .card-entry-inputs .input-label{font-size:10px;margin-bottom:3px}
+.calc-embed .card-entry-inputs .input-field{padding:7px 8px;font-size:13px;min-width:0;width:100%}
+.calc-embed .add-card-btn{display:block;width:100%;padding:10px;background:none;border:1px dashed var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;margin-bottom:14px}
+.calc-embed .add-card-btn:hover{border-color:var(--green);color:var(--green)}
+
+@media print {
+  body, .phone-frame { background: #fff !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  .screen { display: none !important; }
+  #cert-1 { display: flex !important; opacity: 1 !important; }
+  .logo-bar, .top-bar, .progress-wrap, .btn-primary, .screen-scroll::after { display: none !important; }
+  #cert-1 .logo-bar { display: none !important; }
+  #cert-1 .content > *:not(.certificate-display) { display: none !important; }
+  .certificate-display { border: 2px solid var(--gold) !important; padding: 60px 40px !important; margin: 40px auto !important; max-width: 600px !important; box-shadow: none !important; }
+  .cert-name { font-size: 32px !important; }
+  .cert-main-title { font-size: 26px !important; }
+}
+
+.calc-embed .consol-trigger{display:flex;align-items:center;gap:8px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;transition:all 0.2s;background:var(--green-light);border-radius:10px;margin:16px 0 0;justify-content:center;border:1px solid transparent}
+.calc-embed .consol-trigger:hover{background:var(--green);color:#fff}
+.calc-embed .consol-trigger.open{background:var(--green);color:#fff;border-radius:10px 10px 0 0;margin-bottom:0}
+.calc-embed .consol-section{display:none;background:var(--card);border:1px solid var(--green);border-top:none;border-radius:0 0 10px 10px;padding:16px 12px;margin-bottom:14px}
+.calc-embed .consol-section.open{display:block}
+.calc-embed .consol-config{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.calc-embed .consol-config .input-group{margin-bottom:0}
+.calc-embed .consol-amount{text-align:center;padding:10px;background:var(--muted-bg);border-radius:8px;margin-bottom:12px}
+.calc-embed .consol-amount-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px}
+.calc-embed .consol-amount-number{font-family:'Instrument Serif',serif;font-size:20px;color:var(--text)}
+.calc-embed .consol-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:12px}
+.calc-embed .consol-vs-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.calc-embed .consol-vs-card.better{border-color:var(--green);background:var(--green-light)}
+.calc-embed .consol-vs-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:8px}
+.calc-embed .consol-vs-card.better .consol-vs-label{color:var(--green-dark)}
+.calc-embed .consol-vs-row{font-size:12px;color:var(--text-secondary);margin-bottom:4px;line-height:1.4}
+.calc-embed .consol-vs-row strong{font-family:'Instrument Serif',serif;font-size:16px;font-weight:400;color:var(--text);display:block}
+.calc-embed .consol-vs-card.better .consol-vs-row strong{color:var(--green-dark)}
+.calc-embed .consol-vs-mid{display:flex;align-items:center;justify-content:center;padding:0 6px}
+.calc-embed .vs-badge{width:28px;height:28px;background:var(--border);border-radius:50%;font-size:11px;font-weight:700;color:var(--text-muted);display:flex;align-items:center;justify-content:center}
+.calc-embed .consol-check{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;margin-bottom:4px;cursor:pointer;transition:all 0.2s;font-size:12px;font-weight:600}
+.calc-embed .consol-check.on{background:var(--green-light);color:var(--green-dark)}
+.calc-embed .consol-check.off{background:var(--muted-bg);color:var(--text-secondary)}
+.calc-embed .consol-check input[type="checkbox"]{width:16px;height:16px;accent-color:var(--green);cursor:pointer}
+
+/* ── Mobile Polish ── */
+@media(max-width:400px){
+  /* Calculator result grids - stack on small screens */
+  .calc-embed .result-grid{grid-template-columns:1fr;gap:6px}
+  .calc-embed .result-grid.two-col{grid-template-columns:1fr}
+  
+  /* Strategy compare - stack */
+  .calc-embed .strat-compare{grid-template-columns:1fr;gap:8px}
+  
+  /* Card entry inputs - stack */
+  .calc-embed .card-entry-inputs{grid-template-columns:1fr;gap:8px}
+  .calc-embed .card-entry-inputs .input-field{padding:10px 12px;font-size:14px}
+  .calc-embed .card-entry-inputs .input-label{font-size:11px}
+  
+  /* Consolidation config - stack */
+  .calc-embed .consol-config{grid-template-columns:1fr;gap:8px}
+  
+  /* Consolidation comparison - tighter */
+  .calc-embed .consol-vs{grid-template-columns:1fr auto 1fr;gap:0}
+  .calc-embed .consol-vs-box{padding:10px}
+  .calc-embed .consol-vs-box .box-val{font-size:16px}
+  
+  /* Score compare */
+  .score-compare{grid-template-columns:1fr;gap:8px;text-align:center}
+  .score-compare .arrow{transform:rotate(90deg)}
+  
+  /* Confidence options - tighter */
+  .confidence-options{gap:4px}
+  .confidence-btn{padding:8px 4px;font-size:11px}
+  
+  /* Quiz options */
+  .quiz-option{padding:12px 14px;font-size:14px}
+  
+  /* General typography */
+  h2.section-title{font-size:22px}
+  p{font-size:16px}
+  
+  /* Input fields in calculator */
+  .calc-embed .input-field{font-size:14px}
+}
+
+</style>
+</head>
+<body>
+<div id="cb-loading-gate" class="cb-loading-gate"><div class="spinner"></div></div>
+<div id="cb-resume-overlay" class="cb-overlay">
+  <div class="cb-modal">
+    <h3>Welcome back</h3>
+    <p id="cb-resume-text">Resume where you left off?</p>
+    <div class="cb-modal-btns">
+      <button class="cb-btn-restart" onclick="cbDismissResume()">Start Over</button>
+      <button class="cb-btn-resume" onclick="cbResume()">Resume</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="phone-frame">
+
+<!-- WELCOME -->
+<div id="welcome" class="screen active intro-screen">
+  <div class="intro-content">
+    <div class="intro-label">Credit Bright Deep Dive</div>
+    <h1 class="section-title" style="opacity:0;transform:translateY(16px);animation:fadeUp 0.6s ease 0.5s forwards;">Getting Out<br>of Debt</h1>
+    <p class="intro-desc">In the Foundation Course, you saw the minimum payment trap. You learned two strategies for fighting back: the avalanche and the snowball.</p>
+    <p class="intro-desc" style="animation-delay:0.9s;">This course picks up right there. Same Credit Calculator. Your real numbers. But now you have four more tools: balance transfers, consolidation, refinancing, and windfalls.</p>
+    <p class="intro-desc" style="animation-delay:1.1s;">By the end, you will know exactly which strategy fits your situation and how to use the Calculator to test it before you commit.</p>
+    <p class="intro-desc" style="animation-delay:1.3s;">About 30 minutes. Four sections.</p>
+  </div>
+  <div class="intro-bottom">
+    <button class="btn-secondary" onclick="goTo('pre-0')">Begin</button>
+  </div>
+</div>
+
+<!-- PRE-TEST -->
+<div id="pre-0" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">PRE-ASSESSMENT</div>
+      <h2 class="concept-title">Before We Start</h2>
+      <p>Five questions. Answer based on what you know right now. No penalty for guessing.</p>
+      <div id="pre-quiz-area"></div>
+      <div id="pre-nav" style="display:none;margin-top:24px;">
+        <button class="btn-primary" onclick="goTo('pre-1')">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pre-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">PRE-ASSESSMENT</div>
+      <h2 class="concept-title">How confident do you feel?</h2>
+      <p>Rate yourself honestly. No wrong answers.</p>
+      <div class="confidence-item">
+        <p class="confidence-text">I know which debt repayment strategy is best for my situation.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('pre',0,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('pre',0,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('pre',0,this)">Confident</button>
+        </div>
+      </div>
+      <div class="confidence-item">
+        <p class="confidence-text">I understand when a balance transfer or consolidation loan makes sense.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('pre',1,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('pre',1,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('pre',1,this)">Confident</button>
+        </div>
+      </div>
+      <div class="confidence-item">
+        <p class="confidence-text">I know what to watch out for when using advanced debt strategies.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('pre',2,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('pre',2,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('pre',2,this)">Confident</button>
+        </div>
+      </div>
+      <div id="conf-pre-nav" style="display:none;margin-top:20px;">
+        <button class="btn-primary" onclick="goTo('s1-0')">Start the Course</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1: WHERE YOU STAND ═══ -->
+<div id="s1-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 1 OF 4</div>
+      <h2>Where You<br>Stand</h2>
+      <p>Before you can get out of debt, you need to know exactly what you are dealing with. How much you owe, to whom, at what rate, and what it is costing you every month.</p>
+      <p>This section reconnects you with what you learned in the Foundation Course and adds one critical step: finding the money you can use to fight back.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s1-1')">Begin Section 1</button>
+    </div>
+  </div>
+</div>
+
+<div id="s1-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">1 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:6%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Trap You Already Know</h2>
+      <p>In the Foundation Course, you saw what happens when you pay only the minimum on a credit card. A $5,000 balance at 19.99% takes over 30 years to pay off. You end up paying more than $7,700 in interest alone. More than double what you originally borrowed.</p>
+      <p>That is the minimum payment trap. It works because the numbers on your monthly statement look manageable. $100 a month feels fine. But behind that small number, interest is compounding on your remaining balance every single month.</p>
+
+      <div class="cost-box">
+        <div class="cost-label">The Cost of Minimum Payments</div>
+        <div class="cost-amount">$7,700</div>
+        <div class="cost-desc">Interest paid on a $5,000 balance at 19.99%, paying only the minimum. That is $12,700 total for a $5,000 debt.</div>
+      </div>
+
+      <p class="emphasis">You already know this trap. The question now is: what are you going to do about it?</p>
+
+      <div class="quiz-wrap" id="quiz-1-1">
+        <p class="quiz-question">You have a $5,000 credit card balance at 19.99%. You increase your monthly payment from the minimum to $150. What happens?</p>
+        <button class="quiz-option" onclick="answerQuiz('1-1',0,this)">It takes about the same time because interest keeps compounding.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-1',1,this)">You pay it off in about 4 years and save over $5,600 in interest.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-1',2,this)">You pay it off in about 15 years and save a few hundred dollars.</button>
+      </div>
+      <div id="feedback-1-1" style="display:none;"></div>
+      <div id="nav-1-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s1-1c')">Try it in the Calculator</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s1-1c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s1-1c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s1-2')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s1-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-1c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">2 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:12%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Avalanche and Snowball: A Quick Refresh</h2>
+      <p>If you are carrying more than one debt, the Foundation Course taught you two strategies for deciding where to focus your extra money.</p>
+      <p><strong>The Avalanche.</strong> Pay minimums on everything. Put every extra dollar toward the debt with the highest interest rate. This saves you the most money over time. It is the mathematically optimal approach.</p>
+      <p><strong>The Snowball.</strong> Pay minimums on everything. Put every extra dollar toward the debt with the smallest balance. This gives you the fastest win. One fewer bill. One account at zero. The momentum keeps you going.</p>
+      <p>Both strategies require the same thing: extra money focused on one debt at a time. Neither works if you only pay the minimum on everything.</p>
+
+      <div class="quiz-wrap" id="quiz-1-2">
+        <p class="quiz-question">You have three debts: a $1,200 store card at 12%, a $4,000 credit card at 19.99%, and a $10,000 car loan at 6%. You have $200 extra per month. Under the avalanche, where does that $200 go?</p>
+        <button class="quiz-option" onclick="answerQuiz('1-2',0,this)">The store card, because it has the smallest balance.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-2',1,this)">The credit card, because it has the highest interest rate.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-2',2,this)">Split it equally across all three debts.</button>
+      </div>
+      <div id="feedback-1-2" style="display:none;"></div>
+      <div id="nav-1-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s1-2c')">Try it in the Calculator</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s1-2c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s1-2c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s1-3')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s1-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-2c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">3 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:18%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Debt Audit</h2>
+      <p>Before you can choose a strategy, you need to see the full picture. This is your debt audit. Every debt. Every rate. Every payment.</p>
+      <p>Write down each debt you carry right now. For each one, note the balance, the interest rate, and your current monthly payment. If it is a credit card or line of credit, note the minimum payment. If it is an installment loan, note the fixed monthly payment.</p>
+
+      
+
+      <p>Once you see all your debts in one place, two numbers matter most. The first is your <strong>total monthly cost</strong> &mdash; the sum of all your minimum payments. That is the floor. You must pay at least that much every month or your credit takes a hit.</p>
+      <p>The second number is your <strong>extra budget</strong>. This is the money above and beyond your total minimum payments that you can commit to attacking one debt at a time. Even $50. Even $25. The Calculator shows you what that extra money does over time.</p>
+
+      <div class="quiz-wrap" id="quiz-1-3">
+        <p class="quiz-question">You complete your debt audit. Your total monthly minimums add up to $425. Your monthly income after essentials is $600. What is your extra budget for debt repayment?</p>
+        <button class="quiz-option" onclick="answerQuiz('1-3',0,this)">$600, because that is all you have left.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-3',1,this)">$175, the difference between your available income and your minimums.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-3',2,this)">$425, because that is what you owe in minimums.</button>
+      </div>
+      <div id="feedback-1-3" style="display:none;"></div>
+      <div id="nav-1-3" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s1-3c')">Enter your debts in the Calculator</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s1-3c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s1-3c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s1-4')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s1-4" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s1-3c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 1 of 4</span></div><span class="top-bar-step">4 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:25%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Your Starting Position</h2>
+      <p>You now have three things. A complete list of every debt you carry. Your total monthly cost. And your extra budget &mdash; the money you can use to accelerate your payoff.</p>
+
+      
+
+      <p>The avalanche and the snowball are your foundation. They work. But for many Canadians carrying multiple debts at different rates, there are ways to accelerate even further.</p>
+      <p class="emphasis">That is what the next section is about. Four strategies that can change the terms of your debt, not just the order you pay it off.</p>
+
+      <div class="capability-box"><p>You can now audit any debt situation, calculate your extra budget, and use the Credit Calculator to compare avalanche vs. snowball on your own numbers. That is the foundation everything else builds on.</p></div>
+
+      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-0')">Continue to Section 2</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: THE ACCELERATION TOOLKIT ═══ -->
+<div id="s2-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 2 OF 4</div>
+      <h2>The Acceleration<br>Toolkit</h2>
+      <p>Avalanche and snowball decide which debt to pay first. The four strategies in this section do something different. They change the terms of the debt itself.</p>
+      <p>A lower interest rate. Fewer accounts. A lump sum that wipes out a balance. These are the tools that can cut months or years off your timeline.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s2-1')">Begin Section 2</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">1 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:31%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Balance Transfers</h2>
+      <p>A balance transfer moves an existing credit card balance from one card to another, usually to take advantage of a lower promotional interest rate. In Canada, many cards offer 0% or low-rate promotional periods of 6 to 12 months on transferred balances.</p>
+      <p>The idea is simple. If you are paying 19.99% on a $5,000 balance, and you can move that balance to a card charging 0% for 10 months, every dollar you pay during that window goes straight to principal. No interest eating into your payments.</p>
+      <p><strong>The catch.</strong> Balance transfers are not free. Most Canadian cards charge a transfer fee of 1% to 3% of the balance. On $5,000, that is $50 to $150, added to your new balance on day one. And when the promotional period ends, the rate jumps &mdash; often to 19.99% or higher. If you have not paid off the balance by then, you are back where you started, minus the transfer fee.</p>
+
+      
+
+      <div class="quiz-wrap" id="quiz-2-1">
+        <p class="quiz-question">You transfer a $4,000 balance to a card offering 0% for 10 months with a 2% transfer fee. When does a balance transfer save you money?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-1',0,this)">Always, because 0% is always better than 19.99%.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-1',1,this)">Only if you pay off the full balance before the promotional rate expires.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-1',2,this)">Only if the transfer fee is less than $10.</button>
+      </div>
+      <div id="feedback-2-1" style="display:none;"></div>
+      <div id="nav-2-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-1c')">See it in the Calculator</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s2-1c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s2-1c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s2-2')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-1c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">2 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:37%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Debt Consolidation</h2>
+      <p>Debt consolidation replaces several debts with one. You take out a single loan &mdash; usually a personal loan or a line of credit &mdash; and use it to pay off all your existing balances. Instead of three or four payments at different rates, you have one payment at one rate.</p>
+      <p>In Canada, personal consolidation loans from banks and credit unions typically range from 7% to 15%, depending on your credit profile. If you are carrying credit card debt at 19.99%, even a consolidation loan at 12% saves you money on every dollar.</p>
+      <p><strong>Why it works.</strong> A lower average interest rate means more of your payment goes to principal. One payment means less chance of missing a due date. And a fixed term means you have a guaranteed payoff date &mdash; something revolving credit never gives you.</p>
+      <p><strong>Why it fails.</strong> Consolidation only works if you close the old accounts or stop using them. If you consolidate $15,000 of credit card debt into a loan but then run the cards back up, you end up with the loan plus the new card balances. That is worse than where you started.</p>
+
+      
+
+      <div class="quiz-wrap" id="quiz-2-2">
+        <p class="quiz-question">You consolidate three credit cards totalling $12,000 at 19.99% into a personal loan at 10% over 4 years. What is the biggest risk?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-2',0,this)">The personal loan rate might increase over time.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2',1,this)">You run the credit cards back up and end up with both the loan and new card debt.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-2',2,this)">The bank might refuse to give you the loan.</button>
+      </div>
+      <div id="feedback-2-2" style="display:none;"></div>
+      <div id="nav-2-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-2c')">Evaluate a consolidation loan</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s2-2c" class="screen">
+  <div class="screen-scroll">
+    <div style="padding:20px 24px 0;">
+      <div class="section-badge">WHAT YOU ARE CONSOLIDATING</div>
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">These are the three credit cards being replaced by the consolidation loan below.</p>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;font-size:14px;color:var(--text);">Credit Card 1</div><div style="font-size:13px;color:var(--text-secondary);">$4,000 at 19.99%</div></div><div style="font-size:13px;color:var(--text-muted);">Min ~$100/mo</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;font-size:14px;color:var(--text);">Credit Card 2</div><div style="font-size:13px;color:var(--text-secondary);">$5,000 at 19.99%</div></div><div style="font-size:13px;color:var(--text-muted);">Min ~$125/mo</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;font-size:14px;color:var(--text);">Credit Card 3</div><div style="font-size:13px;color:var(--text-secondary);">$3,000 at 19.99%</div></div><div style="font-size:13px;color:var(--text-muted);">Min ~$75/mo</div></div>
+      <div style="background:var(--gold-light);border-radius:12px;padding:14px;margin:12px 0 0;text-align:center;"><span style="font-weight:600;font-size:14px;color:#7D6608;">Total: $12,000 at 19.99% &mdash; ~$300/mo in minimums</span></div>
+    </div>
+    <div id="calc-s2-2c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s2-3')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-2c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">3 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:44%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Refinancing</h2>
+      <p>Refinancing means replacing an existing loan with a new one on better terms. This applies most often to mortgages, but it can work for car loans and personal loans too.</p>
+      <p>In Canada, mortgage refinancing is common when rates have dropped since you signed your original term. If you locked in at 5.5% and current rates are 4.2%, refinancing could save you thousands over the remaining amortization.</p>
+      <p><strong>The Canadian catch: penalties.</strong> Breaking a fixed-rate mortgage in Canada before the term is up triggers a penalty. It is usually the greater of three months&rsquo; interest or the interest rate differential (IRD) &mdash; a calculation based on the difference between your rate and the current rate for the remaining term. On a large mortgage, this penalty can be $10,000 or more.</p>
+      <p>That does not mean refinancing is a bad idea. It means you must do the math. If the interest savings over the new term exceed the penalty, refinancing wins. If they do not, you wait until renewal.</p>
+
+      
+
+      <div class="quiz-wrap" id="quiz-2-3">
+        <p class="quiz-question">You are two years into a five-year fixed mortgage at 5.5%. Current rates are 4.2%. Your bank quotes a $6,000 penalty to break the term. What should you do?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-3',0,this)">Refinance immediately. A lower rate always saves money.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-3',1,this)">Use the Calculator to compare: does the interest saved over the new term exceed the $6,000 penalty?</button>
+        <button class="quiz-option" onclick="answerQuiz('2-3',2,this)">Never break a fixed mortgage. Wait until renewal.</button>
+      </div>
+      <div id="feedback-2-3" style="display:none;"></div>
+      <div id="nav-2-3" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-3c')">Test the refinancing math</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s2-3c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s2-3c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s2-4')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2-4" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-3c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">4 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:50%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Windfalls</h2>
+      <p>A windfall is any lump sum of money that arrives outside your regular income. A tax refund. An annual bonus. An inheritance. A gift. Money from selling something you no longer need.</p>
+      <p>In Canada, the average tax refund is around $2,000. For someone carrying high-interest debt, that $2,000 can save hundreds of dollars in future interest if it goes to the right place.</p>
+      <p><strong>Where to put it.</strong> The same logic as your monthly extra budget, but amplified. If you are using the avalanche, the windfall goes to your highest-rate debt. If you are using the snowball, it goes to your smallest balance. If the windfall is large enough to clear a balance entirely, even better &mdash; one fewer debt, one fewer payment, and that freed-up money rolls into the next target.</p>
+      <p><strong>The temptation.</strong> A $2,000 tax refund feels like found money. The pull to spend it is real. But here is the math: $2,000 applied to a credit card at 19.99% saves you roughly $400 in interest per year. That is a 20% return on your money, guaranteed, risk-free. No investment in the world reliably beats that.</p>
+
+      
+
+      <div class="quiz-wrap" id="quiz-2-4">
+        <p class="quiz-question">You receive a $2,000 tax refund. You are carrying a $3,000 credit card at 19.99% and a $1,500 store card at 12%. You are using the avalanche. Where does the $2,000 go?</p>
+        <button class="quiz-option" onclick="answerQuiz('2-4',0,this)">Split it evenly between both debts.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-4',1,this)">All $2,000 to the credit card, because it has the highest interest rate.</button>
+        <button class="quiz-option" onclick="answerQuiz('2-4',2,this)">All $2,000 to the store card, because it would clear the balance entirely.</button>
+      </div>
+      <div id="feedback-2-4" style="display:none;"></div>
+      <div id="nav-2-4" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-4c')">See the windfall in action</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s2-4c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s2-4c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s2-5')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2-5" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s2-4c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 2 of 4</span></div><span class="top-bar-step">5 of 5</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:56%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Four Tools, One Goal</h2>
+      <p>You now have four acceleration strategies, each working differently.</p>
+      <div class="strategy-card">
+        <div class="strategy-card-header"><div class="strategy-card-title">Balance Transfer</div><div class="strategy-badge green">Rate</div></div>
+        <div class="strategy-card-body">Temporarily eliminates or reduces interest so every payment hits principal. Best for credit card debt you can pay off within the promotional window.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-header"><div class="strategy-card-title">Consolidation</div><div class="strategy-badge green">Simplify</div></div>
+        <div class="strategy-card-body">Replaces multiple debts with one at a lower rate. Best when you are juggling several high-rate balances and want one fixed payment with a guaranteed end date.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-header"><div class="strategy-card-title">Refinancing</div><div class="strategy-badge gold">Terms</div></div>
+        <div class="strategy-card-body">Replaces an existing loan with better terms. Best for mortgages when rates have dropped significantly. Must account for the penalty of breaking a fixed term in Canada.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-header"><div class="strategy-card-title">Windfall</div><div class="strategy-badge green">Lump Sum</div></div>
+        <div class="strategy-card-body">Applies a one-time payment to your target debt. Best used on high-rate debt for maximum interest savings. A $2,000 refund on a 19.99% card earns you a guaranteed 20% return.</div>
+      </div>
+      <p class="emphasis">These tools do not replace the avalanche or snowball. They work alongside them. You choose a strategy for which debt to target. You use these tools to change the terms of the debt itself.</p>
+
+      <div class="capability-box"><p>You now have six strategies in your toolkit: avalanche, snowball, balance transfer, consolidation, refinancing, and windfalls. You can test any of them in your Credit Calculator before committing.</p></div>
+
+      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-0')">Continue to Section 3</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: WHICH ONE FITS YOU ═══ -->
+<div id="s3-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 3 OF 4</div>
+      <h2>Which One<br>Fits You</h2>
+      <p>Knowing the strategies is not enough. You need to know which one to use, and when. The right choice depends on what your debt looks like.</p>
+      <p>This section walks you through real scenarios. By the end, you will be able to look at any debt situation and know which tool to reach for.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s3-1')">Begin Section 3</button>
+    </div>
+  </div>
+</div>
+
+<div id="s3-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">1 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:62%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">One Credit Card, One Balance</h2>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Scenario</div>
+        <div class="scenario-text">Priya has a $6,000 balance on a single credit card at 19.99%. She has no other debt. She can afford to pay $250 per month. She just received a balance transfer offer: 0% for 12 months, with a 2% transfer fee.</div>
+      </div>
+
+      <p>This is the simplest case. One debt, one potential move. The question is whether the balance transfer saves her money.</p>
+      <p>At $250 per month, Priya can pay $3,000 over 12 months. The transfer fee adds $120 to her balance, making it $6,120. After 12 months at 0%, she still owes $3,120. When the rate jumps to 19.99%, she is back to paying interest on that remaining amount.</p>
+      <p>Without the transfer, at 19.99%, roughly $100 of her $250 payment goes to interest every month in the early stages. So after 12 months, her balance would still be around $4,500.</p>
+      <p class="emphasis">The balance transfer puts her $1,380 further ahead after one year. The $120 fee paid for itself many times over.</p>
+
+      <div class="quiz-wrap" id="quiz-3-1">
+        <p class="quiz-question">When does a balance transfer make the most sense for a single credit card balance?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-1',0,this)">When the balance is very small and the fee is high.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-1',1,this)">When you can pay off most or all of the balance within the promotional period.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-1',2,this)">When you plan to make only minimum payments during the promo period.</button>
+      </div>
+      <div id="feedback-3-1" style="display:none;"></div>
+      <div id="nav-3-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-2')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s3-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-1')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">2 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:69%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Multiple Debts, Feeling Overwhelmed</h2>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Scenario</div>
+        <div class="scenario-text">Marcus has four debts: a $2,000 store card at 12%, a $5,000 Visa at 19.99%, a $3,000 personal line of credit at 8%, and a $15,000 car loan at 6.5%. His total minimums are $580. He has $150 extra per month. He is tired of juggling four payments and wants a simpler plan.</div>
+      </div>
+
+      <p>Marcus has two good options. The first is straightforward: use the avalanche. Put the $150 toward his Visa (highest rate at 19.99%) while paying minimums on everything else. When the Visa is gone, roll that payment into the store card.</p>
+      <p>The second option is consolidation. If Marcus can get a personal loan at 9% for the three non-car debts ($10,000 total), he replaces three payments with one. His weighted average rate on those three debts drops from about 15% to 9%. And he gets a fixed end date.</p>
+      <p><strong>The decision comes down to discipline.</strong> If Marcus can stick to the avalanche for 18 months without missing a payment, it works. If he finds juggling four payments stressful and is at risk of slipping, consolidation simplifies his life and still saves him money.</p>
+
+      
+
+      <div class="quiz-wrap" id="quiz-3-2">
+        <p class="quiz-question">Marcus has four debts and $150 extra per month. Under what circumstance is consolidation likely the better choice over the avalanche?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-2',0,this)">When the consolidation loan has a higher rate than all existing debts.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-2',1,this)">When he finds juggling four payments stressful and a simpler structure helps him stay on track.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-2',2,this)">When he plans to keep using the credit cards after consolidating.</button>
+      </div>
+      <div id="feedback-3-2" style="display:none;"></div>
+      <div id="nav-3-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-2c')">Try Marcus's numbers</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s3-2c" class="screen">
+  <div class="screen-scroll">
+    <div id="calc-s3-2c" class="calc-embed"></div>
+    <div style="padding:16px 24px 24px;">
+      <button class="btn-primary" onclick="goTo('s3-3')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div id="s3-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-2c')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">3 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:75%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">A Mortgage and a Windfall</h2>
+
+      <div class="scenario-card">
+        <div class="scenario-label">Scenario</div>
+        <div class="scenario-text">Aisha has a $320,000 mortgage at 5.2% with 3 years left on a 5-year fixed term. She also has a $4,000 credit card balance at 19.99%. She just received a $3,000 inheritance.</div>
+      </div>
+
+      <p>Aisha might be tempted to put the $3,000 toward her mortgage. After all, it is her largest debt. But rate matters more than size.</p>
+      <p>$3,000 applied to a 19.99% credit card saves her roughly $600 per year in interest. That same $3,000 applied to a 5.2% mortgage saves about $156 per year. The credit card wins by a factor of nearly four.</p>
+      <p>What about refinancing the mortgage? Current rates would need to be significantly below 5.2% to justify the penalty of breaking her fixed term. With 3 years left, the IRD penalty could be substantial. Better to wait for renewal, negotiate a lower rate then, and use the inheritance where it does the most good: the credit card.</p>
+
+      <div class="quiz-wrap" id="quiz-3-3">
+        <p class="quiz-question">Aisha has a $320,000 mortgage at 5.2% and a $4,000 credit card at 19.99%. She receives a $3,000 inheritance. Where should it go?</p>
+        <button class="quiz-option" onclick="answerQuiz('3-3',0,this)">Toward the mortgage, because it is the largest debt.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-3',1,this)">Toward the credit card, because 19.99% costs her nearly four times more per dollar than 5.2%.</button>
+        <button class="quiz-option" onclick="answerQuiz('3-3',2,this)">Into a savings account, to build an emergency fund.</button>
+      </div>
+      <div id="feedback-3-3" style="display:none;"></div>
+      <div id="nav-3-3" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s3-4')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s3-4" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s3-3')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 3 of 4</span></div><span class="top-bar-step">4 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:81%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">The Decision Framework</h2>
+      <p>Every debt situation is different. But the decision logic is the same every time.</p>
+      <p><strong>Step 1: Audit.</strong> List every debt. Balance, rate, payment. Open the Credit Calculator and enter them all.</p>
+      <p><strong>Step 2: Find your extra budget.</strong> Income after essentials minus total minimums. Even a small number matters.</p>
+      <p><strong>Step 3: Choose your base strategy.</strong> Avalanche saves the most money. Snowball gives the fastest win. Both work. Pick the one you will stick with.</p>
+      <p><strong>Step 4: Look for acceleration.</strong> Can you transfer a high-rate balance to a promotional rate and pay it off in time? Can you consolidate multiple debts into a single lower-rate loan? Is a windfall coming that you can apply to your target debt? Is your mortgage up for renewal and rates have dropped?</p>
+      <p><strong>Step 5: Test it in the Calculator.</strong> Before you commit to any move, enter the numbers. The Calculator does not guess. It shows you the exact cost of every option.</p>
+
+      <div class="capability-box"><p>You can now look at any combination of debts and choose the right strategy. You have the framework, the tools, and the Calculator to test any move before you make it.</p></div>
+
+      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-0')">Continue to Section 4</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 4: DANGER ZONES AND YOUR PLAN ═══ -->
+<div id="s4-0" class="screen intro-screen">
+  <div class="screen-scroll" >
+    <div class="transition-content">
+      <div class="next-label">SECTION 4 OF 4</div>
+      <h2>Danger Zones<br>and Your Plan</h2>
+      <p>Every strategy in this course works. But every one of them can also go wrong if you are not watching for the traps.</p>
+      <p>This section shows you what to avoid, when to ask for help, and how to build a plan that actually sticks.</p>
+    </div>
+    <div class="intro-bottom">
+      <button class="btn-secondary" onclick="goTo('s4-1')">Begin Section 4</button>
+    </div>
+  </div>
+</div>
+
+<div id="s4-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-0')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">1 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:87%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">What Goes Wrong</h2>
+      <p>These are the traps that catch people who know the strategies but do not protect themselves against the risks.</p>
+
+      <div class="danger-card">
+        <div class="danger-title">Re-spending after consolidation</div>
+        <div class="danger-body">You consolidate $15,000 of credit card debt into a personal loan. The cards are now at zero. It feels like you have room to breathe. You start using them again. Six months later, you have the loan plus $4,000 in new card debt. You are deeper in than when you started. The fix: stop using the credit cards. Keep the accounts open for their credit reporting benefits, but avoid adding new balances until you have paid off the consolidated loan.</div>
+      </div>
+      <div class="danger-card">
+        <div class="danger-title">The promotional rate expiring</div>
+        <div class="danger-body">You transfer $5,000 to a 0% card for 12 months. You pay $200 a month, clearing $2,400 by the end. The remaining $2,600 now sits at 22.99%. You are paying more interest than before you transferred. The fix: calculate your required monthly payment before transferring. If you cannot clear the balance in time, the transfer may not be worth it.</div>
+      </div>
+      <div class="danger-card">
+        <div class="danger-title">Ignoring the penalty math on refinancing</div>
+        <div class="danger-body">You break a fixed-rate mortgage in Canada to save 1% on your rate. The IRD penalty is $12,000. Over the remaining term, the rate savings total $8,000. You paid $12,000 to save $8,000. The fix: always use the Calculator. Enter the penalty as an upfront fee on the new offer and compare total costs.</div>
+      </div>
+      <div class="danger-card">
+        <div class="danger-title">Spending the windfall</div>
+        <div class="danger-body">You receive a $2,000 tax refund. You tell yourself you will put it toward debt, but first you buy a new phone and take a weekend trip. The refund is gone. The debt remains. The fix: apply the windfall the day it arrives. Do not let it sit in your chequing account. Move it to the debt immediately.</div>
+      </div>
+
+      <div class="quiz-wrap" id="quiz-4-1">
+        <p class="quiz-question">You just consolidated $12,000 of credit card debt into a personal loan. Your cards are now at zero. What is the single most important thing you do next?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-1',0,this)">Celebrate by treating yourself to something you have been wanting.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-1',1,this)">Stop using the credit cards. Keep the accounts open but avoid adding new balances.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-1',2,this)">Transfer the loan to a balance transfer card for an even lower rate.</button>
+      </div>
+      <div id="feedback-4-1" style="display:none;"></div>
+      <div id="nav-4-1" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-2')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s4-2" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-1')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">2 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:93%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">When to Ask for Help</h2>
+      <p>Everything in this course assumes you can manage your debt on your own with the right tools and strategies. For many Canadians, that is true. But not for everyone.</p>
+      <p><strong>If your total debt payments exceed 40% of your gross income,</strong> you are in a zone where lenders see risk. You should too. This is where strategies alone may not be enough.</p>
+      <p><strong>If you are missing payments regularly</strong> despite your best efforts, the problem may be structural. Your income may not support your debt load. That is not a failure. It is a situation that requires professional support.</p>
+      <p><strong>If you are losing sleep over debt,</strong> that matters. Financial stress affects your health, your relationships, and your ability to make good decisions.</p>
+      <p>In Canada, non-profit credit counselling is available at no cost. Credit Counselling Canada is the national association. A credit counsellor can review your full situation, negotiate with your creditors on your behalf, and in some cases arrange a Debt Management Plan (DMP) that consolidates your payments at reduced or zero interest.</p>
+      <p>The Government of Canada provides a comprehensive guide to debt help and credit counselling resources: <a href="https://www.canada.ca/en/financial-consumer-agency/services/debt/debt-help.html" target="_blank" rel="noopener" style="color:var(--green);font-weight:600;">canada.ca/debt-help</a></p>
+      <p>If your debt is more severe, a Licensed Insolvency Trustee (LIT) can explain options like a Consumer Proposal, which legally reduces what you owe, or bankruptcy as a last resort.</p>
+      <p class="emphasis">Asking for help is not giving up. It is choosing a different tool for a harder problem.</p>
+
+      <div class="quiz-wrap" id="quiz-4-2">
+        <p class="quiz-question">A Canadian is struggling to keep up with debt payments and feels overwhelmed. Where should they start?</p>
+        <button class="quiz-option" onclick="answerQuiz('4-2',0,this)">Take out another loan to cover the payments.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-2',1,this)">Contact a non-profit credit counselling agency like Credit Counselling Canada for a free assessment.</button>
+        <button class="quiz-option" onclick="answerQuiz('4-2',2,this)">Ignore the debts and wait for them to fall off the credit report.</button>
+      </div>
+      <div id="feedback-4-2" style="display:none;"></div>
+      <div id="nav-4-2" style="display:none;margin-top:20px;"><button class="btn-primary" onclick="goTo('s4-3')">Continue</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="s4-3" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-2')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Section 4 of 4</span></div><span class="top-bar-step">3 of 4</span></div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:100%"></div></div></div>
+    <div class="content">
+      <h2 class="concept-title">Your Plan Starts Now</h2>
+      <p>You have everything you need.</p>
+      <p>You know the minimum payment trap and how to break it. You know the avalanche and the snowball. You know four acceleration strategies: balance transfers, consolidation, refinancing, and windfalls. You know how to test any move in the Credit Calculator before you commit. And you know the danger zones that trip people up.</p>
+      <p>Debt is not a permanent condition. It is a project. A project with inputs you can change, a timeline you can shorten, and an end date you can calculate.</p>
+      <p class="emphasis">Open your Credit Calculator. Enter your debts. Find your extra budget. Choose your strategy. Test it. Then start.</p>
+
+      <div class="capability-box"><p>You can now audit any debt situation, choose the right combination of strategies, test every option in the Calculator, and protect yourself from the traps. Debt is a project. You have the tools to finish it.</p></div>
+
+      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('resources')">Your Resources</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCES                                -->
+<!-- ════════════════════════════════════════ -->
+<div id="resources" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="top-bar"><div class="top-bar-left"><div class="back-arrow" onclick="goTo('s4-3')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div><span class="top-bar-section">Resources</span></div></div>
+    <div class="content">
+      <div class="section-badge">YOUR TOOLKIT</div>
+      <h2 class="concept-title">Your Resources</h2>
+      <p>Everything referenced throughout the course, in one place. Bookmark this page. Come back whenever you need it.</p>
+
+      <p class="emphasis" style="margin-top:24px;">Check Your Credit</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">Equifax &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from one of Canada&rsquo;s two credit bureaus. Check it at least once a year for errors or accounts you don&rsquo;t recognise.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">TransUnion &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from Canada&rsquo;s other credit bureau. Comparing both reports can catch errors one bureau may have that the other doesn&rsquo;t.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/product/consumer-disclosure" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📱</div><div><div class="resource-card-name">Credit Karma</div><div class="resource-card-desc">Check your credit score for free, anytime. Also provides alerts when something changes on your credit file.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditkarma.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditkarma.ca &rarr;</a></div></div></div></div>
+
+      <div class="divider"></div>
+      <p class="emphasis">Build Your Credit</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏠</div><div><div class="resource-card-name">FrontLobby &ndash; Rent Reporting</div><div class="resource-card-desc">Report your rent payments to the credit bureaus. Turn a payment you&rsquo;re already making into a credit-building tool.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.frontlobby.com" target="_blank" style="color:var(--green);text-decoration:none;">frontlobby.com &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏠</div><div><div class="resource-card-name">Borrowell RentAdvantage</div><div class="resource-card-desc">Another option for reporting rent payments to build your credit history. Sign up directly &mdash; no landlord opt-in required.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://borrowell.com/rent-advantage" target="_blank" style="color:var(--green);text-decoration:none;">borrowell.com &rarr;</a></div></div></div></div>
+
+      <div class="divider"></div>
+      <p class="emphasis">Dispute Errors &amp; Report Fraud</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">Equifax &ndash; Dispute a Credit Report Error</div><div class="resource-card-desc">Found something wrong on your Equifax report? File a dispute. They must investigate within 30 days.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/dispute-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca/dispute &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">TransUnion &ndash; Fraud Victim Resources</div><div class="resource-card-desc">If you suspect identity theft, TransUnion provides tools to place a fraud alert and begin the resolution process.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/assistance/fraud-victims-resources" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca/fraud &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🛡️</div><div><div class="resource-card-name">Canadian Anti-Fraud Centre</div><div class="resource-card-desc">Canada&rsquo;s central agency for reporting fraud and identity theft. If someone has used your identity, this is where you report it.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://antifraudcentre-centreantifraude.ca/index-eng.htm" target="_blank" style="color:var(--green);text-decoration:none;">antifraudcentre-centreantifraude.ca &rarr;</a></div></div></div></div>
+
+      <div class="divider"></div>
+      <p class="emphasis">Get Help</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal body that oversees banks and financial institutions. Educational tools, complaint handling, and a database of your rights.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🤝</div><div><div class="resource-card-name">Credit Counselling Canada</div><div class="resource-card-desc">A national network of non-profit agencies offering free or low-cost help with budgeting, debt management, and financial planning.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditcounsellingcanada.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditcounsellingcanada.ca &rarr;</a></div></div></div></div>
+
+      <p style="margin-top:20px;" class="small">You don&rsquo;t need to memorise these. Just know they&rsquo;re here. Come back whenever you need them.</p>
+      <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('post-0')">Take the Final Assessment</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- POST-TEST -->
+<div id="post-0" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">POST-ASSESSMENT</div>
+      <h2 class="concept-title">Same Five Questions</h2>
+      <p>You saw these at the start. Now answer them again. Let us see what changed.</p>
+      <div id="post-quiz-area"></div>
+      <div id="post-nav" style="display:none;margin-top:24px;">
+        <button class="btn-primary" onclick="goTo('post-1')">See Your Results</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="post-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">RESULTS</div>
+      <h2 class="concept-title">Your Score</h2>
+      <div class="score-summary">
+        <div class="score-label">Post-Assessment Score</div>
+        <div class="score-display" id="post-score-display"></div>
+        <div class="score-sub">score</div>
+        <div class="score-compare">
+          <div class="score-compare-item"><div class="score-compare-label">Before</div><div class="score-compare-val" id="pre-score-compare" style="color:var(--text-muted);"></div></div>
+          <div style="display:flex;align-items:center;padding-top:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="opacity:0.25;"><polyline points="9 6 15 12 9 18" stroke="#43A66A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="score-compare-item"><div class="score-compare-label">After</div><div class="score-compare-val" id="post-score-compare" style="color:var(--green);"></div></div>
+        </div>
+      </div>
+      <div id="results-message"></div>
+      <div id="cert-gate"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="cert-0" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="certificate-prompt">
+        <div class="cert-icon">&#127942;</div>
+        <div class="cert-title">You Earned It</div>
+        <div class="cert-desc">Enter your name below to generate your certificate of completion.</div>
+      </div>
+      <input type="text" class="name-input" id="cert-name" placeholder="Your full name" oninput="toggleCertBtn()">
+      <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" disabled onclick="generateCert()">Generate Certificate</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="cert-1" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="certificate-display" id="cert-printable">
+        <div style="margin-bottom:16px;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="cert-logo">CREDIT BRIGHT</div>
+        <div class="cert-main-title">Getting Out of Debt</div>
+        <div class="cert-subtitle">Certificate of Completion</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom:8px;">This certifies that</div>
+        <div class="cert-name" id="cert-display-name"></div>
+        <div class="cert-detail">has successfully completed the Credit Bright Getting Out of Debt course</div>
+        <div class="cert-detail" style="margin-top:16px;font-size:12px;color:var(--text-secondary);line-height:1.8;">Demonstrating understanding of four debt acceleration strategies:<br>Balance Transfers &middot; Debt Consolidation &middot; Refinancing &middot; Windfalls</div>
+        <div class="cert-detail" style="margin-top:16px;">Knowledge Score: <strong id="cert-score"></strong></div>
+        <div class="cert-detail" style="font-size:11px;color:var(--text-muted);">Minimum score of 80% required</div>
+        <div class="cert-detail" id="cert-date" style="margin-top:12px;"></div>
+        <div class="cert-detail" style="margin-top:8px;font-size:11px;color:var(--text-muted);letter-spacing:0.05em;">Certificate ID: <span id="cert-id"></span></div>
+      </div>
+      <div style="text-align:center;margin-top:20px;"><button class="btn-primary" onclick="window.print()">Save as PDF</button></div>
+      <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted);">Use your browser&rsquo;s &ldquo;Save as PDF&rdquo; option in the print dialog.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- phone-frame -->
+
+<script>
+// ═══════════════════════════════════════
+// SUPABASE INTEGRATION
+// ═══════════════════════════════════════
+var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb = null;
+var cbUser = null;
+var cbEnrollmentId = null;
+var courseKey = 'getting_out_of_debt';
+var currentScreen = 'welcome';
+var screenEnteredAt = Date.now();
+var cbResumeScreen = null;
+
+var sectionMap = {
+  'welcome': { key: 'welcome', title: 'Welcome' },
+  'pre': { key: 'pre_assessment', title: 'Pre-Assessment' },
+  's1': { key: 'section_1', title: 'Where You Stand' },
+  's2': { key: 'section_2', title: 'The Acceleration Toolkit' },
+  's3': { key: 'section_3', title: 'Which One Fits You' },
+  's4': { key: 'section_4', title: 'Danger Zones and Your Plan' },
+  'post': { key: 'post_assessment', title: 'Post-Assessment' },
+  'cert': { key: 'certificate', title: 'Certificate' }
+};
+
+function getSectionPrefix(screenId) {
+  var m = screenId.match(/^(welcome|pre|s\d+|post|cert)/);
+  return m ? m[1] : screenId;
+}
+function getSectionInfo(screenId) {
+  var prefix = getSectionPrefix(screenId);
+  return sectionMap[prefix] || { key: screenId, title: screenId };
+}
+
+async function cbInit() {
+  try {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var { data: { user }, error } = await sb.auth.getUser();
+    if (error || !user) { window.location.href = 'website-login.html'; return; }
+    cbUser = user;
+    var { data: enrollments, error: enrollErr } = await sb.from('enrollments')
+      .select('id, product').eq('user_id', user.id).in('product', ['getting_out_of_debt', 'bundle']);
+    if (enrollErr || !enrollments || enrollments.length === 0) { window.location.href = 'website-dashboard.html'; return; }
+    var specific = enrollments.find(function(e) { return e.product === 'getting_out_of_debt'; });
+    cbEnrollmentId = specific ? specific.id : enrollments[0].id;
+    var { data: progress } = await sb.from('section_progress')
+      .select('section_title').eq('user_id', user.id).eq('course', courseKey).eq('section_key', '_resume').maybeSingle();
+    var gate = document.getElementById('cb-loading-gate');
+    if (gate) gate.style.display = 'none';
+    if (progress && progress.section_title && progress.section_title !== 'welcome') {
+      cbResumeScreen = progress.section_title;
+      var sInfo = getSectionInfo(cbResumeScreen);
+      document.getElementById('cb-resume-text').textContent = 'You were in: ' + sInfo.title + '. Pick up where you left off?';
+      document.getElementById('cb-resume-overlay').classList.add('visible');
+    }
+  } catch (e) {
+    console.error('CB init error:', e);
+    var gate = document.getElementById('cb-loading-gate');
+    if (gate) gate.style.display = 'none';
+  }
+}
+function cbResume() {
+  document.getElementById('cb-resume-overlay').classList.remove('visible');
+  if (cbResumeScreen) goTo(cbResumeScreen);
+}
+function cbDismissResume() {
+  document.getElementById('cb-resume-overlay').classList.remove('visible');
+}
+function cbSaveProgress(fromScreen, toScreen) {
+  if (!sb || !cbUser) return;
+  var now = new Date().toISOString();
+  var timeSpent = Math.round((Date.now() - screenEnteredAt) / 1000);
+  var fromSection = getSectionInfo(fromScreen);
+  sb.from('section_progress').upsert({
+    user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
+    section_key: fromSection.key, section_title: fromSection.title,
+    time_spent_seconds: timeSpent, completed_at: now
+  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+  sb.from('section_progress').upsert({
+    user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
+    section_key: '_resume', section_title: toScreen, completed_at: now
+  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+  screenEnteredAt = Date.now();
+}
+function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer, correctAnswer, isCorrect) {
+  if (!sb || !cbUser) return;
+  sb.from('assessment_responses').insert({
+    user_id: cbUser.id, course: courseKey, assessment_type: assessmentType,
+    question_key: courseKey + '_' + assessmentType + '_q' + questionIndex,
+    question_text: questionText, user_answer: userAnswer,
+    correct_answer: correctAnswer, is_correct: isCorrect,
+    answered_at: new Date().toISOString()
+  }).then(function() {});
+}
+async function cbIssueCertificate(certName, certId, preScore, postScore) {
+  if (!sb || !cbUser) return;
+  try {
+    await sb.from('certificates').insert({
+      user_id: cbUser.id, course: courseKey, certificate_id: certId,
+      holder_name: certName, pre_score: preScore, post_score: postScore,
+      issued_at: new Date().toISOString()
+    });
+    await sb.from('enrollments').update({ completed_at: new Date().toISOString() })
+      .eq('user_id', cbUser.id).eq('product', 'getting_out_of_debt');
+    await fetch('/.netlify/functions/send-email', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'certificate', email: cbUser.email, name: certName,
+        course: 'Credit Bright: Getting Out of Debt',
+        preScore: Math.round((preScore / 5) * 100) + '%',
+        postScore: Math.round((postScore / 5) * 100) + '%',
+        certificateId: certId
+      })
+    });
+  } catch (e) { console.error('Certificate error:', e); }
+}
+</script>
+
+<script>
+function goTo(id) {
+  cbSaveProgress(currentScreen, id);
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById(id);
+
+  // Trigger calculator rendering
+  if (calcConfigs && calcConfigs[id]) {
+    setTimeout(function() { renderCalc(id); }, 100);
+  }
+
+  if (el) { 
+    el.classList.add('active'); 
+    var sc = el.querySelector('.screen-scroll'); 
+    if(sc) sc.scrollTop = 0; 
+    window.scrollTo(0,0);
+    document.body.style.background = el.classList.contains('intro-screen') ? 'var(--bg-dark)' : 'var(--bg)';
+  }
+  currentScreen = id;
+}
+
+var confData = { pre: [null,null,null], post: [null,null,null] };
+function setConfidence(phase, idx, btn) {
+  var btns = btn.parentElement.querySelectorAll('.confidence-btn');
+  btns.forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  confData[phase][idx] = btn.textContent;
+  if (confData[phase].every(function(v) { return v !== null; })) {
+    var nav = document.getElementById('conf-' + phase + '-nav');
+    if (nav) nav.style.display = 'block';
+  }
+}
+
+var quizQuestions = [
+  { q: "You are carrying a $5,000 credit card balance at 19.99% and a $2,000 store card at 12%. You have $100 extra per month. Under the avalanche method, where does the extra $100 go?", opts: ["The store card, because it has the smaller balance", "The credit card, because it has the highest interest rate", "Split equally between both debts"], correct: 1, fb_right: "The avalanche targets the highest interest rate. At 19.99%, the credit card is costing you the most per dollar per month. Every extra dollar there reduces the most expensive interest first.", fb_wrong: "Under the avalanche, the extra money goes to the debt with the highest interest rate. The credit card at 19.99% costs you the most per dollar per month, so that is where the extra $100 goes." },
+  { q: "You transfer a $4,000 credit card balance to a 0% promotional card for 10 months with a 2% transfer fee. What is the main risk?", opts: ["The transfer fee makes it more expensive than keeping the original card", "If you do not pay off the balance before the promo ends, the rate jumps and you may be worse off", "Balance transfers always damage your credit score"], correct: 1, fb_right: "The main risk is the promotional period ending with a balance remaining. The new rate is often 19.99% or higher. If you cannot clear the balance in time, you end up paying interest on whatever is left, plus the transfer fee you already paid.", fb_wrong: "The main risk is not paying off the balance before the promotional rate expires. The rate jumps, often to 19.99% or higher, and you are paying interest on whatever remains plus the transfer fee. The fee alone is usually small. The expiring promo rate is the real danger." },
+  { q: "You consolidate three credit card debts into a single personal loan. What is the most important thing to do next?", opts: ["Use the freed-up credit cards for new purchases since the balances are zero", "Stop using the credit cards to avoid accumulating new debt on top of the loan", "Transfer the consolidation loan to a balance transfer card"], correct: 1, fb_right: "The number one danger after consolidation is re-spending on the now-empty credit cards. If you run them back up, you end up with the loan plus new card debt. Keep the accounts open for credit reporting, but stop using them.", fb_wrong: "After consolidation, the most important step is to stop using the credit cards. If you run them back up, you will have both the consolidation loan and new card debt. That is worse than where you started." },
+  { q: "You receive a $2,000 tax refund. You have a $3,000 credit card at 19.99% and a $280,000 mortgage at 4.5%. Where does the refund go?", opts: ["Split it between the mortgage and the credit card", "All toward the credit card, because 19.99% costs nearly four times more per dollar than 4.5%", "Into a savings account for emergencies"], correct: 1, fb_right: "The credit card at 19.99% costs you nearly four times more per dollar than the 4.5% mortgage. That $2,000 saves roughly $400 per year on the credit card versus about $90 on the mortgage. Always target the highest rate.", fb_wrong: "The $2,000 goes to the credit card. At 19.99%, every dollar there costs you nearly four times more than a dollar on a 4.5% mortgage. Windfalls have the biggest impact when applied to the highest-rate debt." },
+  { q: "A Canadian is overwhelmed by debt and struggling to keep up with payments. What should they do first?", opts: ["Take out another loan to cover the payments", "Contact a non-profit credit counselling agency for a free assessment", "Stop paying all debts and wait for them to expire"], correct: 1, fb_right: "Non-profit credit counselling, like Credit Counselling Canada, provides free assessments. A counsellor can review your situation, negotiate with creditors, and arrange a Debt Management Plan if needed. Asking for help is choosing the right tool for a harder problem.", fb_wrong: "The right first step is contacting a non-profit credit counselling agency like Credit Counselling Canada. They offer free assessments, can negotiate with creditors, and may arrange a Debt Management Plan. Taking on more debt or ignoring the problem makes things worse." }
+];
+var preScore = 0, postScore = 0;
+
+function buildQuiz(phase) {
+  var area = document.getElementById(phase + '-quiz-area');
+  var html = '';
+  quizQuestions.forEach(function(qq, i) {
+    html += '<div class="quiz-wrap" id="' + phase + '-q-' + i + '">';
+    html += '<p class="quiz-question">' + qq.q + '</p>';
+    qq.opts.forEach(function(opt, j) {
+      html += '<button class="quiz-option" onclick="answerPrePost(\'' + phase + '\',' + i + ',' + j + ')">' + opt + '</button>';
+    });
+    html += '</div>';
+    html += '<div id="' + phase + '-fb-' + i + '" style="display:none;"></div>';
+  });
+  area.innerHTML = html;
+}
+// Shuffle pre/post quiz options so correct answer is not always in the same position
+quizQuestions.forEach(function(qq) {
+  var indices = qq.opts.map(function(_, i) { return i; });
+  for (var i = indices.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp;
+  }
+  var newOpts = indices.map(function(idx) { return qq.opts[idx]; });
+  qq.correct = indices.indexOf(qq.correct);
+  qq.opts = newOpts;
+});
+buildQuiz('pre');
+buildQuiz('post');
+
+var preAnswered = 0, postAnswered = 0;
+var preAnswers = {}, postAnswers = {};
+function answerPrePost(phase, qi, ai) {
+  var wrap = document.getElementById(phase + '-q-' + qi);
+  var btns = wrap.querySelectorAll('.quiz-option');
+  var correct = quizQuestions[qi].correct;
+  var isCorrect = ai === correct;
+  var answers = phase === 'pre' ? preAnswers : postAnswers;
+  var isNew = !(qi in answers);
+  answers[qi] = ai;
+  btns.forEach(function(b) {
+    b.classList.remove('selected', 'wrong', 'correct-reveal');
+  });
+  if (phase === 'post') {
+    btns[ai].classList.add(isCorrect ? 'selected' : 'wrong');
+    if (!isCorrect) {
+      btns[correct].classList.add('correct-reveal');
+    }
+  } else {
+    btns[ai].classList.add('selected');
+  }
+  if (phase === 'post') {
+    var fbEl = document.getElementById(phase + '-fb-' + qi);
+    fbEl.style.display = 'block';
+    fbEl.innerHTML = '<div class="feedback-box' + (isCorrect ? '' : ' gold') + '"><p>' + (isCorrect ? quizQuestions[qi].fb_right : quizQuestions[qi].fb_wrong) + '</p></div>';
+  }
+  if (isNew) {
+    if (phase === 'pre') preAnswered++;
+    else postAnswered++;
+    cbLogAssessment(phase, qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
+  }
+  var score = 0;
+  var answersObj = phase === 'pre' ? preAnswers : postAnswers;
+  for (var k in answersObj) {
+    if (answersObj[k] === quizQuestions[k].correct) score++;
+  }
+  if (phase === 'pre') preScore = score;
+  else postScore = score;
+  var total = quizQuestions.length;
+  var answeredCount = phase === 'pre' ? preAnswered : postAnswered;
+  if (answeredCount === total) {
+    document.getElementById(phase + '-nav').style.display = 'block';
+    if (phase === 'post') {
+      var pct = Math.round((postScore / total) * 100);
+      document.getElementById('post-score-display').textContent = pct + '%';
+      document.getElementById('pre-score-compare').textContent = Math.round((preScore / total) * 100) + '%';
+      document.getElementById('post-score-compare').textContent = pct + '%';
+      var msg = '';
+      if (postScore > preScore) msg = '<p style="text-align:center;margin-top:16px;">Your score improved from ' + Math.round((preScore / total) * 100) + '% to ' + pct + '%. That is real learning.</p>';
+      else if (postScore === total) msg = '<p style="text-align:center;margin-top:16px;">Perfect score. You came in strong and you are leaving stronger.</p>';
+      else msg = '<p style="text-align:center;margin-top:16px;">You scored ' + pct + '%. Review the sections above to strengthen any areas you missed.</p>';
+      document.getElementById('results-message').innerHTML = msg;
+      var gateEl = document.getElementById('cert-gate');
+      if (postScore >= 4) {
+        gateEl.innerHTML = '<div style="margin-top:28px;"><button class="btn-primary" onclick="goTo(\'cert-0\')">Get Your Certificate</button></div>';
+      } else {
+        gateEl.innerHTML = '<div style="margin-top:28px;background:var(--gold-light);border-radius:14px;padding:24px;text-align:center;"><p style="font-weight:600;color:#7D6608;margin-bottom:8px;">You need 80% to earn your certificate.</p><p style="font-size:15px;color:#7D6608;margin-bottom:16px;">You scored ' + pct + '%. Review the sections you found challenging and retake the assessment when you are ready. There is no limit on attempts.</p><button class="btn-primary" onclick="resetPost()" style="background:linear-gradient(135deg,#E6A817,#F5C542);">Retake Assessment</button></div>';
+      }
+    }
+  }
+}
+
+function resetPost() {
+  postScore = 0;
+  postAnswered = 0;
+  postAnswers = {};
+  document.getElementById('post-nav').style.display = 'none';
+  buildQuiz('post');
+  goTo('post-0');
+}
+
+var sectionQuizData = {
+  '1-1': { correct: 1, fb_right: "Exactly. Paying $150 instead of the minimum cuts the timeline from 30+ years to about 4 years, and saves over $5,600 in interest. That is the power of paying more than the minimum. Open your Credit Calculator, Door 2, and try it with your own numbers.", fb_wrong: "Paying $150 per month on a $5,000 balance at 19.99% gets you debt-free in about 4 years and saves over $5,600 in interest. The difference between the minimum and a fixed payment is enormous. Try it in your Credit Calculator." },
+  '1-2': { correct: 1, fb_right: "The avalanche targets the highest interest rate. The credit card at 19.99% is costing you the most money every month. Every extra dollar there reduces the most expensive interest first. The snowball would target the store card instead, for the quick win.", fb_wrong: "Under the avalanche, the extra money goes to the highest interest rate, which is the credit card at 19.99%. That is the debt costing you the most per dollar per month. The store card at 12% would be the snowball target, since it has the smallest balance." },
+  '1-3': { correct: 1, fb_right: "Your extra budget is $175. That is the money above your minimums that you can put toward one target debt. Enter your debts in the Credit Calculator and set $175 as your extra monthly payment to see how it changes your timeline.", fb_wrong: "$175 is your extra budget: the difference between your $600 available and your $425 in minimums. The $425 is already spoken for. The $600 is your total. The $175 is what you can use to accelerate." },
+  '2-1': { correct: 1, fb_right: "A balance transfer saves money only if you clear the balance before the promotional rate expires. The 2% fee is small. The real risk is the rate jumping to 19.99% or higher on whatever balance remains when the promo ends.", fb_wrong: "A balance transfer is not automatically better. It saves money only when you pay off the full balance within the promotional period. If the balance remains when the promo ends, the rate jumps and you may end up paying more than if you had stayed with the original card." },
+  '2-2': { correct: 1, fb_right: "The biggest risk of consolidation is re-spending on the now-empty credit cards. If you run them back up, you end up with both the loan and new card debt. That is worse than where you started. The fix is simple: stop using the cards.", fb_wrong: "The biggest risk is re-spending on the freed-up credit cards. After consolidation, the cards show zero balances. If you use them again, you end up with the loan plus new card debt. Keep the accounts open for credit reporting, but stop using them." },
+  '2-3': { correct: 1, fb_right: "Always do the math. Enter your current mortgage in the Calculator, then compare with the refinanced terms, adding the $6,000 penalty as an upfront fee. If the total cost of the new mortgage plus penalty is lower than the original, refinance. If not, wait for renewal.", fb_wrong: "A lower rate does not automatically mean refinancing wins. The penalty for breaking a fixed-rate mortgage in Canada can be substantial. You must calculate whether the interest savings exceed the penalty. Use the Calculator to compare both options with the penalty included as a fee." },
+  '2-4': { correct: 1, fb_right: "Under the avalanche, the windfall goes to the highest rate. The credit card at 19.99% costs you nearly four times more per dollar than the store card at 12%. That $2,000 saves roughly $400 per year in interest on the credit card.", fb_wrong: "Under the avalanche, the windfall goes to the highest interest rate: the credit card at 19.99%. Splitting it dilutes the impact. Paying off the store card is the snowball approach, which targets the smallest balance for a quick win. The avalanche always targets the highest rate." },
+  '3-1': { correct: 1, fb_right: "A balance transfer is most powerful when you can clear the balance within the promotional window. If you cannot, the rate jumps and the transfer fee becomes wasted money. Calculate your required monthly payment before transferring.", fb_wrong: "A balance transfer works best when you can pay off most or all of the balance before the promotional rate expires. Making only minimum payments during the promo period will likely leave a large balance that gets hit with a high rate when the promo ends." },
+  '3-2': { correct: 1, fb_right: "Consolidation is about more than math. If juggling four payments creates stress and risk of missed payments, a single consolidated payment can keep you on track. The avalanche saves slightly more in total interest, but only if you stick with it.", fb_wrong: "Consolidation makes sense when the complexity of multiple debts threatens your ability to stay on track. If the consolidation rate is higher than all existing debts, it costs more. And if you plan to keep using the cards after consolidating, you will end up deeper in debt." },
+  '3-3': { correct: 1, fb_right: "Rate determines where a windfall does the most work. At 19.99%, the credit card costs nearly four times more per dollar than the 4.5% mortgage. The $3,000 saves roughly $600 per year on the card versus $135 on the mortgage. Always target the highest rate.", fb_wrong: "The credit card at 19.99% costs nearly four times more per dollar than the 4.5% mortgage. Windfalls go where the interest rate is highest. Size of debt does not matter. Rate per dollar does." },
+  '4-1': { correct: 1, fb_right: "The number one danger after consolidation is re-spending on the now-empty credit cards. Keep the accounts open for credit reporting, but stop using them. If you run them back up, you end up with the loan plus new card debt. That is the most common way consolidation fails.", fb_wrong: "After consolidation, you must stop using the credit cards. Keep the accounts open for credit reporting, but do not add new balances. Celebrating with a purchase or stacking another balance transfer defeats the purpose. The cards are at zero. Keep them there." },
+  '4-2': { correct: 1, fb_right: "Non-profit credit counselling agencies like Credit Counselling Canada offer free assessments. They can negotiate with creditors, arrange Debt Management Plans, and help you find the right path forward. Asking for help is choosing the right tool for a harder problem.", fb_wrong: "Taking on more debt to cover payments is a spiral. Ignoring debts damages your credit for years. The right first step is contacting a non-profit credit counselling agency like Credit Counselling Canada for a free assessment." }
+};
+
+function answerQuiz(qid, ai, clickedEl) {
+  var wrap = document.getElementById('quiz-' + qid);
+  var btns = wrap.querySelectorAll('.quiz-option');
+  var data = sectionQuizData[qid];
+  btns.forEach(function(b) {
+    b.classList.remove('selected', 'wrong', 'correct-reveal');
+  });
+  var isCorrect = ai === data.correct;
+  // Style the CLICKED element
+  clickedEl.classList.add(isCorrect ? 'selected' : 'wrong');
+  // If wrong, reveal the correct one by data-answer-index
+  if (!isCorrect) {
+    var correctBtn = wrap.querySelector('[data-answer-index="' + data.correct + '"]');
+    if (correctBtn) correctBtn.classList.add('correct-reveal');
+  }
+  var fbEl = document.getElementById('feedback-' + qid);
+  fbEl.style.display = 'block';
+  fbEl.innerHTML = '<div class="feedback-box' + (isCorrect ? '' : ' gold') + '"><p>' + (isCorrect ? data.fb_right : data.fb_wrong) + '</p></div>';
+  document.getElementById('nav-' + qid).style.display = 'block';
+}
+
+function toggleCertBtn() {
+  document.getElementById('cert-gen-btn').disabled = document.getElementById('cert-name').value.trim() === '';
+}
+function generateCert() {
+  var name = document.getElementById('cert-name').value.trim();
+  if (!name) return;
+  document.getElementById('cert-display-name').textContent = name;
+  document.getElementById('cert-score').textContent = Math.round((postScore / quizQuestions.length) * 100) + '%';
+  var d = new Date();
+  document.getElementById('cert-date').textContent = d.toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' });
+  var dateStr = d.getFullYear().toString() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var rand = '';
+  for (var i = 0; i < 4; i++) rand += chars.charAt(Math.floor(Math.random() * chars.length));
+  var certId = 'CB-GOD-' + dateStr + '-' + rand;
+  document.getElementById('cert-id').textContent = certId;
+  cbIssueCertificate(name, certId, preScore, postScore);
+  goTo('cert-1');
+}
+
+// ═══ CALCULATOR ENGINE ═══
+function calcFmt(n) { return '$' + Math.round(n).toLocaleString('en-CA'); }
+function calcPmtMonthly(P, rate, mo) { if (rate === 0 || mo === 0) return P / (mo || 1); var r = rate / 100 / 12; return P * r * Math.pow(1 + r, mo) / (Math.pow(1 + r, mo) - 1); }
+function calcPmtMortgage(P, rate, mo) { if (rate === 0 || mo === 0) return P / (mo || 1); var sa = rate / 100 / 2; var r = Math.pow(1 + sa, 1 / 6) - 1; return P * r * Math.pow(1 + r, mo) / (Math.pow(1 + r, mo) - 1); }
+function calcAPR(P, pmt, mo, fees) {
+  var net = P - fees; if (net <= 0 || pmt <= 0 || mo <= 0) return 0;
+  var lo = 0, hi = 5;
+  for (var i = 0; i < 100; i++) { var mid = (lo + hi) / 2; var r = mid / 12; var pv = pmt * (1 - Math.pow(1 + r, -mo)) / r; if (pv > net) lo = mid; else hi = mid; }
+  return ((lo + hi) / 2) * 100;
+}
+function calcMinPay(bal, rate) { return Math.max(Math.round(bal * 0.01 + bal * (rate / 100 / 12)), 25); }
+function simMinPayment(bal, annualRate) {
+  var months = 0, totalInterest = 0, b = bal, r = annualRate / 100 / 12;
+  while (b > 0.5 && months < 600) { var interest = b * r; var minPay = Math.max(Math.round(b * 0.01 + interest), 25); if (minPay >= b + interest) { totalInterest += b * r; break; } totalInterest += interest; b = b + interest - minPay; months++; }
+  return { months: months, totalInterest: Math.round(totalInterest) };
+}
+function simFixedPayment(bal, annualRate, payment) {
+  var months = 0, totalInterest = 0, b = bal, r = annualRate / 100 / 12;
+  while (b > 0.5 && months < 600) { var interest = b * r; totalInterest += interest; var p = Math.min(payment, b + interest); b = b + interest - p; months++; if (b < 0) b = 0; }
+  return { months: months, totalInterest: Math.round(totalInterest) };
+}
+
+var calcConfigs = {
+  's1-1c': { door: 'debt-one', type: 'card', amount: 5000, rate: 19.99, term: 0, label: 'Drag the payment slider. Watch what happens when you pay more than the minimum. How much would you need to pay each month to be debt-free in under 5 years?' },
+  's1-2c': { door: 'debt-several', debts: [{name:'Store Card',balance:1200,rate:12,minPay:35,type:'card'},{name:'Credit Card',balance:4000,rate:19.99,minPay:100,type:'card'},{name:'Car Loan',balance:10000,rate:6,minPay:193,type:'car'}], label: 'Three debts loaded. Toggle between Avalanche and Snowball. See how the order and total interest change.' },
+  's1-3c': { door: 'debt-several', debts: [{name:'Credit Card',balance:0,rate:19.99,minPay:0,type:'card'}], label: 'Enter your own debts. Add each one, set the balance, rate, and minimum payment. Then set your extra monthly budget and choose a strategy.' },
+  's2-1c': { door: 'debt-one', type: 'card', amount: 5000, rate: 19.99, term: 0, label: 'This is a $5,000 credit card at 19.99%. Now try changing the rate to 0% to see what a balance transfer does to your payments during the promotional period.' },
+  's2-2c': { door: 'offer', type: 'personal', amount: 12000, rate: 10, term: 48, fees: 0, label: 'This is the consolidation loan replacing the three credit cards above. $12,000 at 10% over 4 years. Try changing the rate or term to see how it compares to paying 19.99% on the cards.' },
+  's2-3c': { door: 'offer', type: 'mortgage', amount: 300000, rate: 4.2, term: 300, fees: 6000, label: 'A refinanced mortgage at 4.2% with a $6,000 penalty entered as a fee. The APR reflects the true cost including the penalty. Compare with your current rate of 5.5%. Pay attention to Total Paid: the new loan at 4.2% with the $6,000 fee costs far less over 25 years than staying at 5.5%.' },
+  's2-4c': { door: 'debt-one', type: 'card', amount: 3000, rate: 19.99, term: 0, label: 'A $3,000 credit card at 19.99%. Try changing the balance to $1,000 (as if you applied a $2,000 tax refund). Watch the timeline and interest change.' },
+  's3-2c': { door: 'debt-several', debts: [{name:'Store Card',balance:2000,rate:12,minPay:50,type:'card'},{name:'Visa',balance:5000,rate:19.99,minPay:125,type:'card'},{name:'Line of Credit',balance:3000,rate:8,minPay:60,type:'card'},{name:'Car Loan',balance:15000,rate:6.5,minPay:293,type:'car'}], label: "Marcus's four debts loaded. Set extra payment to $150. Compare Avalanche vs Snowball. Then open the consolidation comparison below to see if a $10,000 loan at 9% over 5 years beats the current plan.", consolRate: 9, consolTerm: 5, consolPreselect: [0,1,2] }
+};
+
+function renderCalc(screenId) {
+  var config = calcConfigs[screenId];
+  if (!config) return;
+  var container = document.getElementById('calc-' + screenId);
+  if (!container) return;
+  if (container.getAttribute('data-rendered') === 'true') return;
+  container.setAttribute('data-rendered', 'true');
+  if (config.door === 'offer') renderCalcOffer(container, config, screenId);
+  else if (config.door === 'debt-one') renderCalcDebtOne(container, config, screenId);
+  else if (config.door === 'debt-several') renderCalcDebtSeveral(container, config, screenId);
+}
+
+function renderCalcOffer(container, config, screenId) {
+  var isMortgage = config.type === 'mortgage';
+  var html = '';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header-title">Credit Calculator</div>';
+  html += '<div class="calc-header-sub">' + config.label + '</div></div>';
+  html += '<div class="calc-body">';
+  html += '<div class="input-group"><div class="input-label">Loan Amount</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-amount" value="' + config.amount + '" oninput="calcOfferUpdate(\'' + screenId + '\')"></div></div>';
+  html += '<div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" step="0.1" class="input-field" id="' + screenId + '-rate" value="' + config.rate + '" oninput="calcOfferUpdate(\'' + screenId + '\')"><span class="input-unit">%</span></div></div>';
+  html += '<div class="input-group"><div class="input-label">Term (months)</div><div class="input-row"><input type="number" class="input-field" id="' + screenId + '-term" value="' + config.term + '" oninput="calcOfferUpdate(\'' + screenId + '\')"><span class="input-unit">mo</span></div></div>';
+  html += '<div class="input-group"><div class="input-label">' + (isMortgage ? 'Penalty / Fees' : 'Fees') + '</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-fees" value="' + (config.fees || 0) + '" oninput="calcOfferUpdate(\'' + screenId + '\')"></div></div>';
+  html += '<div class="divider"></div>';
+  html += '<div id="' + screenId + '-results"></div>';
+  html += '<div class="tool-disclaimer">This calculator is for educational purposes only.' + (isMortgage ? ' Uses Canadian-standard semi-annual compounding for mortgages.' : '') + '</div>';
+  html += '</div>';
+  container.innerHTML = html;
+  calcOfferUpdate(screenId);
+}
+
+function calcOfferUpdate(screenId) {
+  var config = calcConfigs[screenId];
+  var amount = parseFloat(document.getElementById(screenId + '-amount').value) || 0;
+  var rate = parseFloat(document.getElementById(screenId + '-rate').value) || 0;
+  var term = parseInt(document.getElementById(screenId + '-term').value) || 1;
+  var fees = parseFloat(document.getElementById(screenId + '-fees').value) || 0;
+  var isMortgage = config.type === 'mortgage';
+  var pmt = isMortgage ? calcPmtMortgage(amount, rate, term) : calcPmtMonthly(amount, rate, term);
+  var totalPaid = pmt * term;
+  var totalInterest = totalPaid - amount;
+  var apr = fees > 0 ? calcAPR(amount, pmt, term, fees) : rate;
+  var html = '<div class="big-result"><div class="big-result-label">Monthly Payment</div><div class="big-result-number">' + calcFmt(pmt) + '</div>';
+  if (isMortgage) html += '<div class="big-result-sub">Semi-annual compounding (Canadian standard)</div>';
+  html += '</div>';
+  html += '<div class="result-grid"><div class="compare-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(totalPaid) + '</div></div>';
+  html += '<div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(totalInterest) + '</div></div>';
+  html += '<div class="compare-card' + (fees > 0 ? '' : ' green-card') + '"><div class="compare-card-label">' + (fees > 0 ? 'APR' : 'Rate') + '</div><div class="compare-card-number">' + apr.toFixed(2) + '%</div></div></div>';
+  if (fees > 0 && apr > rate) {
+    html += '<div class="insight-box"><p>The APR (' + apr.toFixed(2) + '%) is higher than the rate (' + rate.toFixed(1) + '%) because it includes the $' + Math.round(fees).toLocaleString('en-CA') + ' in fees. This is the true cost of borrowing.</p></div>';
+  }
+  document.getElementById(screenId + '-results').innerHTML = html;
+  var container2 = document.getElementById('calc-' + screenId);
+  if (container2 && container2._consolOpen) { calcRenderConsolChecks(screenId, container2); calcEmbedConsol(screenId); }
+}
+
+function renderCalcDebtOne(container, config, screenId) {
+  var isCard = config.type === 'card';
+  var html = '';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header-title">Credit Calculator</div>';
+  html += '<div class="calc-header-sub">' + config.label + '</div></div>';
+  html += '<div class="calc-body">';
+  html += '<div class="input-group"><div class="input-label">Balance</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-bal" value="' + config.amount + '" oninput="calcDebtOneUpdate(\'' + screenId + '\')"></div></div>';
+  html += '<div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" step="0.1" class="input-field" id="' + screenId + '-rate" value="' + config.rate + '" oninput="calcDebtOneUpdate(\'' + screenId + '\')"><span class="input-unit">%</span></div></div>';
+  html += '<div class="input-group"><div class="input-label">Monthly Payment</div>';
+  html += '<div class="slider-wrap"><div class="slider-header"><div class="slider-value" id="' + screenId + '-pay-display">$150</div></div>';
+  var sliderMin = calcMinPay(config.amount, config.rate);
+  html += '<input type="range" id="' + screenId + '-pay-slider" min="' + sliderMin + '" max="1000" value="150" oninput="calcDebtOneSlide(\'' + screenId + '\')">';
+  html += '<div class="slider-labels"><span>$' + sliderMin + '</span><span>$1,000</span></div></div></div>';
+  html += '<div class="divider"></div>';
+  html += '<div id="' + screenId + '-results"></div>';
+  html += '<div class="tool-disclaimer">This calculator is for educational purposes only.</div>';
+  html += '</div>';
+  container.innerHTML = html;
+  calcDebtOneUpdate(screenId);
+}
+
+function calcDebtOneSlide(screenId) {
+  var slider = document.getElementById(screenId + '-pay-slider');
+  document.getElementById(screenId + '-pay-display').textContent = '$' + parseInt(slider.value).toLocaleString('en-CA');
+  calcDebtOneUpdate(screenId);
+}
+
+function calcDebtOneUpdate(screenId) {
+  var bal = parseFloat(document.getElementById(screenId + '-bal').value) || 0;
+  var rate = parseFloat(document.getElementById(screenId + '-rate').value) || 0;
+  var sl = document.getElementById(screenId + '-pay-slider');
+  var mn = calcMinPay(bal, rate);
+  sl.min = mn;
+  if (parseInt(sl.value) < mn) sl.value = mn;
+  var lbls = sl.parentElement.querySelector('.slider-labels');
+  if (lbls) lbls.querySelector('span').textContent = '$' + mn;
+  document.getElementById(screenId + '-pay-display').textContent = '$' + parseInt(sl.value).toLocaleString('en-CA');
+  var payment = parseInt(sl.value) || 150;
+  var minResult = simMinPayment(bal, rate);
+  var fixedResult = simFixedPayment(bal, rate, payment);
+  var html = '';
+  html += '<div class="big-result"><div class="big-result-label">At $' + payment + '/month</div>';
+  html += '<div class="big-result-number">' + (fixedResult.months >= 600 ? '30+ yrs' : (fixedResult.months < 12 ? fixedResult.months + ' mo' : Math.round(fixedResult.months / 12) + ' years')) + '</div>';
+  html += '<div class="big-result-sub">to pay off</div></div>';
+  html += '<div class="result-grid two-col">';
+  html += '<div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(fixedResult.totalInterest) + '</div></div>';
+  html += '<div class="compare-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(bal + fixedResult.totalInterest) + '</div></div></div>';
+  if (minResult.months > fixedResult.months) {
+    var saved = minResult.totalInterest - fixedResult.totalInterest;
+    if (saved > 0) html += '<div class="savings-badge"><span class="savings-badge-text">You save ' + calcFmt(saved) + ' vs minimum payments</span></div>';
+  }
+  document.getElementById(screenId + '-results').innerHTML = html;
+}
+
+function renderCalcDebtSeveral(container, config, screenId) {
+  var html = '';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header-title">Paydown Strategies</div>';
+  html += '<div class="calc-header-sub">' + config.label + '</div></div>';
+  html += '<div class="calc-body">';
+  html += '<div id="' + screenId + '-cards"></div>';
+  html += '<button class="add-card-btn" onclick="calcAddDebt(\'' + screenId + '\')">+ Add another debt</button>';
+  html += '<div class="input-group"><div class="input-label">Extra Monthly Payment</div>';
+  html += '<div class="slider-wrap"><div class="slider-header"><div class="slider-value" id="' + screenId + '-extra-display">$200</div></div>';
+  html += '<input type="range" id="' + screenId + '-extra-slider" min="0" max="500" value="200" oninput="calcPaydownSlide(\'' + screenId + '\')">';
+  html += '<div class="slider-labels"><span>$0</span><span>$500</span></div></div></div>';
+  html += '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:10px;">Total Interest Paid per Strategy</div>';
+  html += '<div class="strat-compare"><div class="strat-card active" id="' + screenId + '-strat-aval" onclick="calcSetStrat(\'' + screenId + '\',\'avalanche\')"><div class="strat-card-title">Avalanche</div><div class="strat-card-sub">Highest rate first</div><div class="strat-card-stat" id="' + screenId + '-aval-int"></div></div>';
+  html += '<div class="strat-card" id="' + screenId + '-strat-snow" onclick="calcSetStrat(\'' + screenId + '\',\'snowball\')"><div class="strat-card-title">Snowball</div><div class="strat-card-sub">Smallest balance first</div><div class="strat-card-stat" id="' + screenId + '-snow-int"></div></div></div>';
+  html += '<div class="divider"></div>';
+  html += '<div id="' + screenId + '-results"></div>';
+  html += '<div class="consol-trigger" id="' + screenId + '-consol-trigger" onclick="calcToggleConsol(\'' + screenId + '\')">&#128260; What If You Consolidated?</div>';
+  html += '<div class="consol-section" id="' + screenId + '-consol-section">';
+  html += '<div style="font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:10px;">Select debts to roll into one consolidation loan.</div>';
+  html += '<div id="' + screenId + '-consol-checks"></div>';
+  html += '<div style="border-top:1px solid var(--border);margin:10px 0;"></div>';
+  html += '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:10px;">Consolidation Loan Terms</div>';
+  html += '<div class="consol-amount"><div class="consol-amount-label">Loan Amount</div><div class="consol-amount-number" id="' + screenId + '-consol-amount">$0</div></div>';
+  html += '<div class="consol-config">';
+  html += '<div class="input-group"><div class="input-label">Rate (%)</div><input type="number" step="0.1" class="input-field" id="' + screenId + '-consol-rate" value="' + (config.consolRate || 10) + '" oninput="calcEmbedConsol(\'' + screenId + '\')"></div>';
+  html += '<div class="input-group"><div class="input-label">Term (yr)</div><input type="number" class="input-field" id="' + screenId + '-consol-term" value="' + (config.consolTerm || 5) + '" oninput="calcEmbedConsol(\'' + screenId + '\')"></div>';
+  html += '<div class="input-group"><div class="input-label">Fees ($)</div><input type="number" class="input-field" id="' + screenId + '-consol-fees" value="0" oninput="calcEmbedConsol(\'' + screenId + '\')"></div></div>';
+  html += '<div id="' + screenId + '-consol-results" style="display:none;"></div>';
+  html += '<div id="' + screenId + '-consol-empty" style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:8px;">Check at least one debt to see the comparison.</div>';
+  html += '</div>';
+  html += '<div class="tool-disclaimer">This calculator is for educational purposes only.</div>';
+  html += '</div>';
+  container.innerHTML = html;
+  container._debts = JSON.parse(JSON.stringify(config.debts));
+  container._strategy = 'avalanche';
+  container._consolOpen = false;
+  container._consolSelected = config.debts.map(function(d) { return config.consolPreselect ? (config.consolPreselect.indexOf(config.debts.indexOf(d)) !== -1) : false; });
+  calcRenderCards(screenId, container);
+  calcPaydownUpdate(screenId, container);
+}
+
+function calcRenderCards(screenId, container) {
+  if (!container) container = document.getElementById('calc-' + screenId);
+  var debts = container._debts;
+  var html = '';
+  debts.forEach(function(d, i) {
+    var isRev = d.type === 'card' || d.type === 'loc';
+    html += '<div class="card-entry"><div class="card-entry-header"><div class="card-entry-name">' + d.name + '</div>';
+    if (debts.length > 1) html += '<div class="card-entry-remove" onclick="calcRemoveDebt(\'' + screenId + '\',' + i + ')">Remove</div>';
+    html += '</div><div class="card-entry-inputs">';
+    html += '<div class="input-group"><div class="input-label">Balance</div><input type="number" class="input-field" value="' + (d.balance || '') + '" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'balance\',this.value)"></div>';
+    html += '<div class="input-group"><div class="input-label">Rate (%)</div><input type="number" class="input-field" value="' + (d.rate || '') + '" step="0.01" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'rate\',this.value)"></div>';
+    html += '<div class="input-group"><div class="input-label">' + (isRev ? 'Min Pay' : 'Payment') + '</div><input type="number" class="input-field" value="' + (d.minPay || '') + '" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'minPay\',this.value)"></div>';
+    html += '</div></div>';
+  });
+  document.getElementById(screenId + '-cards').innerHTML = html;
+}
+
+function calcUpdateDebt(screenId, idx, field, val) {
+  var container = document.getElementById('calc-' + screenId);
+  container._debts[idx][field] = parseFloat(val) || 0;
+  calcPaydownUpdate(screenId, container);
+}
+
+function calcAddDebt(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  container._debts.push({name: 'Debt ' + (container._debts.length + 1), balance: 0, rate: 0, minPay: 0, type: 'card'});
+  calcRenderCards(screenId, container);
+  calcPaydownUpdate(screenId, container);
+}
+
+function calcRemoveDebt(screenId, idx) {
+  var container = document.getElementById('calc-' + screenId);
+  if (container._debts.length <= 1) return;
+  container._debts.splice(idx, 1);
+  calcRenderCards(screenId, container);
+  calcPaydownUpdate(screenId, container);
+}
+
+function calcSetStrat(screenId, strat) {
+  var container = document.getElementById('calc-' + screenId);
+  container._strategy = strat;
+  document.getElementById(screenId + '-strat-aval').classList.toggle('active', strat === 'avalanche');
+  document.getElementById(screenId + '-strat-snow').classList.toggle('active', strat === 'snowball');
+  calcPaydownUpdate(screenId, container);
+}
+
+function calcPaydownSlide(screenId) {
+  var val = document.getElementById(screenId + '-extra-slider').value;
+  document.getElementById(screenId + '-extra-display').textContent = '$' + parseInt(val).toLocaleString('en-CA');
+  calcPaydownUpdate(screenId);
+}
+
+function calcPaydownUpdate(screenId, container) {
+  if (!container) container = document.getElementById('calc-' + screenId);
+  var debts = container._debts;
+  var strategy = container._strategy;
+  var extra = parseInt(document.getElementById(screenId + '-extra-slider').value) || 0;
+  function simPD(ds, ex, strat) {
+    var dd = ds.map(function(d) { return {balance:d.balance, rate:d.rate, minPay:d.minPay||calcMinPay(d.balance,d.rate), name:d.name}; });
+    var months=0, totalInt=0;
+    while(dd.some(function(d){return d.balance>0.5;}) && months<600) {
+      var sorted=dd.filter(function(d){return d.balance>0.5;});
+      if(strat==='avalanche') sorted.sort(function(a,b){return b.rate-a.rate;});
+      else sorted.sort(function(a,b){return a.balance-b.balance;});
+      var extraLeft=ex;
+      dd.forEach(function(d){
+        if(d.balance<=0.5)return;
+        var interest=d.balance*(d.rate/100/12); totalInt+=interest;
+        var pay=d.minPay;
+        if(d===sorted[0]) pay+=extraLeft;
+        d.balance=Math.max(0,d.balance+interest-pay);
+      });
+      months++;
+    }
+    return {months:months, totalInterest:Math.round(totalInt)};
+  }
+  var avalResult = simPD(debts, extra, 'avalanche');
+  var snowResult = simPD(debts, extra, 'snowball');
+  var avalEl = document.getElementById(screenId + '-aval-int');
+  var snowEl = document.getElementById(screenId + '-snow-int');
+  if (avalEl) avalEl.textContent = calcFmt(avalResult.totalInterest);
+  if (snowEl) snowEl.textContent = calcFmt(snowResult.totalInterest);
+  var result = strategy === 'avalanche' ? avalResult : snowResult;
+  var otherResult = strategy === 'avalanche' ? snowResult : avalResult;
+  var html = '<div class="big-result"><div class="big-result-label">' + (strategy === 'avalanche' ? 'Avalanche' : 'Snowball') + ' Strategy</div>';
+  html += '<div class="big-result-number">' + (result.months < 12 ? result.months + ' mo' : Math.round(result.months/12*10)/10 + ' years') + '</div>';
+  html += '<div class="big-result-sub">to be debt-free</div></div>';
+  html += '<div class="result-grid two-col">';
+  html += '<div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(result.totalInterest) + '</div></div>';
+  var diff = otherResult.totalInterest - result.totalInterest;
+  var otherName = strategy === 'avalanche' ? 'Snowball' : 'Avalanche';
+  if (diff > 0) {
+    html += '<div class="compare-card green-card"><div class="compare-card-label">Saved vs ' + otherName + '</div><div class="compare-card-number">' + calcFmt(diff) + '</div></div>';
+  } else {
+    html += '<div class="compare-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(debts.reduce(function(s,d){return s+d.balance;},0) + result.totalInterest) + '</div></div>';
+  }
+  html += '</div>';
+  var order = debts.slice();
+  if (strategy === 'avalanche') order.sort(function(a,b){return b.rate-a.rate;});
+  else order.sort(function(a,b){return a.balance-b.balance;});
+  html += '<div class="paydown-timeline">';
+  order.forEach(function(d, i) {
+    if (d.balance <= 0) return;
+    html += '<div class="paydown-row"><div class="paydown-order">' + (i+1) + '</div><div class="paydown-info"><div class="paydown-name">' + d.name + '</div><div class="paydown-detail">' + calcFmt(d.balance) + ' at ' + d.rate + '%</div></div>';
+    if (i === 0) html += '<div class="paydown-focus">Focus extra here</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  document.getElementById(screenId + '-results').innerHTML = html;
+}
+
+
+// ═══ EMBEDDED CONSOLIDATION COMPARISON ═══
+function calcToggleConsol(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  container._consolOpen = !container._consolOpen;
+  var trigger = document.getElementById(screenId + '-consol-trigger');
+  var section = document.getElementById(screenId + '-consol-section');
+  trigger.classList.toggle('open', container._consolOpen);
+  section.classList.toggle('open', container._consolOpen);
+  trigger.innerHTML = container._consolOpen ? '&#9662; What If You Consolidated?' : '&#128260; What If You Consolidated?';
+  if (container._consolOpen) {
+    calcRenderConsolChecks(screenId, container);
+    calcEmbedConsol(screenId);
+  }
+}
+
+function calcRenderConsolChecks(screenId, container) {
+  if (!container) container = document.getElementById('calc-' + screenId);
+  var debts = container._debts;
+  var sel = container._consolSelected || debts.map(function() { return false; });
+  while (sel.length < debts.length) sel.push(false);
+  container._consolSelected = sel;
+  var html = '';
+  debts.forEach(function(d, i) {
+    var label = d.name + (d.balance > 0 ? ' (' + calcFmt(d.balance) + ' at ' + d.rate + '%)' : '');
+    html += '<div class="consol-check ' + (sel[i] ? 'on' : 'off') + '" onclick="calcToggleConsolDebt(\'' + screenId + '\',' + i + ')">';
+    html += '<input type="checkbox" ' + (sel[i] ? 'checked' : '') + ' style="pointer-events:none">';
+    html += '<span>' + label + '</span></div>';
+  });
+  document.getElementById(screenId + '-consol-checks').innerHTML = html;
+}
+
+function calcToggleConsolDebt(screenId, idx) {
+  var container = document.getElementById('calc-' + screenId);
+  container._consolSelected[idx] = !container._consolSelected[idx];
+  calcRenderConsolChecks(screenId, container);
+  calcEmbedConsol(screenId);
+}
+
+function calcEmbedConsol(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  if (!container || !container._consolOpen) return;
+  var debts = container._debts;
+  var sel = container._consolSelected || [];
+  var strategy = container._strategy;
+  var extra = parseInt(document.getElementById(screenId + '-extra-slider').value) || 0;
+
+  var consolBal = 0, selectedCount = 0;
+  debts.forEach(function(d, i) { if (sel[i]) { consolBal += d.balance || 0; selectedCount++; } });
+  document.getElementById(screenId + '-consol-amount').textContent = calcFmt(consolBal);
+
+  if (selectedCount === 0 || consolBal <= 0) {
+    document.getElementById(screenId + '-consol-results').style.display = 'none';
+    document.getElementById(screenId + '-consol-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById(screenId + '-consol-empty').style.display = 'none';
+  document.getElementById(screenId + '-consol-results').style.display = 'block';
+
+  var consolRate = parseFloat(document.getElementById(screenId + '-consol-rate').value) || 0;
+  var consolTerm = parseFloat(document.getElementById(screenId + '-consol-term').value) || 5;
+  var consolFees = parseFloat(document.getElementById(screenId + '-consol-fees').value) || 0;
+
+  // Current plan simulation
+  function simPD(ds, ex, strat) {
+    var dd = ds.map(function(d) { return {balance:d.balance, rate:d.rate, minPay:d.minPay||calcMinPay(d.balance,d.rate)}; });
+    var months=0, totalInt=0, totalPaid=0;
+    while(dd.some(function(d){return d.balance>0.5;}) && months<600) {
+      var sorted=dd.filter(function(d){return d.balance>0.5;});
+      if(strat==='avalanche') sorted.sort(function(a,b){return b.rate-a.rate;});
+      else sorted.sort(function(a,b){return a.balance-b.balance;});
+      var extraLeft=ex;
+      dd.forEach(function(d){
+        if(d.balance<=0.5)return;
+        var interest=d.balance*(d.rate/100/12); totalInt+=interest;
+        var pay=d.minPay;
+        if(d===sorted[0]) pay+=extraLeft;
+        pay=Math.min(pay, d.balance+interest);
+        totalPaid+=pay;
+        d.balance=Math.max(0,d.balance+interest-pay);
+      });
+      months++;
+    }
+    return {months:months, totalInterest:Math.round(totalInt), totalPaid:Math.round(totalPaid)};
+  }
+
+  var currentResult = simPD(debts, extra, strategy);
+
+  // Consolidation: keep unselected debts, replace selected with one loan
+  var consolDebts = [];
+  debts.forEach(function(d, i) {
+    if (!sel[i]) consolDebts.push({balance:d.balance, rate:d.rate, minPay:d.minPay||calcMinPay(d.balance,d.rate), type:d.type});
+  });
+  var consolMo = consolTerm * 12;
+  var consolMp = calcPmtMonthly(consolBal + consolFees, consolRate, consolMo);
+  consolDebts.push({balance: consolBal + consolFees, rate: consolRate, minPay: consolMp, type: 'personal'});
+  var consolResult = simPD(consolDebts, extra, strategy);
+
+  var currentBetter = currentResult.totalInterest <= consolResult.totalInterest;
+  var consolBetter = !currentBetter;
+  var savedInt = Math.abs(currentResult.totalInterest - consolResult.totalInterest);
+  var savedMo = Math.abs(currentResult.months - consolResult.months);
+
+  var html = '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:10px;">Comparison</div>';
+  html += '<div class="consol-vs">';
+  html += '<div class="consol-vs-card' + (currentBetter ? ' better' : '') + '"><div class="consol-vs-label">Current Plan</div>';
+  html += '<div class="consol-vs-row"><strong>' + calcFmt(currentResult.totalInterest) + '</strong>total interest</div>';
+  html += '<div class="consol-vs-row"><strong>' + (currentResult.months < 24 ? currentResult.months + ' mo' : Math.round(currentResult.months/12) + ' yr') + '</strong>to debt-free</div></div>';
+  html += '<div class="consol-vs-mid"><div class="vs-badge">vs</div></div>';
+  html += '<div class="consol-vs-card' + (consolBetter ? ' better' : '') + '"><div class="consol-vs-label">Consolidation</div>';
+  html += '<div class="consol-vs-row"><strong>' + calcFmt(consolResult.totalInterest) + '</strong>total interest</div>';
+  html += '<div class="consol-vs-row"><strong>' + (consolResult.months < 24 ? consolResult.months + ' mo' : Math.round(consolResult.months/12) + ' yr') + '</strong>to debt-free</div></div>';
+  html += '</div>';
+  if (savedInt > 10) {
+    var winner = currentBetter ? 'Current plan' : 'Consolidation';
+    html += '<div class="savings-badge" style="margin:10px 0;padding:10px 12px;"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text" style="font-size:13px;">' + winner + ' saves ' + calcFmt(savedInt) + ' in interest</span></div>';
+  }
+  if (consolBetter) {
+    html += '<div class="caution-note" style="font-size:12px;">Consolidation only works if you stop using the accounts you paid off. Keep them open for credit reporting, but do not add new balances.</div>';
+  }
+  document.getElementById(screenId + '-consol-results').innerHTML = html;
+}
+
+// Shuffle in-section quiz option order on page load
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.quiz-wrap').forEach(function(wrap) {
+    if (wrap.id.indexOf('pre-') === 0 || wrap.id.indexOf('post-') === 0) return;
+    var btns = Array.from(wrap.querySelectorAll('.quiz-option'));
+    if (btns.length < 2) return;
+    // Add data-answer-index before shuffling to track original position
+    btns.forEach(function(b, i) { b.setAttribute('data-answer-index', i); });
+    for (var i = btns.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = btns[i]; btns[i] = btns[j]; btns[j] = tmp;
+    }
+    btns.forEach(function(b) { wrap.appendChild(b); });
+  });
+  cbInit();
+});
+
+</script>
+
+</body>
+</html>

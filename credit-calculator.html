@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright · Credit Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+.cb-loading-gate{position:fixed;top:0;left:0;width:100%;height:100%;background:#1B2A1F;z-index:9998;display:flex;justify-content:center;align-items:center}
+.cb-loading-gate .spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.2);border-top-color:#43A66A;border-radius:50%;animation:cbspin 0.8s linear infinite}
+@keyframes cbspin{to{transform:rotate(360deg)}}
+:root {
+  --bg:#FAFAF8;--bg-dark:#1B2A1F;--bg-dark-2:#243028;--card:#FFFFFF;
+  --border:#E8E5DE;--border-light:#F0EDE6;--text:#1A1D1A;--text-secondary:#5A5F58;
+  --text-muted:#6A6E67;--green:#2E7D4F;--green-light:#E8F5EC;--green-glow:#43A66A;
+  --green-dark:#1B5E3A;--red:#C62828;--red-light:#FDEAEA;--red-glow:#E53935;
+  --blue:#3BA4D9;--blue-light:#E6F4FB;--gold:#E6A817;--gold-light:#FEF8E7;
+  --orange:#F5A623;--pink:#E44271;--muted-bg:#F4F3F0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);min-height:100vh}
+.phone-frame{width:100%;max-width:700px;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative}
+.header{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));padding:20px 24px;flex-shrink:0}
+.header-compact{padding:16px 24px}
+.logo-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.logo-icon{flex-shrink:0}
+.logo-text{font-size:12px;font-weight:700;letter-spacing:0.2em;color:rgba(255,255,255,0.4)}
+.header-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:#fff;line-height:1.2;margin-bottom:4px}
+.header-title-sm{font-size:20px;margin-bottom:0}
+.header-sub{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.5}
+.header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:12px;transition:color 0.2s}
+.header-back:hover{color:rgba(255,255,255,0.8)}
+.header-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.screen{display:none;flex-direction:column;flex:1}
+.screen.active{display:flex}
+.scroll-area{flex:1;padding:24px}
+.scroll-area::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:right;padding:16px 0 4px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.04em;color:var(--text-muted);opacity:0.5}
+.door-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:24px;margin-bottom:14px;cursor:pointer;transition:all 0.25s ease;position:relative;overflow:hidden}
+.door-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 24px rgba(46,125,79,0.08)}
+.door-card:active{transform:translateY(0)}
+.door-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.door-icon.offer{background:var(--blue-light)}
+.door-icon.debt{background:var(--red-light)}
+.door-icon.strength{background:var(--green-light)}
+.door-title{font-family:'Instrument Serif',serif;font-size:20px;color:var(--text);font-weight:400;line-height:1.3;margin-bottom:6px}
+.door-desc{font-size:14px;color:var(--text-muted);line-height:1.55;padding-right:24px}
+.door-arrow{position:absolute;right:20px;top:50%;transform:translateY(-50%);color:var(--border);transition:color 0.2s}
+.door-card:hover .door-arrow{color:var(--green)}
+.door-arrow svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.input-group{margin-bottom:18px}
+.input-label{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.input-row{display:flex;align-items:center;gap:10px}
+.input-field{flex:1;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;color:var(--text);background:var(--card);outline:none;transition:border-color 0.2s;-moz-appearance:textfield}
+.input-field::-webkit-outer-spin-button,.input-field::-webkit-inner-spin-button{-webkit-appearance:none}
+.input-field:focus{border-color:var(--green)}
+.input-unit{font-size:14px;font-weight:600;color:var(--text-muted);flex-shrink:0;min-width:28px}
+.input-prefix{font-size:16px;font-weight:600;color:var(--text-muted);flex-shrink:0}
+.input-group.compact{margin-bottom:14px}
+.input-group.compact .input-label{margin-bottom:5px;font-size:12px}
+.input-group.compact .input-field{padding:10px 12px;font-size:14px}
+.helper-text{font-size:12px;color:var(--text-muted);margin-top:5px;line-height:1.4;font-style:italic}
+.slider-wrap{margin-top:4px}
+.slider-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.slider-value{font-family:'Instrument Serif',serif;font-size:28px;color:var(--text);font-weight:400}
+.slider-value .unit{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);font-weight:500;margin-left:2px}
+input[type="range"]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--border);outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 2px 8px rgba(46,125,79,0.3);transition:transform 0.15s}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--green);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(46,125,79,0.3)}
+.slider-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--text-muted)}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.pill{padding:10px 16px;border:1.5px solid var(--border);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text-secondary);background:var(--card);cursor:pointer;transition:all 0.2s}
+.pill:hover{border-color:var(--green);color:var(--green)}
+.pill.active{background:var(--green);color:#fff;border-color:var(--green)}
+.pill.sm{padding:8px 12px;font-size:13px}
+.mode-toggle{display:flex;background:var(--border-light);border-radius:12px;padding:3px;margin-bottom:20px}
+.mode-btn{flex:1;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;border-radius:10px;cursor:pointer;transition:all 0.25s}
+.mode-btn.active{background:var(--card);color:var(--green);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.divider{height:1px;background:var(--border-light);margin:24px 0}
+.result-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--green);margin-bottom:16px}
+.big-result{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:20px;padding:28px 24px;margin-bottom:16px;text-align:center}
+.big-result-label{font-size:13px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.big-result-number{font-family:'Instrument Serif',serif;font-size:42px;color:#fff;font-weight:400;line-height:1.1;transition:all 0.3s ease}
+.big-result-sub{font-size:14px;color:rgba(255,255,255,0.45);margin-top:6px;line-height:1.5}
+.result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.result-grid.two-col{grid-template-columns:1fr 1fr}
+.compare-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:18px 12px;text-align:center;transition:all 0.3s ease}
+.compare-card.green-card{border-color:var(--green);background:var(--green-light)}
+.compare-card.red-card{border-color:rgba(198,40,40,0.2);background:var(--red-light)}
+.compare-card.muted-card{border-color:var(--border);background:var(--muted-bg);opacity:0.7}
+.compare-card-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:8px}
+.compare-card.green-card .compare-card-label{color:var(--green-dark)}
+.compare-card.red-card .compare-card-label{color:var(--red)}
+.compare-card-number{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400;color:var(--text);line-height:1.2}
+.compare-card.green-card .compare-card-number{color:var(--green-dark)}
+.compare-card.red-card .compare-card-number{color:var(--red)}
+.compare-card.muted-card .compare-card-number{color:var(--text-secondary)}
+.compare-card-sub{font-size:12px;color:var(--text-muted);margin-top:4px}
+.result-row{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--border-light)}
+.result-row:last-child{border-bottom:none}
+.result-row-label{font-size:14px;color:var(--text-secondary)}
+.result-row-value{font-size:17px;font-weight:700;color:var(--text)}
+.result-row-value.red{color:var(--red)}
+.result-row-value.green{color:var(--green)}
+.savings-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green-light);border-radius:12px;padding:14px 16px;margin:16px 0}
+.savings-badge.warning{background:var(--gold-light)}
+.savings-badge-icon{font-size:18px}
+.savings-badge-text{font-size:14px;font-weight:600;color:var(--green-dark)}
+.savings-badge.warning .savings-badge-text{color:#8B6914}
+.insight-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:16px 18px;margin:16px 0}
+.insight-box p{font-size:14px;color:var(--text-secondary);line-height:1.65;margin:0}
+.context-note{font-size:13px;color:var(--text-muted);line-height:1.55;font-style:italic;margin:12px 0}
+.caution-note{background:var(--gold-light);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:13px;color:#8B6914;line-height:1.55}
+.action-line{background:var(--green-light);border-radius:14px;padding:18px 20px;margin-top:20px;display:flex;gap:12px;align-items:flex-start}
+.action-line-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.action-line-text{font-size:14px;color:var(--green-dark);line-height:1.55;font-weight:500}
+.intro-note{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border-light)}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:20px 0 24px}
+.gauge-number{font-family:'Instrument Serif',serif;font-size:56px;font-weight:400;line-height:1;transition:color 0.3s}
+.gauge-label{font-size:14px;color:var(--text-muted);margin-top:4px}
+.gauge-bar-wrap{width:100%;height:10px;background:var(--border);border-radius:5px;margin-top:16px;position:relative;overflow:hidden}
+.gauge-bar-fill{height:100%;border-radius:5px;transition:width 0.4s ease,background 0.4s ease}
+.gauge-zones{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)}
+.gauge-zones .good{color:var(--green);font-weight:600}
+.gauge-zones .ok{color:var(--gold);font-weight:600}
+.gauge-zones .high{color:var(--red);font-weight:600}
+.vs-divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.vs-line{flex:1;height:1px;background:var(--border)}
+.vs-badge{width:32px;height:32px;background:var(--border);border-radius:50%;font-size:12px;font-weight:700;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.loan-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:12px}
+.loan-tag.b{background:var(--green-light);color:var(--green)}
+.card-entry{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.card-entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.card-entry-name{font-size:14px;font-weight:600;color:var(--text)}
+.card-entry-remove{font-size:13px;color:var(--text-muted);cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.2s}
+.card-entry-remove:hover{background:var(--red-light);color:var(--red)}
+.card-entry-inputs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:8px;overflow:hidden}
+.card-entry-inputs .input-group{min-width:0}
+.card-entry-inputs .input-label{font-size:11px;margin-bottom:4px}
+.card-entry-inputs .input-field{padding:8px 10px;font-size:13px;min-width:0;width:100%}
+.card-entry-type{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.card-entry-type .pill{padding:5px 8px;font-size:11px}
+.add-card-btn{display:block;width:100%;padding:12px;background:none;border:1px dashed var(--border);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all 0.2s;margin-bottom:16px}
+.add-card-btn:hover{border-color:var(--green);color:var(--green)}
+.paydown-timeline{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.paydown-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border-light);gap:12px}
+.paydown-row:last-child{border-bottom:none}
+.paydown-order{width:24px;height:24px;border-radius:50%;background:var(--green-light);color:var(--green-dark);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.paydown-info{flex:1}
+.paydown-name{font-size:14px;font-weight:600;color:var(--text)}
+.paydown-detail{font-size:12px;color:var(--text-muted);margin-top:2px}
+.paydown-focus{font-size:13px;font-weight:600;color:var(--green)}
+.expand-trigger{display:flex;align-items:center;gap:8px;padding:14px 16px;font-size:14px;font-weight:600;color:var(--green);cursor:pointer;transition:all 0.2s;background:var(--green-light);border-radius:12px;margin:16px 0;justify-content:center}
+.expand-trigger:hover{background:var(--green);color:#fff}
+.expand-content{display:none}
+.expand-content.open{display:block}
+.freq-row{display:flex;gap:6px;margin-bottom:16px}
+.freq-pill{flex:1;padding:9px 6px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text-secondary);background:var(--card);cursor:pointer;transition:all 0.2s;text-align:center}
+.freq-pill:hover{border-color:var(--green)}
+.freq-pill.active{background:var(--green);color:#fff;border-color:var(--green)}
+.tool-disclaimer{font-size:12px;color:var(--text-muted);line-height:1.55;text-align:center;padding:16px 20px;border-top:1px solid var(--border-light);flex-shrink:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeUp 0.4s ease forwards}
+.delay-1{animation-delay:0.1s;opacity:0}
+.delay-2{animation-delay:0.2s;opacity:0}
+.delay-3{animation-delay:0.3s;opacity:0}
+.sub-section{display:none}
+.sub-section.active{display:block}
+.acct-entry{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.acct-entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.acct-entry-name{font-size:14px;font-weight:600;color:var(--text)}
+.acct-entry-remove{font-size:13px;color:var(--text-muted);cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.2s}
+.acct-entry-remove:hover{background:var(--red-light);color:var(--red)}
+.acct-entry-inputs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;overflow:hidden}
+.acct-entry-inputs .input-group{min-width:0}
+.acct-entry-inputs .input-label{font-size:11px;margin-bottom:4px}
+.acct-entry-inputs .input-field{padding:8px 10px;font-size:13px;min-width:0;width:100%}
+.acct-util{font-size:13px;font-weight:600;margin-top:8px;padding:6px 10px;border-radius:8px;text-align:center}
+.strat-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.strat-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s}
+.strat-card.active{border-color:var(--green);background:var(--green-light)}
+.strat-card-title{font-size:14px;font-weight:700;margin-bottom:8px}
+.strat-card.active .strat-card-title{color:var(--green-dark)}
+.strat-card-stat{font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;color:var(--text)}
+.strat-card.active .strat-card-stat{color:var(--green-dark)}
+.strat-card-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
+
+.consol-trigger{display:flex;align-items:center;gap:8px;padding:14px 16px;font-size:14px;font-weight:600;color:var(--green);cursor:pointer;transition:all 0.2s;background:var(--green-light);border-radius:12px;margin:20px 0 0;justify-content:center;border:1.5px solid transparent}
+.consol-trigger:hover{background:var(--green);color:#fff}
+.consol-trigger.open{background:var(--green);color:#fff;border-radius:12px 12px 0 0;margin-bottom:0}
+.consol-section{display:none;background:var(--card);border:1.5px solid var(--green);border-top:none;border-radius:0 0 12px 12px;padding:20px 16px;margin-bottom:16px}
+.consol-section.open{display:block}
+.consol-config{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.consol-config .input-group{margin-bottom:0}
+.consol-config .input-label{font-size:11px;margin-bottom:4px}
+.consol-config .input-field{padding:10px 12px;font-size:14px}
+.consol-amount{text-align:center;padding:12px;background:var(--muted-bg);border-radius:10px;margin-bottom:16px}
+.consol-amount-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:4px}
+.consol-amount-number{font-family:'Instrument Serif',serif;font-size:24px;color:var(--text)}
+.consol-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:16px}
+.consol-vs-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.consol-vs-card.better{border-color:var(--green);background:var(--green-light)}
+.consol-vs-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:10px}
+.consol-vs-card.better .consol-vs-label{color:var(--green-dark)}
+.consol-vs-row{font-size:13px;color:var(--text-secondary);margin-bottom:6px;line-height:1.4}
+.consol-vs-row strong{font-family:'Instrument Serif',serif;font-size:18px;font-weight:400;color:var(--text);display:block}
+.consol-vs-card.better .consol-vs-row strong{color:var(--green-dark)}
+.consol-vs-mid{display:flex;align-items:center;justify-content:center;padding:0 8px}
+.card-entry-check{display:none;align-items:center;gap:8px;margin-bottom:10px;padding:8px 12px;background:var(--green-light);border-radius:8px;cursor:pointer;transition:all 0.2s}
+.card-entry-check.visible{display:flex}
+.card-entry-check input[type="checkbox"]{width:18px;height:18px;accent-color:var(--green);cursor:pointer}
+.card-entry-check label{font-size:13px;font-weight:600;color:var(--green-dark);cursor:pointer}
+.consol-note{font-size:13px;color:var(--text-muted);line-height:1.5;text-align:center;padding:8px 0}
+
+/* ── Mobile Polish ── */
+@media(max-width:400px){
+  /* Result grids - stack */
+  .result-grid{grid-template-columns:1fr;gap:6px}
+  .result-grid.two-col{grid-template-columns:1fr}
+  
+  /* Card entry inputs - stack */
+  .card-entry-inputs{grid-template-columns:1fr;gap:8px}
+  .card-entry-inputs .input-field{padding:10px 12px;font-size:14px}
+  
+  /* Account entry inputs - stack */
+  .acct-entry-inputs{grid-template-columns:1fr;gap:8px}
+  
+  /* Strategy compare - stack */
+  .strat-compare{grid-template-columns:1fr;gap:8px}
+  
+  /* Consolidation config - stack */
+  .consol-config{grid-template-columns:1fr;gap:8px}
+  
+  /* Consolidation comparison - tighter */
+  .consol-vs{grid-template-columns:1fr auto 1fr;gap:0}
+  .consol-vs-box{padding:12px 8px}
+  .consol-vs-box .box-val{font-size:18px}
+  
+  /* Compare cards - stack */
+  .compare-cards{flex-direction:column;gap:8px}
+  .compare-card{padding:14px 10px}
+  
+  /* Pills - tighter */
+  .pill{padding:8px 12px;font-size:12px}
+  .pill-row{gap:6px}
+  
+  /* Input fields */
+  .input-field{font-size:14px}
+  
+  /* Door cards */
+  .door-card{padding:20px}
+  .door-desc{font-size:13px}
+  
+  /* Big result */
+  .big-result{padding:22px 18px}
+  .big-result .result-value{font-size:32px}
+  
+  /* Mode toggle */
+  .mode-btn{padding:8px 10px;font-size:12px}
+  
+  /* General typography */
+  h2.section-title{font-size:22px}
+  p{font-size:16px}
+}
+
+@media(max-width:540px){
+  .phone-frame{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="cb-loading-gate" class="cb-loading-gate"><div class="spinner"></div></div>
+<div class="phone-frame">
+
+<!-- ═══ LANDING ═══ -->
+<div class="screen active" id="screen-landing">
+  <div class="header">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="header-title">Credit Calculator</div>
+    <div class="header-sub">See the real numbers before you decide.</div>
+  </div>
+  <div class="scroll-area">
+    <div class="door-card animate-in delay-1" onclick="openDoor('offer')">
+      <div class="door-icon offer">📋</div>
+      <div class="door-title">Before you sign</div>
+      <div class="door-desc">Evaluate any credit offer. Loans, mortgages, credit cards, lines of credit. See what it will really cost you.</div>
+      <div class="door-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+    <div class="door-card animate-in delay-2" onclick="openDoor('debt')">
+      <div class="door-icon debt">💳</div>
+      <div class="door-title">After you've signed</div>
+      <div class="door-desc">You have a loan, a card, a line of credit. See where you stand and find the smartest way to pay it down.</div>
+      <div class="door-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+    <div class="door-card animate-in delay-3" onclick="openDoor('strength')">
+      <div class="door-icon strength">📊</div>
+      <div class="door-title">Strengthen my credit</div>
+      <div class="door-desc">Check your credit utilization and debt service ratios. See how a lender sees you.</div>
+      <div class="door-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DOOR 1: BEFORE YOU SIGN ═══ -->
+<div class="screen" id="screen-offer">
+  <div class="header header-compact">
+    <div class="header-back" onclick="goHome()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Credit Calculator</div>
+    <div class="logo-bar" style="margin-bottom:8px"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="header-title header-title-sm">Before You Sign</div>
+  </div>
+  <div class="scroll-area">
+    <div class="input-label" style="margin-bottom:10px">What type of credit?</div>
+    <div class="pill-row" id="d1-type-pills">
+      <div class="pill sm active" onclick="setD1Type(this,'personal')">Personal Loan</div>
+      <div class="pill sm" onclick="setD1Type(this,'car')">Car Loan</div>
+      <div class="pill sm" onclick="setD1Type(this,'mortgage')">Mortgage</div>
+      <div class="pill sm" onclick="setD1Type(this,'card')">Credit Card</div>
+      <div class="pill sm" onclick="setD1Type(this,'loc')">Line of Credit</div>
+    </div>
+
+    <!-- Installment inputs -->
+    <div id="d1-installment-inputs">
+      <div class="input-group"><div class="input-label" id="d1-amount-label">Loan Amount</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d1-amount" value="" placeholder="e.g. 10000" oninput="calcD1()"></div><div class="helper-text" id="d1-amount-helper">The total amount you plan to borrow.</div></div>
+      <div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" class="input-field" id="d1-rate" value="" placeholder="e.g. 6" step="0.1" oninput="calcD1()"><span class="input-unit">%</span></div><div class="helper-text" id="d1-rate-helper">The annual rate on your offer. Not the same as APR.</div></div>
+      <div class="input-group"><div class="slider-wrap"><div class="slider-header"><div class="input-label" style="margin:0" id="d1-term-label">Loan Term</div><div class="slider-value"><span id="d1-term-display">3</span><span class="unit"> years</span></div></div><input type="range" id="d1-term" min="1" max="10" value="3" step="1" oninput="calcD1()"><div class="slider-labels" id="d1-term-labels"><span>1 yr</span><span>5 yrs</span><span>10 yrs</span></div></div></div>
+      <div class="input-group compact"><div class="input-label">Upfront Fees</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d1-fees" value="" placeholder="0" oninput="calcD1()"></div><div class="helper-text" id="d1-fees-helper">Application fees, origination fees, broker fees. Check your offer letter. $0 if unsure.</div></div>
+      <div id="d1-freq-section" style="display:none">
+        <div class="input-label">Payment Frequency</div>
+        <div class="freq-row">
+          <div class="freq-pill active" onclick="setD1Freq(this,'monthly')">Monthly</div>
+          <div class="freq-pill" onclick="setD1Freq(this,'biweekly')">Biweekly</div>
+          <div class="freq-pill" onclick="setD1Freq(this,'accel')">Accelerated Biweekly</div>
+        </div>
+        <div class="context-note" id="d1-freq-note">12 payments per year.</div>
+      </div>
+    </div>
+
+    <!-- Revolving inputs -->
+    <div id="d1-revolving-inputs" style="display:none">
+      <div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" class="input-field" id="d1-rev-rate" value="" placeholder="e.g. 19.99" step="0.01" oninput="calcD1()"><span class="input-unit">%</span></div><div class="helper-text" id="d1-rev-rate-helper">The rate charged on purchases. Found on your card agreement.</div></div>
+      <div class="input-group"><div class="input-label">Annual Fee</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d1-rev-fee" value="" placeholder="0" oninput="calcD1()"></div><div class="helper-text">Yearly charge for holding this card. $0 for many cards. Check your offer.</div></div>
+      <div class="input-group"><div class="input-label">Expected Monthly Balance</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d1-rev-balance" value="" placeholder="e.g. 2000" oninput="calcD1()"></div><div class="helper-text">How much you expect to carry unpaid each month. If you pay in full every month, enter $0.</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Installment results -->
+    <div id="d1-installment-results">
+      <div class="result-label">Your Numbers</div>
+      <div class="big-result"><div class="big-result-label" id="d1-pay-label">Monthly Payment</div><div class="big-result-number" id="d1-monthly">$304</div></div>
+      <div class="result-grid">
+        <div class="compare-card"><div class="compare-card-label">Total Repaid</div><div class="compare-card-number" id="d1-total">$10,952</div></div>
+        <div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number" id="d1-interest">$952</div></div>
+        <div class="compare-card"><div class="compare-card-label">APR</div><div class="compare-card-number" id="d1-apr">6.0%</div><div class="compare-card-sub">True cost of borrowing</div></div>
+      </div>
+      <div id="d1-freq-savings" style="display:none"><div class="savings-badge"><span class="savings-badge-icon">💰</span><span class="savings-badge-text" id="d1-freq-text">Saves $0</span></div></div>
+      <div id="d1-mort-note" style="display:none"><div class="context-note">Canadian mortgages compound semi-annually by law. Results do not include CMHC insurance, property tax, or prepayment penalties.</div></div>
+    </div>
+
+    <!-- Revolving results -->
+    <div id="d1-revolving-results" style="display:none">
+      <div class="result-label">Annual Cost of This Product</div>
+      <div class="big-result"><div class="big-result-label">Annual Cost</div><div class="big-result-number" id="d1-rev-annual">$400</div><div class="big-result-sub" id="d1-rev-annual-sub">$400 interest + $0 annual fee</div></div>
+      <div class="result-row"><span class="result-row-label">Monthly interest cost</span><span class="result-row-value red" id="d1-rev-monthly-int">$33</span></div>
+      <div class="result-row"><span class="result-row-label">Effective annual cost rate</span><span class="result-row-value" id="d1-rev-eff">19.99%</span></div>
+    </div>
+
+    <div class="action-line"><div class="action-line-icon">👉</div><div class="action-line-text" id="d1-action-text">A 3-year term means $952 in interest.</div></div>
+
+    <!-- Compare -->
+    <div class="expand-trigger" id="d1-compare-trigger" onclick="toggleD1Compare()">+ Compare with another offer</div>
+    <div class="expand-content" id="d1-compare-section">
+      <div class="vs-divider"><div class="vs-line"></div><div class="vs-badge">vs</div><div class="vs-line"></div></div>
+      <div class="loan-tag b">Second Offer</div>
+
+      <!-- Installment compare -->
+      <div id="d1-comp-installment">
+        <div class="input-group compact"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" class="input-field" id="d1c-rate" value="" placeholder="e.g. 5.5" step="0.1" oninput="calcD1Compare()"><span class="input-unit">%</span></div></div>
+        <div class="input-group compact"><div class="input-label" id="d1c-term-label">Term</div><div class="input-row"><input type="number" class="input-field" id="d1c-term" value="" placeholder="e.g. 3" oninput="calcD1Compare()"><span class="input-unit">years</span></div></div>
+        <div class="input-group compact"><div class="input-label">Upfront Fees</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d1c-fees" value="" placeholder="0" oninput="calcD1Compare()"></div></div>
+      </div>
+      <!-- Revolving compare -->
+      <div id="d1-comp-revolving" style="display:none">
+        <div class="input-group compact"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" class="input-field" id="d1c-rev-rate" value="" placeholder="e.g. 12.99" step="0.01" oninput="calcD1Compare()"><span class="input-unit">%</span></div></div>
+        <div class="input-group compact"><div class="input-label">Annual Fee</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d1c-rev-fee" value="" placeholder="0" oninput="calcD1Compare()"></div></div>
+      </div>
+
+      <div class="divider" style="margin:16px 0"></div>
+      <div class="result-label">True Cost Comparison</div>
+      <!-- Installment comparison results -->
+      <div id="d1c-inst-results">
+        <div class="result-grid two-col" style="margin-bottom:8px">
+          <div class="compare-card"><div class="compare-card-label">First Offer</div><div class="compare-card-number" id="d1c-pay-a">$304/mo</div></div>
+          <div class="compare-card"><div class="compare-card-label">Second Offer</div><div class="compare-card-number" id="d1c-pay-b">$280/mo</div></div>
+        </div>
+        <div class="result-grid two-col">
+          <div class="compare-card" id="d1c-card-a"><div class="compare-card-label">Total Cost</div><div class="compare-card-number" id="d1c-total-a">$10,952</div><div class="compare-card-sub" id="d1c-sub-a">APR: 6.0%</div></div>
+          <div class="compare-card" id="d1c-card-b"><div class="compare-card-label">Total Cost</div><div class="compare-card-number" id="d1c-total-b">$10,850</div><div class="compare-card-sub" id="d1c-sub-b">APR: 5.5%</div></div>
+        </div>
+      </div>
+      <!-- Revolving comparison results -->
+      <div id="d1c-rev-results" style="display:none">
+        <div class="result-grid two-col">
+          <div class="compare-card" id="d1c-rev-card-a"><div class="compare-card-label">First Offer</div><div class="compare-card-number" id="d1c-rev-total-a">$400/yr</div><div class="compare-card-sub" id="d1c-rev-sub-a">19.99% + no fee</div></div>
+          <div class="compare-card" id="d1c-rev-card-b"><div class="compare-card-label">Second Offer</div><div class="compare-card-number" id="d1c-rev-total-b">$380/yr</div><div class="compare-card-sub" id="d1c-rev-sub-b">12.99% + $120 fee</div></div>
+        </div>
+      </div>
+      <div class="savings-badge" id="d1c-savings"><span class="savings-badge-icon">💰</span><span class="savings-badge-text" id="d1c-savings-text">Second offer saves you $102</span></div>
+      <div id="d1-comp-breakeven" style="display:none"><div class="insight-box"><p id="d1-comp-breakeven-text"></p></div></div>
+      <div class="insight-box"><p>Always compare APR, not just the advertised rate. APR includes fees and reflects the true cost of borrowing.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DOOR 2: AFTER YOU'VE SIGNED ═══ -->
+<div class="screen" id="screen-debt">
+  <div class="header header-compact">
+    <div class="header-back" onclick="goHome()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Credit Calculator</div>
+    <div class="logo-bar" style="margin-bottom:8px"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="header-title header-title-sm">After You've Signed</div>
+  </div>
+  <div class="scroll-area">
+    <div class="mode-toggle" id="d2-mode">
+      <button class="mode-btn active" onclick="setD2Mode('one',this)">One debt</button>
+      <button class="mode-btn" onclick="setD2Mode('several',this)">Several debts</button>
+    </div>
+
+    <!-- ONE DEBT -->
+    <div class="sub-section active" id="d2-one">
+      <div class="input-label" style="margin-bottom:10px">What type?</div>
+      <div class="pill-row" id="d2-type-pills">
+        <div class="pill sm" onclick="setD2Type(this,'personal')">Personal Loan</div>
+        <div class="pill sm" onclick="setD2Type(this,'car')">Car Loan</div>
+        <div class="pill sm" onclick="setD2Type(this,'mortgage')">Mortgage</div>
+        <div class="pill sm active" onclick="setD2Type(this,'card')">Credit Card</div>
+        <div class="pill sm" onclick="setD2Type(this,'loc')">Line of Credit</div>
+      </div>
+
+      <!-- Revolving debt inputs -->
+      <div id="d2-revolving-inputs">
+        <div class="input-group"><div class="input-label">Balance Owed</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d2r-balance" value="" placeholder="e.g. 5000" oninput="calcD2()"></div><div class="helper-text">Your current amount owing. Found on your latest statement.</div></div>
+        <div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" class="input-field" id="d2r-rate" value="" placeholder="e.g. 19.99" step="0.01" oninput="calcD2()"><span class="input-unit">%</span></div><div class="helper-text">The annual rate on your account. Found on your statement.</div></div>
+        <div class="input-group"><div class="input-label">Minimum Payment</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d2r-minpay" value="" oninput="calcD2()"></div><div class="helper-text" id="d2r-minpay-helper">Estimated. Check your statement for your actual minimum payment.</div></div>
+        <div id="d2r-var-note" style="display:none"><div class="caution-note">Lines of credit are typically variable rate. These projections assume today's rate holds.</div></div>
+        <div class="input-group"><div class="slider-wrap"><div class="slider-header"><div class="input-label" style="margin:0">I can pay each month</div><div class="slider-value">$<span id="d2r-pay-display">150</span></div></div><input type="range" id="d2r-payment" min="50" max="500" value="150" step="10" oninput="calcD2()"><div class="slider-labels"><span>$50</span><span id="d2r-slider-mid">$250</span><span id="d2r-slider-max">$500</span></div></div></div>
+      </div>
+
+      <!-- Installment debt inputs -->
+      <div id="d2-installment-inputs" style="display:none">
+        <div class="input-group"><div class="input-label">Remaining Balance</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d2i-balance" value="" placeholder="e.g. 15000" oninput="calcD2()"></div><div class="helper-text">Your current balance owing. Found on your latest statement.</div></div>
+        <div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" class="input-field" id="d2i-rate" value="" placeholder="e.g. 6" step="0.1" oninput="calcD2()"><span class="input-unit">%</span></div><div class="helper-text">The annual rate on your loan agreement.</div></div>
+        <div class="input-group"><div class="input-label" id="d2i-term-label">Remaining Term</div><div class="input-row"><input type="number" class="input-field" id="d2i-term" value="" placeholder="e.g. 4" oninput="calcD2()"><span class="input-unit">years</span></div><div class="helper-text" id="d2i-term-helper">How many years left on your loan.</div></div>
+        <div id="d2-mort-freq" style="display:none">
+          <div class="input-label">Payment Frequency</div>
+          <div class="freq-row">
+            <div class="freq-pill active" onclick="setD2Freq(this,'monthly')">Monthly</div>
+            <div class="freq-pill" onclick="setD2Freq(this,'biweekly')">Biweekly</div>
+            <div class="freq-pill" onclick="setD2Freq(this,'accel')">Accelerated Biweekly</div>
+          </div>
+        </div>
+        <div id="d2i-caution" style="display:none"></div>
+        <div id="d2i-var-note" style="display:none"><div class="caution-note">If your rate is variable, these projections assume it stays at today's rate. Your actual results will change as rates move.</div></div>
+        <div class="input-group"><div class="slider-wrap"><div class="slider-header"><div class="input-label" style="margin:0">Extra payment per month</div><div class="slider-value">$<span id="d2i-extra-display">0</span></div></div><input type="range" id="d2i-extra" min="0" max="500" value="0" step="25" oninput="calcD2()"><div class="slider-labels"><span>$0</span><span>$250</span><span>$500</span></div></div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Revolving results -->
+      <div id="d2-revolving-results">
+        <div class="result-label" style="color:var(--text-muted);opacity:0.7">Minimum Payment Path</div>
+        <div class="result-grid">
+          <div class="compare-card muted-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number" id="d2r-min-time">19 yrs</div></div>
+          <div class="compare-card muted-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number" id="d2r-min-total">$12,313</div></div>
+          <div class="compare-card muted-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number" id="d2r-min-int">$7,313</div></div>
+        </div>
+        <div class="result-label">Your Path</div>
+        <div class="result-grid">
+          <div class="compare-card green-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number" id="d2r-your-time">3.4 yrs</div></div>
+          <div class="compare-card green-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number" id="d2r-your-total">$6,820</div></div>
+          <div class="compare-card green-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number" id="d2r-your-int">$1,820</div></div>
+        </div>
+        <div class="savings-badge" id="d2r-savings"><span class="savings-badge-icon">💰</span><span class="savings-badge-text" id="d2r-savings-text">You save $5,480 and 16 years</span></div>
+      </div>
+
+      <!-- Installment results -->
+      <div id="d2-installment-results" style="display:none">
+        <div class="result-label">Current Path</div>
+        <div class="result-grid">
+          <div class="compare-card"><div class="compare-card-label">Time Left</div><div class="compare-card-number" id="d2i-current-time">4 yrs</div></div>
+          <div class="compare-card"><div class="compare-card-label">Total You'll Pay</div><div class="compare-card-number" id="d2i-current-total">$16,896</div></div>
+          <div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number" id="d2i-current-int">$1,896</div></div>
+        </div>
+        <div class="result-row"><span class="result-row-label">Monthly payment</span><span class="result-row-value" id="d2i-current-pay">$352</span></div>
+        <div id="d2i-extra-results" style="display:none">
+          <div class="result-label">With Extra Payments</div>
+          <div class="result-grid">
+            <div class="compare-card green-card"><div class="compare-card-label">Paid Off In</div><div class="compare-card-number" id="d2i-new-time">3.1 yrs</div></div>
+            <div class="compare-card green-card"><div class="compare-card-label">Total Saved</div><div class="compare-card-number" id="d2i-saved">$340</div></div>
+            <div class="compare-card green-card"><div class="compare-card-label">Interest Saved</div><div class="compare-card-number" id="d2i-int-saved">$340</div></div>
+          </div>
+        </div>
+        <div id="d2-mort-savings" style="display:none"><div class="savings-badge"><span class="savings-badge-icon">💰</span><span class="savings-badge-text" id="d2-mort-savings-text">Saves $0</span></div></div>
+      </div>
+
+      <div class="action-line"><div class="action-line-icon">👉</div><div class="action-line-text" id="d2-action-text">Paying $150/month saves you $5,480.</div></div>
+    </div>
+
+    <!-- SEVERAL DEBTS -->
+    <div class="sub-section" id="d2-several">
+      <div class="intro-note">Enter each debt below. Pick the type so we can calculate accurately.</div>
+      <div id="pd-cards"></div>
+      <button class="add-card-btn" onclick="addDebt()">+ Add Another Debt</button>
+      <div class="input-group"><div class="input-label">Extra Monthly Budget</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="pd-extra" value="" placeholder="e.g. 100" oninput="calcPaydown()"></div><div class="helper-text">Above all your minimums, how much more can you put toward debt each month?</div></div>
+      <div class="divider"></div>
+
+      <div class="result-label">Compare Strategies: Total Interest Paid</div>
+      <div class="strat-compare">
+        <div class="strat-card active" id="pd-aval-card" onclick="setStrategy('avalanche')"><div class="strat-card-title">🏔️ Avalanche</div><div class="strat-card-stat" id="pd-aval-months">36 mo</div><div class="strat-card-sub" id="pd-aval-int">$3,241 interest</div></div>
+        <div class="strat-card" id="pd-snow-card" onclick="setStrategy('snowball')"><div class="strat-card-title">⛄ Snowball</div><div class="strat-card-stat" id="pd-snow-months">38 mo</div><div class="strat-card-sub" id="pd-snow-int">$3,440 interest</div></div>
+      </div>
+      <div class="insight-box" id="pd-desc" style="margin-top:0;margin-bottom:20px"><p><strong>Avalanche:</strong> Attack the highest-rate debt first. Saves the most money. <strong>Snowball:</strong> Attack the smallest balance first. Builds momentum with quick wins.</p></div>
+      <div id="pd-mort-caution" style="display:none"><div class="caution-note">Your plan includes a mortgage. Most closed mortgages limit extra payments to 10-20% of your original balance per year. Check your prepayment privileges.</div></div>
+
+      <div class="result-label">Pay-Off Order</div>
+      <div class="paydown-timeline" id="pd-order"></div>
+      <div class="savings-badge" id="pd-savings"><span class="savings-badge-icon">💰</span><span class="savings-badge-text" id="pd-savings-text">You save $1,200 vs. minimums only</span></div>
+      <div class="action-line"><div class="action-line-icon">👉</div><div class="action-line-text" id="pd-action-text">Your first move: put your extra $100 toward your Credit Card this month.</div></div>
+
+      <div class="consol-trigger" id="consol-trigger" onclick="toggleConsol()">🔄 What If You Consolidated?</div>
+      <div class="consol-section" id="consol-section">
+        <div class="consol-note" style="margin-bottom:14px">Select the debts you would roll into a single consolidation loan.</div>
+        <div id="consol-checks"></div>
+        <div class="divider" style="margin:14px 0"></div>
+        <div class="result-label">Consolidation Loan Terms</div>
+        <div class="consol-amount"><div class="consol-amount-label">Loan Amount (from selected debts)</div><div class="consol-amount-number" id="consol-amount">$0</div></div>
+        <div class="consol-config">
+          <div class="input-group"><div class="input-label">Rate (%)</div><input type="number" step="0.1" class="input-field" id="consol-rate" value="10" placeholder="e.g. 10" oninput="calcConsol()"></div>
+          <div class="input-group"><div class="input-label">Term (yr)</div><input type="number" class="input-field" id="consol-term" value="5" placeholder="e.g. 5" oninput="calcConsol()"></div>
+          <div class="input-group"><div class="input-label">Fees ($)</div><input type="number" class="input-field" id="consol-fees" value="0" placeholder="e.g. 0" oninput="calcConsol()"></div>
+        </div>
+        <div id="consol-results" style="display:none">
+          <div class="result-label">Comparison</div>
+          <div class="consol-vs" id="consol-vs"></div>
+          <div class="savings-badge" id="consol-savings" style="display:none"><span class="savings-badge-icon">💰</span><span class="savings-badge-text" id="consol-savings-text"></span></div>
+          <div class="caution-note" id="consol-caution" style="display:none">Consolidation only works if you stop using the accounts you paid off. Keep them open for credit reporting, but do not add new balances.</div>
+        </div>
+        <div class="consol-note" id="consol-empty" style="margin-top:10px">Check at least one debt above to see the comparison.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DOOR 3: STRENGTHEN MY CREDIT ═══ -->
+<div class="screen" id="screen-strength">
+  <div class="header header-compact">
+    <div class="header-back" onclick="goHome()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Credit Calculator</div>
+    <div class="logo-bar" style="margin-bottom:8px"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="header-title header-title-sm">Strengthen My Credit</div>
+  </div>
+  <div class="scroll-area">
+    <div class="mode-toggle" id="d3-mode">
+      <button class="mode-btn active" onclick="setD3Mode('util',this)">Credit Utilization</button>
+      <button class="mode-btn" onclick="setD3Mode('mortgage',this)">Mortgage Readiness</button>
+    </div>
+
+    <!-- UTILIZATION -->
+    <div class="sub-section active" id="d3-util">
+      <div class="intro-note">Credit utilization only measures revolving credit: credit cards and lines of credit. Don't include loans or mortgages. Lower is better. Under 30% is the target.</div>
+      <div id="u-accounts"></div>
+      <button class="add-card-btn" onclick="addAcct()">+ Add Another Account</button>
+
+      <div class="divider"></div>
+      <div class="result-label">Your Utilization</div>
+      <div class="gauge-wrap">
+        <div class="gauge-number" id="u-pct">30%</div>
+        <div class="gauge-label" id="u-status">At the threshold</div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar-fill" id="u-bar" style="width:30%;background:var(--gold)"></div></div>
+        <div class="gauge-zones"><span class="good">Under 30%: Good</span><span class="ok">30-50%: Caution</span><span class="high">50%+: High</span></div>
+      </div>
+      <div class="input-group"><div class="slider-wrap"><div class="slider-header"><div class="input-label" style="margin:0">What if I pay down...</div><div class="slider-value">$<span id="u-pd-display">0</span></div></div><input type="range" id="u-paydown" min="0" max="1500" value="0" step="50" oninput="calcUtil()"><div class="slider-labels"><span>$0</span><span id="u-slider-max">$1,500</span></div></div></div>
+      <div id="u-after" style="display:none">
+        <div class="result-grid two-col">
+          <div class="compare-card muted-card"><div class="compare-card-label">Current</div><div class="compare-card-number" id="u-before-pct">30%</div></div>
+          <div class="compare-card green-card"><div class="compare-card-label">After Paydown</div><div class="compare-card-number" id="u-after-pct">20%</div></div>
+        </div>
+      </div>
+      <div id="u-target" style="display:none"><div class="savings-badge"><span class="savings-badge-icon">🎯</span><span class="savings-badge-text" id="u-target-text">Below 30%.</span></div></div>
+      <div class="insight-box"><p>Credit utilization has no memory. Unlike late payments, which stay on your report for years, your utilization resets every month. A single payment can improve your score next cycle.</p></div>
+      <div class="action-line"><div class="action-line-icon">👉</div><div class="action-line-text" id="u-action-text">You're at 30%.</div></div>
+    </div>
+
+    <!-- MORTGAGE READINESS (TDS) -->
+    <div class="sub-section" id="d3-mortgage">
+      <div class="intro-note">Lenders use the Total Debt Service (TDS) ratio to decide if you can handle a mortgage. TDS measures all your debt payments as a percentage of your income. Under 44% is the target.</div>
+      <div class="input-group"><div class="input-label">Gross Monthly Income</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-income" value="" placeholder="e.g. 5000" oninput="calcDTI()"></div><div class="helper-text">Your pre-tax monthly income. Include your partner's if applying jointly.</div></div>
+      <div class="divider" style="margin:16px 0"></div>
+      <div class="input-label" style="margin-bottom:12px">Housing Costs (Monthly)</div>
+      <div class="input-group compact"><div class="input-label">Mortgage / Rent</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-mortgage" value="" placeholder="e.g. 1400" oninput="calcDTI()"></div><div class="helper-text">Your monthly housing payment. If you don't yet own, enter the mortgage payment you'd expect.</div></div>
+      <div class="input-group compact"><div class="input-label">Property Tax</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-tax" value="" placeholder="0" oninput="calcDTI()"></div><div class="helper-text">Monthly amount. Divide your annual tax bill by 12. Enter $0 if renting.</div></div>
+      <div class="input-group compact"><div class="input-label">Heating</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-heat" value="" placeholder="0" oninput="calcDTI()"></div><div class="helper-text">Monthly heating costs for the property.</div></div>
+      <div class="input-group compact"><div class="input-label">Condo Fees</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-condo" value="" placeholder="0" oninput="calcDTI()"></div><div class="helper-text">Monthly condo fees, if applicable. Only 50% is counted in the calculation. Enter $0 if not in a condo.</div></div>
+      <div class="divider" style="margin:16px 0"></div>
+      <div class="input-label" style="margin-bottom:12px">Other Debt Payments (Monthly)</div>
+      <div class="input-group compact"><div class="input-label">Credit Cards / Lines of Credit</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-cards" value="" placeholder="0" oninput="calcDTI()"></div><div class="helper-text">Your total monthly minimum payments across all revolving accounts.</div></div>
+      <div class="input-group compact"><div class="input-label">Car Loan / Other Loans</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="dti-loans" value="" placeholder="0" oninput="calcDTI()"></div><div class="helper-text">Total monthly payments on all installment debts.</div></div>
+      <div class="divider"></div>
+
+      <div class="result-label">Your TDS Ratio</div>
+      <div class="gauge-wrap">
+        <div class="gauge-number" id="dti-tds">46%</div>
+        <div class="gauge-label" id="dti-status">Above target</div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar-fill" id="dti-bar" style="width:46%;background:var(--red-glow)"></div></div>
+        <div class="gauge-zones"><span class="good">Under 44%: Good</span><span class="ok">44-50%: Tight</span><span class="high">50%+: High</span></div>
+      </div>
+
+      <div class="result-row"><span class="result-row-label">Housing costs</span><span class="result-row-value" id="dti-housing-total">$1,750</span></div>
+      <div class="result-row"><span class="result-row-label">All debt payments</span><span class="result-row-value" id="dti-all-total">$2,300</span></div>
+      <div class="result-row"><span class="result-row-label">Room for more debt</span><span class="result-row-value" id="dti-room">$0/mo</span></div>
+
+      <div class="insight-box"><p><strong>TDS (Total Debt Service)</strong> includes housing costs plus all other debt payments, divided by your gross income. Canadian lenders typically require TDS under 44%. CMHC will not insure a mortgage above this threshold.</p></div>
+      <div class="action-line"><div class="action-line-icon">👉</div><div class="action-line-text" id="dti-action-text">Your TDS is 46%. Clearing $100/month in debt payments would bring you to 44%.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tool-disclaimer">This calculator provides estimates for educational purposes. Actual costs depend on your lender's terms. Always confirm before making a decision.</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// SUPABASE INTEGRATION (TOOL)
+// ═══════════════════════════════════════
+var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb = null;
+var cbUser = null;
+var cbToolSessionStart = Date.now();
+
+async function cbInit() {
+  try {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var { data: { user }, error } = await sb.auth.getUser();
+    if (error || !user) { window.location.href = 'website-login.html'; return; }
+    cbUser = user;
+    // Tools unlock after any purchase
+    var { data: enrollments, error: enrollErr } = await sb.from('enrollments')
+      .select('id').eq('user_id', user.id).limit(1);
+    if (enrollErr || !enrollments || enrollments.length === 0) { window.location.href = 'website-dashboard.html'; return; }
+    var gate = document.getElementById('cb-loading-gate');
+    if (gate) gate.style.display = 'none';
+  } catch (e) {
+    console.error('CB init error:', e);
+    var gate = document.getElementById('cb-loading-gate');
+    if (gate) gate.style.display = 'none';
+  }
+}
+
+// Log tool session on page unload
+window.addEventListener('beforeunload', function() {
+  if (!sb || !cbUser) return;
+  var duration = Math.round((Date.now() - cbToolSessionStart) / 1000);
+  navigator.sendBeacon && sb.from('tool_sessions').insert({
+    user_id: cbUser.id, tool: 'calculator',
+    session_data: JSON.stringify({ duration_seconds: duration }),
+    started_at: new Date(cbToolSessionStart).toISOString(),
+    ended_at: new Date().toISOString(),
+    duration_seconds: duration
+  }).then(function() {});
+});
+
+document.addEventListener('DOMContentLoaded', function() { cbInit(); });
+</script>
+
+<script>
+// ═══ NAVIGATION ═══
+function goHome(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('screen-landing').classList.add('active');document.querySelectorAll('.scroll-area').forEach(function(a){a.scrollTop=0});window.scrollTo(0,0)}
+function openDoor(d){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.querySelectorAll('.scroll-area').forEach(function(a){a.scrollTop=0});window.scrollTo(0,0);if(d==='offer'){document.getElementById('screen-offer').classList.add('active');calcD1()}else if(d==='debt'){document.getElementById('screen-debt').classList.add('active');calcD2();calcPaydown()}else{document.getElementById('screen-strength').classList.add('active');calcUtil();calcDTI()}}
+function fmt(n){return '$'+Math.round(n).toLocaleString('en-CA')}
+
+// ═══ MATH ENGINES ═══
+function pmtMonthly(P,rate,mo){if(rate===0||mo===0)return P/(mo||1);var r=rate/100/12;return P*r*Math.pow(1+r,mo)/(Math.pow(1+r,mo)-1)}
+function pmtMortgage(P,rate,mo){if(rate===0||mo===0)return P/(mo||1);var sa=rate/100/2;var r=Math.pow(1+sa,1/6)-1;return P*r*Math.pow(1+r,mo)/(Math.pow(1+r,mo)-1)}
+function calcAPR(P,pmt,mo,fees){
+  if(mo<=0||pmt<=0)return 0;var totalAdv=P-fees;if(totalAdv<=0)return 0;var guess=0.005;
+  for(var i=0;i<100;i++){var g=guess,gp1=1+g;var pv=pmt*(1-Math.pow(gp1,-mo))/g;var dpv=pmt*(mo*Math.pow(gp1,-mo-1)*g-(1-Math.pow(gp1,-mo)))/(g*g);var diff=pv-totalAdv;var newGuess=g-diff/dpv;if(newGuess<=0)newGuess=g/2;if(Math.abs(newGuess-g)<1e-10)break;guess=newGuess}
+  return guess*12*100;
+}
+function simBiweekly(P,annualRate,monthlyPmt,freq){
+  var sa=annualRate/100/2;var bwRate=Math.pow(1+sa,1/13)-1;var bwPay=freq==='accel'?monthlyPmt/2:monthlyPmt*12/26;
+  var bal=P,tot=0,periods=0,mx=30*26;
+  while(bal>0.50&&periods<mx){var i=bal*bwRate;var p=Math.min(bwPay,bal+i);bal=bal+i-p;tot+=p;periods++}
+  return{totalPaid:tot,periods:periods,years:(periods/26),interest:tot-P,payment:bwPay}
+}
+function calcMinPay(bal,rate){return Math.max(Math.round(bal*0.01+bal*(rate/100/12)),25)}
+function simMinPayment(bal,annualRate){
+  var r=annualRate/100/12,b=bal,tot=0,mo=0,mx=600;
+  while(b>0.50&&mo<mx){var i=b*r;var mp=Math.max(b*0.01+i,25);mp=Math.min(mp,b+i);b-=(mp-i);tot+=mp;mo++}
+  return{months:mo,total:tot,interest:tot-bal}
+}
+function simFixedPayment(bal,annualRate,payment){
+  var r=annualRate/100/12,b=bal,tot=0,mo=0,mx=600;
+  while(b>0.50&&mo<mx){var i=b*r;var p=Math.min(payment,b+i);b=b+i-p;tot+=p;mo++}
+  return{months:mo,total:tot,interest:tot-bal}
+}
+
+// ═══ DOOR 1: BEFORE YOU SIGN ═══
+var d1Type='personal',d1Freq='monthly';
+function setD1Type(el,type){
+  d1Type=type;d1Freq='monthly';
+  document.querySelectorAll('#d1-type-pills .pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');
+  var isRev=(type==='card'||type==='loc');
+  document.getElementById('d1-installment-inputs').style.display=isRev?'none':'block';
+  document.getElementById('d1-revolving-inputs').style.display=isRev?'block':'none';
+  document.getElementById('d1-installment-results').style.display=isRev?'none':'block';
+  document.getElementById('d1-revolving-results').style.display=isRev?'block':'none';
+  document.getElementById('d1-comp-installment').style.display=isRev?'none':'block';
+  document.getElementById('d1-comp-revolving').style.display=isRev?'block':'none';
+  document.getElementById('d1c-inst-results').style.display=isRev?'none':'block';
+  document.getElementById('d1c-rev-results').style.display=isRev?'block':'none';
+  if(!isRev){
+    var s=document.getElementById('d1-term'),lbl=document.getElementById('d1-term-label'),lbls=document.getElementById('d1-term-labels'),amt=document.getElementById('d1-amount'),amtL=document.getElementById('d1-amount-label'),rate=document.getElementById('d1-rate'),fs=document.getElementById('d1-freq-section'),mn=document.getElementById('d1-mort-note');
+    var amtH=document.getElementById('d1-amount-helper'),rateH=document.getElementById('d1-rate-helper'),feesH=document.getElementById('d1-fees-helper');
+    if(type==='mortgage'){s.min=5;s.max=30;s.value=25;lbls.innerHTML='<span>5 yrs</span><span>15 yrs</span><span>30 yrs</span>';lbl.textContent='Amortization';amtL.textContent='Mortgage Amount';amt.value='';rate.value='';fs.style.display='block';mn.style.display='block';amtH.textContent='The total mortgage amount you plan to borrow.';rateH.textContent='The annual rate on your mortgage offer.';feesH.textContent='Broker fees, lender fees, legal fees, appraisal fees. Check your disclosure statement.';document.querySelectorAll('#d1-freq-section .freq-pill').forEach(function(p,i){p.classList.toggle('active',i===0)});document.getElementById('d1c-term-label').textContent='Amortization';document.getElementById('d1c-term').value=''}
+    else{s.min=1;s.max=10;s.value=type==='car'?5:3;lbls.innerHTML='<span>1 yr</span><span>5 yrs</span><span>10 yrs</span>';lbl.textContent='Loan Term';amtL.textContent='Loan Amount';amt.value='';rate.value='';fs.style.display='none';mn.style.display='none';amtH.textContent='The total amount you plan to borrow.';rateH.textContent='The annual rate on your offer. Not the same as APR.';feesH.textContent='Application fees, origination fees, broker fees. Check your offer letter. $0 if unsure.';document.getElementById('d1c-term-label').textContent='Term';document.getElementById('d1c-term').value=''}
+  }else{
+    var rh=document.getElementById('d1-rev-rate-helper');
+    if(type==='card'){document.getElementById('d1-rev-rate').value='';document.getElementById('d1-rev-fee').value='';document.getElementById('d1-rev-balance').value='';rh.textContent='The rate charged on purchases. Found on your card agreement.';document.getElementById('d1c-rev-rate').value='';document.getElementById('d1c-rev-fee').value=''}
+    else{document.getElementById('d1-rev-rate').value='';document.getElementById('d1-rev-fee').value='';document.getElementById('d1-rev-balance').value='';rh.textContent='The annual rate on your line of credit. Found on your agreement.';document.getElementById('d1c-rev-rate').value='';document.getElementById('d1c-rev-fee').value=''}
+  }
+  calcD1();
+  if(document.getElementById('d1-compare-section').classList.contains('open'))calcD1Compare();
+}
+function setD1Freq(el,f){d1Freq=f;document.querySelectorAll('#d1-freq-section .freq-pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');var n=document.getElementById('d1-freq-note');if(f==='monthly')n.textContent='12 payments per year.';else if(f==='biweekly')n.textContent='26 payments per year. Same annual cost, spread over more pay periods.';else n.textContent='26 half-payments per year. Equals 13 months of payments. The extra goes straight to principal.';calcD1()}
+
+function calcD1(){
+  var isRev=(d1Type==='card'||d1Type==='loc');
+  if(isRev){calcD1Revolving();return}
+  var P=parseFloat(document.getElementById('d1-amount').value)||0;
+  var rate=parseFloat(document.getElementById('d1-rate').value)||0;
+  var years=parseInt(document.getElementById('d1-term').value)||1;
+  var fees=parseFloat(document.getElementById('d1-fees').value)||0;
+  var months=years*12;
+  document.getElementById('d1-term-display').textContent=years;
+  var isMort=(d1Type==='mortgage');
+  var mp=isMort?pmtMortgage(P,rate,months):pmtMonthly(P,rate,months);
+  var totalPaid,totalInt,payDisp,payLabel;
+  var freqSav=document.getElementById('d1-freq-savings');freqSav.style.display='none';
+  var monthlyRef=mp*months;
+  if(isMort&&d1Freq!=='monthly'){
+    var bw=simBiweekly(P,rate,mp,d1Freq);totalInt=bw.interest;totalPaid=bw.totalPaid;payDisp=fmt(bw.payment);payLabel='Biweekly Payment';
+    var saved=monthlyRef-bw.totalPaid,yrsSaved=((months/12)-bw.years).toFixed(1);
+    if(saved>100){freqSav.style.display='block';document.getElementById('d1-freq-text').textContent='Saves '+fmt(saved)+' in interest and pays off '+yrsSaved+' years sooner'}
+  }else{totalPaid=mp*months;totalInt=totalPaid-P;payDisp=fmt(mp);payLabel='Monthly Payment'}
+  document.getElementById('d1-pay-label').textContent=payLabel;
+  document.getElementById('d1-monthly').textContent=payDisp;
+  document.getElementById('d1-total').textContent=fmt(totalPaid);
+  document.getElementById('d1-interest').textContent=fmt(totalInt);
+  var apr=fees>0?calcAPR(P,mp,months,fees):rate;
+  document.getElementById('d1-apr').textContent=apr.toFixed(1)+'%';
+  var act=document.getElementById('d1-action-text');
+  if(isMort&&d1Freq==='accel'){act.textContent='Accelerated biweekly saves you '+fmt(monthlyRef-totalPaid)+'. Ask your lender to set this up.'}
+  else if(isMort){act.textContent='Try switching to accelerated biweekly payments. One simple change could save you years and tens of thousands in interest.'}
+  else{var st=Math.max(1,years-1),sm=pmtMonthly(P,rate,st*12),si=sm*st*12-P,d=totalInt-si;
+    if(d>10&&years>1)act.textContent='A '+st+'-year term would save you '+fmt(d)+' in interest. Your payment goes up by '+fmt(sm-mp)+'/month.';
+    else act.textContent='At '+rate+'% over '+years+' years, you will pay '+fmt(totalInt)+' in interest.'+(fees>0?' Your APR including fees is '+apr.toFixed(1)+'%.':'')}
+  if(document.getElementById('d1-compare-section').classList.contains('open'))calcD1Compare();
+}
+function calcD1Revolving(){
+  var rate=parseFloat(document.getElementById('d1-rev-rate').value)||0;
+  var fee=parseFloat(document.getElementById('d1-rev-fee').value)||0;
+  var bal=parseFloat(document.getElementById('d1-rev-balance').value)||0;
+  var monthlyInt=bal*(rate/100/12);var annualInt=monthlyInt*12;var annualCost=annualInt+fee;
+  var effRate=bal>0?((annualCost/bal)*100):0;
+  document.getElementById('d1-rev-annual').textContent=fmt(annualCost);
+  document.getElementById('d1-rev-annual-sub').textContent=fmt(annualInt)+' interest'+(fee>0?' + '+fmt(fee)+' annual fee':'');
+  document.getElementById('d1-rev-monthly-int').textContent=fmt(monthlyInt);
+  document.getElementById('d1-rev-eff').textContent=effRate.toFixed(1)+'%';
+  var act=document.getElementById('d1-action-text');
+  if(fee>0&&bal>0)act.textContent='Carrying '+fmt(bal)+' on this account costs you '+fmt(annualCost)+'/year. The annual fee adds '+fmt(fee)+' on top of interest.';
+  else if(bal>0)act.textContent='Carrying '+fmt(bal)+' at '+rate+'% costs you '+fmt(monthlyInt)+' every month in interest alone.';
+  else act.textContent=fee>0?'With no balance carried, your only cost is the '+fmt(fee)+' annual fee.':'With no balance carried and no annual fee, this costs you nothing.';
+  if(document.getElementById('d1-compare-section').classList.contains('open'))calcD1Compare();
+}
+function toggleD1Compare(){var s=document.getElementById('d1-compare-section'),t=document.getElementById('d1-compare-trigger');if(s.classList.contains('open')){s.classList.remove('open');t.textContent='+ Compare with another offer'}else{s.classList.add('open');t.textContent='− Hide comparison';calcD1Compare()}}
+
+function calcD1Compare(){
+  var isRev=(d1Type==='card'||d1Type==='loc');
+  if(isRev){calcD1CompareRev();return}
+  var P=parseFloat(document.getElementById('d1-amount').value)||0;
+  var rA=parseFloat(document.getElementById('d1-rate').value)||0;
+  var fA=parseFloat(document.getElementById('d1-fees').value)||0;
+  var yA=parseInt(document.getElementById('d1-term').value)||1,mA_mo=yA*12;
+  var rB=parseFloat(document.getElementById('d1c-rate').value)||0;
+  var yB=parseInt(document.getElementById('d1c-term').value)||yA,mB_mo=yB*12;
+  var fB=parseFloat(document.getElementById('d1c-fees').value)||0;
+  var isMort=(d1Type==='mortgage');
+  var mpA=isMort?pmtMortgage(P,rA,mA_mo):pmtMonthly(P,rA,mA_mo);
+  var mpB=isMort?pmtMortgage(P,rB,mB_mo):pmtMonthly(P,rB,mB_mo);
+  var tA=mpA*mA_mo+fA,tB=mpB*mB_mo+fB;
+  var aprA=fA>0?calcAPR(P,mpA,mA_mo,fA):rA;
+  var aprB=fB>0?calcAPR(P,mpB,mB_mo,fB):rB;
+  document.getElementById('d1c-pay-a').textContent=fmt(mpA)+'/mo';
+  document.getElementById('d1c-pay-b').textContent=fmt(mpB)+'/mo';
+  document.getElementById('d1c-total-a').textContent=fmt(tA);
+  document.getElementById('d1c-total-b').textContent=fmt(tB);
+  document.getElementById('d1c-sub-a').textContent='APR: '+aprA.toFixed(1)+'%'+(yA!==yB?' · '+yA+'yr':'');
+  document.getElementById('d1c-sub-b').textContent='APR: '+aprB.toFixed(1)+'%'+(yA!==yB?' · '+yB+'yr':'');
+  var cA=document.getElementById('d1c-card-a'),cB=document.getElementById('d1c-card-b');
+  if(tA<=tB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
+  var diff=Math.abs(tA-tB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
+  if(diff>5){badge.style.display='flex';txt.textContent=(tA<tB?'First':'Second')+' offer saves you '+fmt(diff)}else badge.style.display='none';
+  document.getElementById('d1-comp-breakeven').style.display='none';
+}
+function calcD1CompareRev(){
+  var rA=parseFloat(document.getElementById('d1-rev-rate').value)||0;var feeA=parseFloat(document.getElementById('d1-rev-fee').value)||0;
+  var bal=parseFloat(document.getElementById('d1-rev-balance').value)||0;
+  var rB=parseFloat(document.getElementById('d1c-rev-rate').value)||0;var feeB=parseFloat(document.getElementById('d1c-rev-fee').value)||0;
+  var costA=bal*(rA/100/12)*12+feeA,costB=bal*(rB/100/12)*12+feeB;
+  document.getElementById('d1c-rev-total-a').textContent=fmt(costA)+'/yr';
+  document.getElementById('d1c-rev-total-b').textContent=fmt(costB)+'/yr';
+  document.getElementById('d1c-rev-sub-a').textContent=rA+'%'+(feeA>0?' + '+fmt(feeA)+' fee':' + no fee');
+  document.getElementById('d1c-rev-sub-b').textContent=rB+'%'+(feeB>0?' + '+fmt(feeB)+' fee':' + no fee');
+  var cA=document.getElementById('d1c-rev-card-a'),cB=document.getElementById('d1c-rev-card-b');
+  if(costA<=costB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
+  var diff=Math.abs(costA-costB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
+  if(diff>1){badge.style.display='flex';txt.textContent=(costA<costB?'First':'Second')+' offer saves you '+fmt(diff)+'/year'}else badge.style.display='none';
+  var feeDiff=feeB-feeA,rateDiff=(rA-rB)/100;
+  if(feeDiff>0&&rateDiff>0){var be=feeDiff/rateDiff;document.getElementById('d1-comp-breakeven').style.display='block';document.getElementById('d1-comp-breakeven-text').textContent='The lower-rate option only saves money if you carry a balance above '+fmt(be)+'. Below that, the higher-rate option with no fee costs less.'}
+  else if(feeDiff<0&&rateDiff<0){var be=Math.abs(feeDiff/rateDiff);document.getElementById('d1-comp-breakeven').style.display='block';document.getElementById('d1-comp-breakeven-text').textContent='The first option only saves money if you carry a balance above '+fmt(be)+'. Below that, the second option costs less.'}
+  else{document.getElementById('d1-comp-breakeven').style.display='none'}
+}
+
+// ═══ DOOR 2: AFTER YOU'VE SIGNED ═══
+var d2Type='card',d2Freq='monthly';
+function setD2Mode(m,el){document.querySelectorAll('#d2-mode .mode-btn').forEach(function(b){b.classList.remove('active')});el.classList.add('active');document.getElementById('d2-one').classList.toggle('active',m==='one');document.getElementById('d2-several').classList.toggle('active',m==='several');if(m==='several')calcPaydown()}
+function setD2Type(el,type){
+  d2Type=type;d2Freq='monthly';
+  document.querySelectorAll('#d2-type-pills .pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');
+  var isRev=(type==='card'||type==='loc');
+  document.getElementById('d2-revolving-inputs').style.display=isRev?'block':'none';
+  document.getElementById('d2-installment-inputs').style.display=isRev?'none':'block';
+  document.getElementById('d2-revolving-results').style.display=isRev?'block':'none';
+  document.getElementById('d2-installment-results').style.display=isRev?'none':'block';
+  if(isRev){
+    var h=document.getElementById('d2r-minpay-helper'),vn=document.getElementById('d2r-var-note');
+    if(type==='loc'){h.textContent='Often interest-only for lines of credit. Check your statement. If interest-only, your balance never decreases without extra payments.';vn.style.display='block';document.getElementById('d2r-rate').value='';document.getElementById('d2r-balance').value=''}
+    else{h.textContent='Estimated. Check your statement for your actual minimum payment.';vn.style.display='none';document.getElementById('d2r-rate').value='';document.getElementById('d2r-balance').value=''}
+    var bal=parseFloat(document.getElementById('d2r-balance').value)||0;var rate=parseFloat(document.getElementById('d2r-rate').value)||0;
+    document.getElementById('d2r-minpay').value=calcMinPay(bal,rate);
+    updateD2RSlider(bal);
+  }else{
+    var tl=document.getElementById('d2i-term-label'),th=document.getElementById('d2i-term-helper'),mf=document.getElementById('d2-mort-freq'),caut=document.getElementById('d2i-caution'),vn=document.getElementById('d2i-var-note');
+    caut.innerHTML='';caut.style.display='none';vn.style.display='none';
+    document.querySelectorAll('#d2-mort-freq .freq-pill').forEach(function(p,i){p.classList.toggle('active',i===0)});
+    if(type==='mortgage'){tl.textContent='Remaining Amortization';th.textContent='Remaining amortization period.';document.getElementById('d2i-balance').value='';document.getElementById('d2i-rate').value='';document.getElementById('d2i-term').value='';mf.style.display='block';caut.style.display='block';caut.innerHTML='<div class="caution-note">Most closed mortgages limit extra payments to 10-20% of your original balance per year. Exceeding this triggers a penalty. Check your prepayment privileges before acting on these numbers.</div>'}
+    else if(type==='car'){tl.textContent='Remaining Term';th.textContent='How many years left on your loan.';document.getElementById('d2i-balance').value='';document.getElementById('d2i-rate').value='';document.getElementById('d2i-term').value='';mf.style.display='none';caut.style.display='block';caut.innerHTML='<div class="caution-note">Some lenders charge a prepayment penalty. Check your loan agreement before making extra payments.</div>'}
+    else{tl.textContent='Remaining Term';th.textContent='How many years left on your loan.';document.getElementById('d2i-balance').value='';document.getElementById('d2i-rate').value='';document.getElementById('d2i-term').value='';mf.style.display='none'}
+    if(type==='mortgage'||type==='loc')vn.style.display='block';
+  }
+  calcD2();
+}
+function setD2Freq(el,f){d2Freq=f;document.querySelectorAll('#d2-mort-freq .freq-pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');calcD2()}
+function updateD2RSlider(bal){
+  var sl=document.getElementById('d2r-payment');var mx=Math.max(200,Math.round(bal*0.10/10)*10);
+  var rate=parseFloat(document.getElementById('d2r-rate').value)||0;
+  var mn=calcMinPay(bal,rate);
+  sl.min=mn;sl.max=mx;if(parseInt(sl.value)>mx)sl.value=Math.round(mx/2);if(parseInt(sl.value)<mn)sl.value=mn;
+  document.getElementById('d2r-slider-max').textContent='$'+mx;document.getElementById('d2r-slider-mid').textContent='$'+Math.round((mn+mx)/2);
+  var lbls=sl.parentElement.querySelector('.slider-labels');if(lbls)lbls.querySelector('span').textContent='$'+mn;
+}
+function calcD2(){
+  var isRev=(d2Type==='card'||d2Type==='loc');
+  if(isRev){calcD2Rev()}else{calcD2Inst()}
+}
+function calcD2Rev(){
+  var bal=parseFloat(document.getElementById('d2r-balance').value)||0;
+  var rate=parseFloat(document.getElementById('d2r-rate').value)||0;
+  var mpField=document.getElementById('d2r-minpay');
+  if(!mpField.value)mpField.value=calcMinPay(bal,rate);
+  updateD2RSlider(bal);
+  var minp=parseFloat(mpField.value)||25;
+  var payment=parseInt(document.getElementById('d2r-payment').value)||minp;
+  document.getElementById('d2r-pay-display').textContent=payment;
+  if(payment<minp)payment=minp;
+  var minSim=simMinPayment(bal,rate);
+  document.getElementById('d2r-min-time').textContent=minSim.months>=600?'30+ yrs':minSim.months<24?(minSim.months+' mo'):(minSim.months/12).toFixed(1)+' yrs';
+  document.getElementById('d2r-min-total').textContent=fmt(minSim.total);
+  document.getElementById('d2r-min-int').textContent=fmt(minSim.interest);
+  var yourSim=simFixedPayment(bal,rate,payment);
+  document.getElementById('d2r-your-time').textContent=yourSim.months>=600?'30+ yrs':yourSim.months<24?(yourSim.months+' mo'):(yourSim.months/12).toFixed(1)+' yrs';
+  document.getElementById('d2r-your-total').textContent=fmt(yourSim.total);
+  document.getElementById('d2r-your-int').textContent=fmt(yourSim.interest);
+  var savedMoney=minSim.interest-yourSim.interest,savedTime=minSim.months-yourSim.months;
+  var sb=document.getElementById('d2r-savings');
+  if(savedMoney>10){sb.style.display='flex';document.getElementById('d2r-savings-text').textContent='You save '+fmt(savedMoney)+' and '+(savedTime<24?savedTime+' months':(savedTime/12).toFixed(1)+' years')}else sb.style.display='none';
+  var act=document.getElementById('d2-action-text');
+  if(payment<=minp+5)act.textContent='You\'re paying the minimum. Even '+fmt(minp+50)+'/month would save you '+fmt(simFixedPayment(bal,rate,minp+50).interest<minSim.interest?minSim.interest-simFixedPayment(bal,rate,minp+50).interest:0)+' in interest.';
+  else act.textContent='Paying '+fmt(payment)+'/month saves you '+fmt(savedMoney)+' compared to minimums.';
+}
+function calcD2Inst(){
+  var bal=parseFloat(document.getElementById('d2i-balance').value)||0;
+  var rate=parseFloat(document.getElementById('d2i-rate').value)||0;
+  var years=parseFloat(document.getElementById('d2i-term').value)||1;
+  var extra=parseInt(document.getElementById('d2i-extra').value)||0;
+  var months=Math.round(years*12);
+  var isMort=(d2Type==='mortgage');
+  var mp=isMort?pmtMortgage(bal,rate,months):pmtMonthly(bal,rate,months);
+  var totalPaid=mp*months,totalInt=totalPaid-bal;
+  document.getElementById('d2i-extra-display').textContent=extra;
+  document.getElementById('d2i-current-time').textContent=years<=1?(months+' mo'):years+' yrs';
+  document.getElementById('d2i-current-total').textContent=fmt(totalPaid);
+  document.getElementById('d2i-current-int').textContent=fmt(totalInt);
+  document.getElementById('d2i-current-pay').textContent=fmt(mp)+'/mo';
+  var exR=document.getElementById('d2i-extra-results'),ms=document.getElementById('d2-mort-savings');
+  exR.style.display='none';ms.style.display='none';
+  var act=document.getElementById('d2-action-text');
+
+  if(isMort&&d2Freq!=='monthly'){
+    var bw=simBiweekly(bal,rate,mp,d2Freq);
+    var saved=totalPaid-bw.totalPaid;
+    if(saved>100){ms.style.display='block';document.getElementById('d2-mort-savings-text').textContent='Biweekly payments save '+fmt(saved)+' and pay off '+(years-bw.years).toFixed(1)+' years sooner'}
+  }
+
+  if(extra>0){
+    exR.style.display='block';
+    var newSim=simFixedPayment(bal,rate,mp+extra);
+    var intSaved=totalInt-newSim.interest;
+    document.getElementById('d2i-new-time').textContent=newSim.months<24?(newSim.months+' mo'):(newSim.months/12).toFixed(1)+' yrs';
+    document.getElementById('d2i-saved').textContent=fmt(totalPaid-newSim.total);
+    document.getElementById('d2i-int-saved').textContent=fmt(intSaved);
+    act.textContent='An extra '+fmt(extra)+'/month saves you '+fmt(intSaved)+' in interest and cuts '+(months-newSim.months)+' months off your term.';
+  }else{
+    act.textContent='You\'re on track to pay off in '+years+' years. Use the slider to see how extra payments can speed things up.';
+  }
+}
+
+// ═══ MULTI-DEBT PAYDOWN ═══
+var pdDebts=[
+  {type:'card',balance:0,rate:0,minpay:null,term:null}
+];
+var pdNextIdx=1;
+
+function getPdTypeName(t){return{card:'Credit Card',personal:'Personal Loan',car:'Car Loan',mortgage:'Mortgage',loc:'Line of Credit'}[t]||t}
+function isRevolvingType(t){return t==='card'||t==='loc'}
+
+function renderPdCards(){
+  var html='';
+  pdDebts.forEach(function(d,i){
+    var isRev=isRevolvingType(d.type);
+    var thirdLabel=isRev?'Min. Pay':'Term (yr)';
+    var thirdVal=isRev?(d.minpay||''):(d.term||'');
+    html+='<div class="card-entry" data-index="'+i+'"><div class="card-entry-header"><div class="card-entry-name">'+getPdTypeName(d.type)+'</div>'+(pdDebts.length>1?'<div class="card-entry-remove" onclick="removeDebt('+i+')">Remove</div>':'')+'</div>';
+    html+='<div class="card-entry-type"><div class="pill sm'+(d.type==='card'?' active':'')+'" onclick="setPdType('+i+',this,\'card\')">Credit Card</div><div class="pill sm'+(d.type==='personal'?' active':'')+'" onclick="setPdType('+i+',this,\'personal\')">Personal Loan</div><div class="pill sm'+(d.type==='car'?' active':'')+'" onclick="setPdType('+i+',this,\'car\')">Car Loan</div><div class="pill sm'+(d.type==='mortgage'?' active':'')+'" onclick="setPdType('+i+',this,\'mortgage\')">Mortgage</div><div class="pill sm'+(d.type==='loc'?' active':'')+'" onclick="setPdType('+i+',this,\'loc\')">LOC</div></div>';
+    html+='<div class="card-entry-inputs"><div class="input-group compact"><div class="input-label">Balance</div><input type="number" class="input-field" value="'+(d.balance||'')+'" placeholder="e.g. 3000" onchange="updatePdField('+i+',\'balance\',this.value)"></div><div class="input-group compact"><div class="input-label">Rate (%)</div><input type="number" class="input-field" value="'+(d.rate||'')+'" placeholder="e.g. 19.99" step="0.01" onchange="updatePdField('+i+',\'rate\',this.value)"></div><div class="input-group compact"><div class="input-label">'+thirdLabel+'</div><input type="number" class="input-field" value="'+thirdVal+'" placeholder="'+(isRev?'e.g. 75':'e.g. 3')+'" onchange="updatePdField('+i+',\''+(isRev?'minpay':'term')+'\',this.value)"></div></div></div>';
+  });
+  document.getElementById('pd-cards').innerHTML=html;
+}
+function setPdType(idx,el,type){
+  pdDebts[idx].type=type;
+  if(isRevolvingType(type)){pdDebts[idx].term=null;pdDebts[idx].minpay=calcMinPay(pdDebts[idx].balance,pdDebts[idx].rate)}
+  else{pdDebts[idx].minpay=null;if(!pdDebts[idx].term)pdDebts[idx].term=3}
+  renderPdCards();calcPaydown();
+}
+function updatePdField(idx,field,val){pdDebts[idx][field]=parseFloat(val)||0;calcPaydown()}
+function addDebt(){
+  pdDebts.push({type:'card',balance:0,rate:0,minpay:null,term:null});pdNextIdx++;pdConsolSelected.push(false);renderPdCards();if(pdConsolOpen)renderConsolChecks();calcPaydown()
+}
+function removeDebt(idx){if(pdDebts.length<=1)return;pdDebts.splice(idx,1);pdConsolSelected.splice(idx,1);renderPdCards();if(pdConsolOpen)renderConsolChecks();calcPaydown()}
+
+function simPaydown(debts,extra,strategy){
+  var ds=debts.map(function(d){
+    var isRev=isRevolvingType(d.type);
+    var mp;
+    if(isRev){mp=d.minpay||calcMinPay(d.balance,d.rate)}
+    else{var mo=(d.term||3)*12;mp=pmtMonthly(d.balance,d.rate,mo)}
+    return{type:d.type,balance:d.balance,rate:d.rate,minPay:mp,origBal:d.balance,isRev:isRev,paidOff:false,paidOffMonth:0}
+  });
+  var totalPaid=0,months=0,maxMo=600,order=[];
+  while(months<maxMo){
+    var allDone=true;
+    for(var i=0;i<ds.length;i++){if(ds[i].balance>0.50)allDone=false}
+    if(allDone)break;
+    months++;
+    // Collect freed minimums from debts paid off in PREVIOUS months
+    var freedFromPrev=0;
+    for(var i=0;i<ds.length;i++){if(ds[i].paidOff)freedFromPrev+=ds[i].minPay}
+    var newlyFreed=0;
+    // Pay minimums on all active debts
+    for(var i=0;i<ds.length;i++){
+      if(ds[i].balance<=0.50)continue;
+      var interest=ds[i].balance*(ds[i].rate/100/12);
+      var mp=ds[i].isRev?Math.max(Math.min(ds[i].minPay,ds[i].balance+interest),Math.min(25,ds[i].balance+interest)):Math.min(ds[i].minPay,ds[i].balance+interest);
+      ds[i].balance=ds[i].balance+interest-mp;totalPaid+=mp;
+      if(ds[i].balance<=0.50&&!ds[i].paidOff){ds[i].paidOff=true;ds[i].paidOffMonth=months;ds[i].balance=0;newlyFreed+=ds[i].minPay;order.push({type:ds[i].type,month:months})}
+    }
+    // Apply extra + all freed minimums, cascading through debts
+    var extraBudget=extra+freedFromPrev+newlyFreed;
+    while(extraBudget>0.01){
+      var active=ds.filter(function(d){return d.balance>0.50});
+      if(active.length===0)break;
+      active.sort(function(a,b){return strategy==='avalanche'?b.rate-a.rate:a.balance-b.balance});
+      var target=active[0];
+      var apply=Math.min(extraBudget,target.balance);
+      target.balance-=apply;totalPaid+=apply;extraBudget-=apply;
+      if(target.balance<=0.50&&!target.paidOff){target.paidOff=true;target.paidOffMonth=months;target.balance=0;order.push({type:target.type,month:months})}
+    }
+  }
+  var totalInt=totalPaid-debts.reduce(function(s,d){return s+d.balance},0);
+  return{months:months,totalPaid:totalPaid,interest:totalInt,order:order}
+}
+function simMinOnly(debts){
+  var ds=debts.map(function(d){
+    var isRev=isRevolvingType(d.type);
+    var mp;if(isRev){mp=d.minpay||calcMinPay(d.balance,d.rate)}else{mp=pmtMonthly(d.balance,d.rate,(d.term||3)*12)}
+    return{balance:d.balance,rate:d.rate,minPay:mp,isRev:isRev}
+  });
+  var totalPaid=0,months=0;
+  while(months<600){
+    var allDone=true;
+    for(var i=0;i<ds.length;i++){if(ds[i].balance>0.50)allDone=false}
+    if(allDone)break;months++;
+    for(var i=0;i<ds.length;i++){
+      if(ds[i].balance<=0.50)continue;
+      var interest=ds[i].balance*(ds[i].rate/100/12);
+      var mp=ds[i].isRev?Math.max(Math.min(ds[i].minPay,ds[i].balance+interest),Math.min(25,ds[i].balance+interest)):Math.min(ds[i].minPay,ds[i].balance+interest);
+      ds[i].balance=ds[i].balance+interest-mp;totalPaid+=mp;
+      if(ds[i].balance<=0.50)ds[i].balance=0;
+    }
+  }
+  return{months:months,totalPaid:totalPaid,interest:totalPaid-debts.reduce(function(s,d){return s+d.balance},0)}
+}
+
+function calcPaydown(){
+  var extra=parseFloat(document.getElementById('pd-extra').value)||0;
+  var aval=simPaydown(pdDebts,extra,'avalanche');
+  var snow=simPaydown(pdDebts,extra,'snowball');
+  var minOnly=simMinOnly(pdDebts);
+  document.getElementById('pd-aval-months').textContent=aval.months+' mo';
+  document.getElementById('pd-aval-int').textContent=fmt(aval.interest)+' interest';
+  document.getElementById('pd-snow-months').textContent=snow.months+' mo';
+  document.getElementById('pd-snow-int').textContent=fmt(snow.interest)+' interest';
+  // Show which is active
+  var isAval=document.getElementById('pd-aval-card').classList.contains('active');
+  var chosen=isAval?aval:snow;
+  // Order display
+  var orderHtml='';
+  chosen.order.forEach(function(o,i){
+    orderHtml+='<div class="paydown-row"><div class="paydown-order">'+(i+1)+'</div><div class="paydown-info"><div class="paydown-name">'+getPdTypeName(o.type)+'</div><div class="paydown-detail">Paid off in month '+o.month+'</div></div></div>';
+  });
+  document.getElementById('pd-order').innerHTML=orderHtml||'<div class="paydown-row"><div class="paydown-info"><div class="paydown-name">Enter your debts above</div></div></div>';
+  var saved=minOnly.interest-chosen.interest;
+  if(saved>10){document.getElementById('pd-savings').style.display='flex';document.getElementById('pd-savings-text').textContent='You save '+fmt(saved)+' vs. minimums only'}
+  else document.getElementById('pd-savings').style.display='none';
+  // Mortgage caution
+  var hasMort=pdDebts.some(function(d){return d.type==='mortgage'});
+  document.getElementById('pd-mort-caution').style.display=hasMort?'block':'none';
+  // Action
+  if(chosen.order.length>0){
+    document.getElementById('pd-action-text').textContent='Your first move: put your extra '+fmt(extra)+' toward your '+getPdTypeName(chosen.order[0].type)+' this month.';
+  }
+  if(pdConsolOpen){renderConsolChecks();calcConsol();}
+}
+function setStrategy(s){
+  document.getElementById('pd-aval-card').classList.toggle('active',s==='avalanche');
+  document.getElementById('pd-snow-card').classList.toggle('active',s==='snowball');
+  calcPaydown();
+}
+
+// ═══ CONSOLIDATION COMPARISON ═══
+var pdConsolOpen=false;
+var pdConsolSelected=[];
+
+function toggleConsol(){
+  pdConsolOpen=!pdConsolOpen;
+  document.getElementById('consol-trigger').classList.toggle('open',pdConsolOpen);
+  document.getElementById('consol-section').classList.toggle('open',pdConsolOpen);
+  document.getElementById('consol-trigger').innerHTML=pdConsolOpen?'▾ What If You Consolidated?':'🔄 What If You Consolidated?';
+  if(pdConsolOpen){
+    while(pdConsolSelected.length<pdDebts.length)pdConsolSelected.push(false);
+    renderConsolChecks();
+    calcConsol();
+  }
+}
+
+function renderConsolChecks(){
+  var html='';
+  pdDebts.forEach(function(d,i){
+    var bal=d.balance||0;
+    var label=getPdTypeName(d.type)+(bal>0?' ('+fmt(bal)+' at '+d.rate+'%)':'');
+    var checked=pdConsolSelected[i]?'checked':'';
+    var isInst=!isRevolvingType(d.type);
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:'+(pdConsolSelected[i]?'var(--green-light)':'var(--muted-bg)')+';border-radius:8px;margin-bottom:6px;cursor:pointer" onclick="toggleConsolDebt('+i+')">';
+    html+='<input type="checkbox" '+checked+' style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;pointer-events:none">';
+    html+='<span style="font-size:13px;font-weight:600;color:'+(pdConsolSelected[i]?'var(--green-dark)':'var(--text-secondary)')+'">'+label+'</span>';
+    if(isInst)html+='<span style="font-size:11px;color:var(--text-muted);margin-left:auto">installment</span>';
+    html+='</div>';
+  });
+  document.getElementById('consol-checks').innerHTML=html;
+}
+
+function toggleConsolDebt(idx){
+  while(pdConsolSelected.length<pdDebts.length)pdConsolSelected.push(false);
+  pdConsolSelected[idx]=!pdConsolSelected[idx];
+  renderConsolChecks();
+  calcConsol();
+}
+
+function calcConsol(){
+  if(!pdConsolOpen)return;
+  while(pdConsolSelected.length<pdDebts.length)pdConsolSelected.push(false);
+
+  // Calculate consolidation amount
+  var consolBal=0,selectedCount=0;
+  pdDebts.forEach(function(d,i){if(pdConsolSelected[i]){consolBal+=d.balance||0;selectedCount++}});
+  var fees=parseFloat(document.getElementById('consol-fees').value)||0;
+  document.getElementById('consol-amount').textContent=fmt(consolBal);
+
+  if(selectedCount===0||consolBal<=0){
+    document.getElementById('consol-results').style.display='none';
+    document.getElementById('consol-empty').style.display='block';
+    return;
+  }
+  document.getElementById('consol-empty').style.display='none';
+  document.getElementById('consol-results').style.display='block';
+
+  var consolRate=parseFloat(document.getElementById('consol-rate').value)||0;
+  var consolTerm=parseFloat(document.getElementById('consol-term').value)||5;
+  var extra=parseFloat(document.getElementById('pd-extra').value)||0;
+  var isAval=document.getElementById('pd-aval-card').classList.contains('active');
+  var strategy=isAval?'avalanche':'snowball';
+
+  // Current scenario: all debts as-is
+  var currentSim=simPaydown(pdDebts,extra,strategy);
+
+  // Consolidation scenario: remove selected debts, add consolidation loan
+  var consolDebts=[];
+  pdDebts.forEach(function(d,i){if(!pdConsolSelected[i])consolDebts.push({type:d.type,balance:d.balance,rate:d.rate,minpay:d.minpay,term:d.term})});
+  consolDebts.push({type:'personal',balance:consolBal+fees,rate:consolRate,minpay:null,term:consolTerm});
+  var consolSim=simPaydown(consolDebts,extra,strategy);
+
+  // Build comparison
+  var currentBetter=currentSim.interest<=consolSim.interest;
+  var consolBetter=!currentBetter;
+  var savedInt=Math.abs(currentSim.interest-consolSim.interest);
+  var savedMo=Math.abs(currentSim.months-consolSim.months);
+
+  var html='';
+  html+='<div class="consol-vs-card'+(currentBetter?' better':'')+'"><div class="consol-vs-label">Current Plan</div>';
+  html+='<div class="consol-vs-row"><strong>'+fmt(currentSim.interest)+'</strong>total interest</div>';
+  html+='<div class="consol-vs-row"><strong>'+fmt(currentSim.totalPaid)+'</strong>total paid</div>';
+  html+='<div class="consol-vs-row"><strong>'+(currentSim.months<24?currentSim.months+' mo':Math.round(currentSim.months/12)+' yr')+'</strong>to debt-free</div></div>';
+  html+='<div class="consol-vs-mid"><div class="vs-badge">vs</div></div>';
+  html+='<div class="consol-vs-card'+(consolBetter?' better':'')+'"><div class="consol-vs-label">Consolidation</div>';
+  html+='<div class="consol-vs-row"><strong>'+fmt(consolSim.interest)+'</strong>total interest</div>';
+  html+='<div class="consol-vs-row"><strong>'+fmt(consolSim.totalPaid)+'</strong>total paid</div>';
+  html+='<div class="consol-vs-row"><strong>'+(consolSim.months<24?consolSim.months+' mo':Math.round(consolSim.months/12)+' yr')+'</strong>to debt-free</div></div>';
+  document.getElementById('consol-vs').innerHTML=html;
+
+  if(savedInt>10){
+    document.getElementById('consol-savings').style.display='flex';
+    var winner=currentBetter?'Current plan':'Consolidation';
+    document.getElementById('consol-savings-text').textContent=winner+' saves '+fmt(savedInt)+' in interest'+(savedMo>1?' and '+(savedMo<24?savedMo+' months':(savedMo/12).toFixed(1)+' years'):'');
+    document.getElementById('consol-savings').className=consolBetter?'savings-badge':'savings-badge warning';
+  }else{
+    document.getElementById('consol-savings').style.display='none';
+  }
+  document.getElementById('consol-caution').style.display=consolBetter?'block':'none';
+}
+
+// ═══ DOOR 3: STRENGTHEN MY CREDIT ═══
+function setD3Mode(m,el){document.querySelectorAll('#d3-mode .mode-btn').forEach(function(b){b.classList.remove('active')});el.classList.add('active');document.getElementById('d3-util').classList.toggle('active',m==='util');document.getElementById('d3-mortgage').classList.toggle('active',m==='mortgage');if(m==='util')calcUtil();else calcDTI()}
+
+// Utilization - multi-account
+var uAccounts=[{limit:0,balance:0}];
+var uNextIdx=1;
+
+function renderAccounts(){
+  var html='';
+  uAccounts.forEach(function(a,i){
+    html+='<div class="acct-entry" data-index="'+i+'"><div class="acct-entry-header"><div class="acct-entry-name">Account '+(i+1)+'</div>'+(uAccounts.length>1?'<div class="acct-entry-remove" onclick="removeAcct('+i+')">Remove</div>':'')+'</div>';
+    html+='<div class="acct-entry-inputs"><div class="input-group compact"><div class="input-label">Credit Limit</div><input type="number" class="input-field" value="'+(a.limit||'')+'" placeholder="e.g. 5000" onchange="updateAcct('+i+',\'limit\',this.value)"><div class="helper-text">Found on your statement. The maximum you can borrow.</div></div><div class="input-group compact"><div class="input-label">Current Balance</div><input type="number" class="input-field" value="'+(a.balance||'')+'" placeholder="e.g. 1500" onchange="updateAcct('+i+',\'balance\',this.value)"><div class="helper-text">Your amount owing on your latest statement.</div></div></div>';
+    html+='<div class="acct-util" id="u-acct-'+i+'-pct"></div></div>';
+  });
+  document.getElementById('u-accounts').innerHTML=html;
+}
+function updateAcct(i,field,val){uAccounts[i][field]=parseFloat(val)||0;calcUtil()}
+function addAcct(){uAccounts.push({limit:0,balance:0});uNextIdx++;renderAccounts();calcUtil()}
+function removeAcct(i){if(uAccounts.length<=1)return;uAccounts.splice(i,1);renderAccounts();calcUtil()}
+
+function calcUtil(){
+  var totalLimit=0,totalBalance=0;
+  uAccounts.forEach(function(a,i){
+    totalLimit+=a.limit;totalBalance+=a.balance;
+    var pct=a.limit>0?Math.round(a.balance/a.limit*100):0;
+    var el=document.getElementById('u-acct-'+i+'-pct');
+    if(el){
+      el.textContent=pct+'% used';
+      if(pct<30){el.style.background='var(--green-light)';el.style.color='var(--green-dark)'}
+      else if(pct<50){el.style.background='var(--gold-light)';el.style.color='#8B6914'}
+      else{el.style.background='var(--red-light)';el.style.color='var(--red)'}
+    }
+  });
+  var paydown=parseInt(document.getElementById('u-paydown').value)||0;
+  var sl=document.getElementById('u-paydown');
+  sl.max=Math.max(100,totalBalance);
+  document.getElementById('u-slider-max').textContent=fmt(totalBalance);
+  var adjBalance=Math.max(0,totalBalance-paydown);
+  var pct=totalLimit>0?Math.round(adjBalance/totalLimit*100):0;
+  var basePct=totalLimit>0?Math.round(totalBalance/totalLimit*100):0;
+  document.getElementById('u-pct').textContent=pct+'%';
+  var bar=document.getElementById('u-bar');bar.style.width=Math.min(pct,100)+'%';
+  if(pct<30){bar.style.background='var(--green-glow)';document.getElementById('u-pct').style.color='var(--green)';document.getElementById('u-status').textContent='Good. Under 30%'}
+  else if(pct<50){bar.style.background='var(--gold)';document.getElementById('u-pct').style.color='var(--gold)';document.getElementById('u-status').textContent='Caution. Between 30% and 50%'}
+  else{bar.style.background='var(--red-glow)';document.getElementById('u-pct').style.color='var(--red)';document.getElementById('u-status').textContent='High. Over 50%'}
+  document.getElementById('u-pd-display').textContent=paydown;
+  var afterSection=document.getElementById('u-after');
+  if(paydown>0){afterSection.style.display='block';document.getElementById('u-before-pct').textContent=basePct+'%';document.getElementById('u-after-pct').textContent=pct+'%'}else afterSection.style.display='none';
+  // Target
+  var targetEl=document.getElementById('u-target');
+  if(basePct>=30){
+    var needed=totalBalance-totalLimit*0.30;
+    if(needed>0&&paydown<needed){targetEl.style.display='block';document.getElementById('u-target-text').textContent='Pay down '+fmt(needed)+' to get under 30%.'}
+    else if(pct<30){targetEl.style.display='block';document.getElementById('u-target-text').textContent='You\'d be under 30%. Nice!'}
+    else targetEl.style.display='none';
+  }else{targetEl.style.display='block';document.getElementById('u-target-text').textContent='You\'re already under 30%. Well done.'}
+  // Action
+  var act=document.getElementById('u-action-text');
+  if(pct<30)act.textContent='You\'re at '+pct+'%. Lenders like what they see.';
+  else if(pct<50)act.textContent='You\'re at '+pct+'%. Paying down '+(basePct>=30?fmt(totalBalance-totalLimit*0.30):'')+' would put you in the green zone.';
+  else act.textContent='At '+pct+'%, your utilization is high. This is the fastest lever you can pull to improve your credit score.';
+}
+
+// Mortgage Readiness (TDS)
+function calcDTI(){
+  var income=parseFloat(document.getElementById('dti-income').value)||1;
+  var mortgage=parseFloat(document.getElementById('dti-mortgage').value)||0;
+  var tax=parseFloat(document.getElementById('dti-tax').value)||0;
+  var heat=parseFloat(document.getElementById('dti-heat').value)||0;
+  var condo=parseFloat(document.getElementById('dti-condo').value)||0;
+  var cards=parseFloat(document.getElementById('dti-cards').value)||0;
+  var loans=parseFloat(document.getElementById('dti-loans').value)||0;
+  var housing=mortgage+tax+heat+(condo*0.5);
+  var allDebt=housing+cards+loans;
+  var tds=Math.round(allDebt/income*100);
+  document.getElementById('dti-tds').textContent=tds+'%';
+  document.getElementById('dti-housing-total').textContent=fmt(housing);
+  document.getElementById('dti-all-total').textContent=fmt(allDebt);
+  var bar=document.getElementById('dti-bar');bar.style.width=Math.min(tds,100)+'%';
+  if(tds<44){bar.style.background='var(--green-glow)';document.getElementById('dti-tds').style.color='var(--green)';document.getElementById('dti-status').textContent='Under 44%. You\'d likely qualify'}
+  else if(tds<50){bar.style.background='var(--gold)';document.getElementById('dti-tds').style.color='var(--gold)';document.getElementById('dti-status').textContent='Between 44-50%. Tight'}
+  else{bar.style.background='var(--red-glow)';document.getElementById('dti-tds').style.color='var(--red)';document.getElementById('dti-status').textContent='Over 50%. A lender would likely decline'}
+  var room=Math.max(0,income*0.44-allDebt);
+  document.getElementById('dti-room').textContent=room>0?fmt(room)+'/mo':'$0/mo';
+  document.getElementById('dti-room').className='result-row-value '+(room>0?'green':'red');
+  var act=document.getElementById('dti-action-text');
+  if(tds<44){act.textContent='Your TDS is '+tds+'%. You have room for '+fmt(room)+'/month in additional debt payments before hitting the 44% threshold.'}
+  else{var over=allDebt-income*0.44;act.textContent='Your TDS is '+tds+'%. Clearing '+fmt(over)+'/month in debt payments would bring you to 44%.'}
+}
+
+// ═══ INIT ═══
+window.addEventListener('DOMContentLoaded',function(){
+  renderPdCards();renderAccounts();
+  setD2Type(document.querySelector('#d2-type-pills .pill.active'),'card');
+  calcD1();calcUtil();calcDTI();
+});
+</script>
+</body>
+</html>
