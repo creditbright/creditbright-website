@@ -215,6 +215,9 @@ async function loadReport(uid){
     var prePct=preT>0?Math.round(preC/preT*100):null;
     var postPct=postT>0?Math.round(postC/postT*100):null;
     var secPct=secT>0?Math.round(secC/secT*100):null;
+    var confPre=ca.filter(function(a){return a.assessment_type==='confidence_pre'});
+    var confPost=ca.filter(function(a){return a.assessment_type==='confidence_post'});
+    var activities=ca.filter(function(a){return a.assessment_type==='activity'});
     var status=cc?'Completed':(cp.length>0?'In Progress':(enrolled?'Not Started':'Not Enrolled'));
     var sb2=cc?'badge-green':(cp.length>0?'badge-gold':(enrolled?'badge-muted':'badge-muted'));
     var cSecs=0;cp.forEach(function(sp){if(sp.time_spent_seconds)cSecs+=sp.time_spent_seconds});
@@ -233,6 +236,21 @@ async function loadReport(uid){
     h+='<div class="score-item"><div class="score-label">Course Activities</div><div class="score-value">'+(secPct!==null?secPct+'%':ef())+'</div>'+(secT>0?'<div class="detail-label">'+secC+' of '+secT+' correct</div>':'')+'</div>';
     h+='<div class="score-item"><div class="score-label">Time Spent</div><div class="score-value">'+(enrolled?fm(cSecs):ef())+'</div></div>';
     h+='</div>';
+
+    // Confidence ratings
+    h+='<div class="sub-title">Confidence Self-Assessment</div>';
+    if(confPre.length>0||confPost.length>0){
+      h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">';
+      h+='<div><div class="score-label" style="margin-bottom:8px">Before Course</div>';
+      if(confPre.length>0){confPre.forEach(function(c){
+        h+='<div class="section-row"><span class="section-row-name" style="font-size:12px">'+c.question_text+'</span><span class="section-row-time"><strong>'+c.user_answer+'</strong></span></div>'})}
+      else{h+=ef('Not completed')}
+      h+='</div><div><div class="score-label" style="margin-bottom:8px">After Course</div>';
+      if(confPost.length>0){confPost.forEach(function(c){
+        h+='<div class="section-row"><span class="section-row-name" style="font-size:12px">'+c.question_text+'</span><span class="section-row-time"><strong>'+c.user_answer+'</strong></span></div>'})}
+      else{h+=ef('Not completed')}
+      h+='</div></div>'}
+    else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No confidence ratings yet')+'</div>'}
 
     // Progress bar
     var pctD=cp.length>0?Math.min(Math.round(cp.length/maxS*100),100):0;
@@ -268,6 +286,16 @@ async function loadReport(uid){
       h+='<div class="q-row">'+icon+'<div><div class="q-text">'+(a.question_text||'Activity '+a.question_key)+'</div><div class="q-answer">Answered: <strong>'+(a.user_answer||'?')+'</strong>';
       if(!a.is_correct&&a.correct_answer)h+=' (Correct: '+a.correct_answer+')';h+='</div></div></div>'})}
     else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No activity responses yet')+'</div>'}
+
+    // Interactive exercises (Foundation only)
+    if(ck==='foundation'){
+      h+='<div class="sub-title">Interactive Exercises</div>';
+      if(activities.length>0){activities.forEach(function(a){
+        var icon=a.is_correct?'<div class="q-icon q-correct">✓</div>':'<div class="q-icon q-wrong">✗</div>';
+        var label=a.question_text||a.question_key||'Exercise';
+        h+='<div class="q-row">'+icon+'<div><div class="q-text">'+label+'</div><div class="q-answer">Result: <strong>'+(a.user_answer||'?')+'</strong></div></div></div>'})}
+      else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No interactive exercises completed yet')+'</div>'}
+    }
 
     // Post-assessment detail
     h+='<div class="sub-title">Post-Assessment Detail</div>';

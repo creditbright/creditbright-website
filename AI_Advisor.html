@@ -181,6 +181,7 @@ var conversationHistory = [];
 var isLoading = false;
 var sessionStart = new Date();
 var questionCount = 0;
+var cbSessionRowId = null;
 
 function useSuggestion(el) {
   document.getElementById('input').value = el.textContent;
@@ -236,20 +237,31 @@ async function logSessionMetadata() {
     var now = new Date();
     var durationSeconds = Math.round((now - sessionStart) / 1000);
 
-    await sb.from('tool_sessions').insert({
-      user_id: session.user.id,
-      tool: 'ai_advisor',
-      questions_asked: questionCount,
-      started_at: sessionStart.toISOString(),
-      ended_at: now.toISOString(),
-      duration_seconds: durationSeconds
-    });
+    if (!cbSessionRowId) {
+      // First question: insert new row
+      var { data } = await sb.from('tool_sessions').insert({
+        user_id: session.user.id,
+        tool: 'ai_advisor',
+        questions_asked: questionCount,
+        started_at: sessionStart.toISOString(),
+        ended_at: now.toISOString(),
+        duration_seconds: durationSeconds
+      }).select('id').single();
+      if (data) cbSessionRowId = data.id;
+    } else {
+      // Subsequent questions: update existing row
+      await sb.from('tool_sessions').update({
+        questions_asked: questionCount,
+        ended_at: now.toISOString(),
+        duration_seconds: durationSeconds
+      }).eq('id', cbSessionRowId);
+    }
   } catch (e) {
     console.error('Metadata log error:', e);
   }
 }
 
-// Log metadata when user leaves the page
+// Also log on page unload as backup
 window.addEventListener('beforeunload', function() {
   if (questionCount > 0) {
     logSessionMetadata();
@@ -289,6 +301,9 @@ async function sendMessage() {
     conversationHistory.push({ role: 'assistant', content: reply });
     showTyping(false);
     addMessage('assistant', reply);
+
+    // Log session after each question for reliability
+    logSessionMetadata();
 
   } catch (err) {
     showTyping(false);

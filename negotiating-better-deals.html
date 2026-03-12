@@ -1333,6 +1333,16 @@ function setConfidence(phase, idx, btn) {
   if (confData[phase].every(function(v) { return v !== null; })) {
     var nav = document.getElementById('conf-' + phase + '-nav');
     if (nav) nav.style.display = 'block';
+    // Log confidence ratings
+    var confQuestions = [
+      'I know which credit terms are negotiable.',
+      'I could call my bank right now and ask for a lower rate.',
+      'I know the best time to negotiate credit terms.'
+    ];
+    var arr = confData[phase];
+    for (var ci = 0; ci < arr.length; ci++) {
+      cbLogAssessment('confidence_' + phase, ci, confQuestions[ci], arr[ci], '', true);
+    }
   }
 }
 

@@ -3257,6 +3257,16 @@ function setConfidence(phase, idx, el) {
   if (allSet) {
     var doneEl = document.getElementById(phase + '-conf-done');
     if (doneEl) doneEl.style.display = 'block';
+    // Log confidence ratings to Supabase
+    var confQuestions = [
+      'I understand how credit products work in Canada.',
+      'I could compare two loan offers and identify the better deal.',
+      'I know what steps to take to protect or improve my credit.'
+    ];
+    var confLabels = {1: 'Not confident', 2: 'Somewhat confident', 3: 'Confident'};
+    for (var ci = 0; ci < arr.length; ci++) {
+      cbLogAssessment('confidence_' + phase, ci, confQuestions[ci], confLabels[arr[ci]] || String(arr[ci]), '', true);
+    }
   }
 }
 
@@ -4474,6 +4484,7 @@ function revealCard(group, idx) {
   if (revealCounts[group] >= total) {
     var after = document.getElementById(group + '-after');
     if (after) { after.style.display = 'block'; }
+    cbLogAssessment('activity', group + '_reveal', 'Tap-to-reveal: ' + group, 'completed (' + total + ' cards)', '', true);
   }
 }
 
@@ -4504,6 +4515,11 @@ function showRankResult(group) {
   if (result) result.classList.add('visible');
   var after = document.getElementById(group + '-after');
   if (after) after.style.display = 'block';
+  // Log ranking exercise to Supabase
+  var correct = rankCorrectOrder[group] || [];
+  var userOrder = rankState[group] ? rankState[group].order : [];
+  var isCorrect = JSON.stringify(userOrder) === JSON.stringify(correct);
+  cbLogAssessment('activity', group + '_ranking', 'Ranking exercise: ' + group, JSON.stringify(userOrder), JSON.stringify(correct), isCorrect);
 }
 
 function resetRanking(group) {
@@ -4556,6 +4572,10 @@ function checkMatching(group) {
   if (nav && allCorrect) nav.style.display = 'block';
   var retry = document.getElementById(group + '-retry');
   if (retry) retry.style.display = allCorrect ? 'none' : 'block';
+  // Log matching exercise attempt to Supabase
+  if (allPicked) {
+    cbLogAssessment('activity', group + '_matching', 'Matching exercise: ' + group, allCorrect ? 'all correct' : 'has errors', 'all correct', allCorrect);
+  }
 }
 
 </script>
