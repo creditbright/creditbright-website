@@ -665,21 +665,37 @@ function cbTrackCalc() {
   cbCalculations++;
 }
 
-// Log tool session on page unload
-window.addEventListener('beforeunload', function() {
+var cbSessionRowId = null;
+
+// Log or update tool session immediately on each interaction
+async function cbLogSession() {
   if (!sb || !cbUser) return;
   var duration = Math.round((Date.now() - cbToolSessionStart) / 1000);
   var doorNames = { 'offer': 'Before You Sign', 'debt': 'After You Signed', 'strength': 'Strengthen My Credit' };
   var doorsLabel = cbDoorsVisited.map(function(d) { return doorNames[d] || d; }).join(', ');
-  sb.from('tool_sessions').insert({
-    user_id: cbUser.id, tool: 'calculator',
-    calculator_door: doorsLabel || null,
-    session_data: JSON.stringify({ doors: cbDoorsVisited, calculations: cbCalculations }),
-    started_at: new Date(cbToolSessionStart).toISOString(),
-    ended_at: new Date().toISOString(),
-    duration_seconds: duration
-  }).then(function() {});
-});
+  var sessionData = JSON.stringify({ doors: cbDoorsVisited, calculations: cbCalculations });
+
+  try {
+    if (!cbSessionRowId) {
+      var { data } = await sb.from('tool_sessions').insert({
+        user_id: cbUser.id, tool: 'calculator',
+        calculator_door: doorsLabel || null,
+        session_data: sessionData,
+        started_at: new Date(cbToolSessionStart).toISOString(),
+        ended_at: new Date().toISOString(),
+        duration_seconds: duration
+      }).select('id').single();
+      if (data) cbSessionRowId = data.id;
+    } else {
+      await sb.from('tool_sessions').update({
+        calculator_door: doorsLabel || null,
+        session_data: sessionData,
+        ended_at: new Date().toISOString(),
+        duration_seconds: duration
+      }).eq('id', cbSessionRowId);
+    }
+  } catch (e) { console.error('Session log error:', e); }
+}
 
 document.addEventListener('DOMContentLoaded', function() { cbInit(); });
 </script>
@@ -687,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function() { cbInit(); });
 <script>
 // ═══ NAVIGATION ═══
 function goHome(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('screen-landing').classList.add('active');document.querySelectorAll('.scroll-area').forEach(function(a){a.scrollTop=0});window.scrollTo(0,0)}
-function openDoor(d){cbTrackDoor(d);document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.querySelectorAll('.scroll-area').forEach(function(a){a.scrollTop=0});window.scrollTo(0,0);if(d==='offer'){document.getElementById('screen-offer').classList.add('active');calcD1()}else if(d==='debt'){document.getElementById('screen-debt').classList.add('active');calcD2();calcPaydown()}else{document.getElementById('screen-strength').classList.add('active');calcUtil();calcDTI()}}
+function openDoor(d){cbTrackDoor(d);cbLogSession();document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.querySelectorAll('.scroll-area').forEach(function(a){a.scrollTop=0});window.scrollTo(0,0);if(d==='offer'){document.getElementById('screen-offer').classList.add('active');calcD1()}else if(d==='debt'){document.getElementById('screen-debt').classList.add('active');calcD2();calcPaydown()}else{document.getElementById('screen-strength').classList.add('active');calcUtil();calcDTI()}}
 function fmt(n){return '$'+Math.round(n).toLocaleString('en-CA')}
 
 // ═══ MATH ENGINES ═══
