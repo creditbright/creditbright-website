@@ -1048,10 +1048,10 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <div class="certificate-prompt">
         <div class="cert-icon">&#127942;</div>
         <div class="cert-title">You Earned It</div>
-        <div class="cert-desc">Enter your name below to generate your certificate of completion.</div>
+        <div class="cert-desc">Your certificate will be issued in the name on your account.</div>
       </div>
-      <input type="text" class="name-input" id="cert-name" placeholder="Your full name" oninput="toggleCertBtn()">
-      <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" disabled onclick="generateCert()">Generate Certificate</button></div>
+      <input type="text" class="name-input" id="cert-name" readonly style="background:var(--muted-bg);cursor:default;">
+      <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" onclick="generateCert()">Generate Certificate</button></div>
     </div>
   </div>
 </div>
@@ -1129,6 +1129,23 @@ async function cbInit() {
     if (enrollErr || !enrollments || enrollments.length === 0) { window.location.href = 'website-dashboard.html'; return; }
     var specific = enrollments.find(function(e) { return e.product === 'getting_out_of_debt'; });
     cbEnrollmentId = specific ? specific.id : enrollments[0].id;
+    // Auto-populate certificate name
+    var certNameEl = document.getElementById('cert-name');
+    if (certNameEl) {
+      var userName = (user.user_metadata && user.user_metadata.full_name) || '';
+      if (!userName) {
+        var { data: profileData } = await sb.from('profiles').select('full_name').eq('id', user.id).maybeSingle();
+        if (profileData) userName = profileData.full_name || '';
+      }
+      certNameEl.value = userName;
+    }
+    // Load pre-assessment scores from Supabase (in case of browser restart)
+    var { data: savedPre } = await sb.from('assessment_responses')
+      .select('is_correct').eq('user_id', user.id).eq('course', courseKey).eq('assessment_type', 'pre');
+    if (savedPre && savedPre.length > 0) {
+      preScore = savedPre.filter(function(r) { return r.is_correct; }).length;
+      preAnswered = savedPre.length;
+    }
     var { data: progress } = await sb.from('section_progress')
       .select('section_title').eq('user_id', user.id).eq('course', courseKey).eq('section_key', '_resume').maybeSingle();
     var gate = document.getElementById('cb-loading-gate');
@@ -1291,6 +1308,8 @@ function answerPrePost(phase, qi, ai) {
   var isCorrect = ai === correct;
   var answers = phase === 'pre' ? preAnswers : postAnswers;
   var isNew = !(qi in answers);
+  // For post-assessment: lock after first answer
+  if (phase === 'post' && !isNew) return;
   answers[qi] = ai;
   btns.forEach(function(b) {
     b.classList.remove('selected', 'wrong', 'correct-reveal');
@@ -1300,6 +1319,8 @@ function answerPrePost(phase, qi, ai) {
     if (!isCorrect) {
       btns[correct].classList.add('correct-reveal');
     }
+    // Disable all buttons for this question
+    btns.forEach(function(b) { b.disabled = true; b.style.opacity = b.classList.contains('selected') || b.classList.contains('wrong') || b.classList.contains('correct-reveal') ? '1' : '0.5'; });
   } else {
     btns[ai].classList.add('selected');
   }

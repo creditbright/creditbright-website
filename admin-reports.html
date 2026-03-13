@@ -221,7 +221,7 @@ async function loadReport(uid){
     var status=cc?'Completed':(cp.length>0?'In Progress':(enrolled?'Not Started':'Not Enrolled'));
     var sb2=cc?'badge-green':(cp.length>0?'badge-gold':(enrolled?'badge-muted':'badge-muted'));
     var cSecs=0;cp.forEach(function(sp){if(sp.time_spent_seconds)cSecs+=sp.time_spent_seconds});
-    var maxS=ck==='foundation'?13:6;
+    var maxS=ck==='foundation'?13:8;
 
     h+='<div class="block"><div class="block-title">'+(CN[ck]||ck)+' <span class="badge '+sb2+'">'+status+'</span></div>';
 

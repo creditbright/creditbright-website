@@ -1295,6 +1295,8 @@ footer {
   <a href="#" onclick="goTo('notes'); return false;">Credit Notes</a>
   <a href="#" onclick="goTo('about'); return false;">About</a>
   <a href="#" onclick="goTo('contact'); return false;">Contact</a>
+  <a href="website-login.html" style="color:var(--green);font-weight:600;margin-top:8px;padding-top:12px;border-top:1px solid var(--border);">Log In</a>
+  <a href="website-login.html" style="background:var(--green);color:#fff;border-radius:10px;padding:12px 20px;text-align:center;font-weight:600;">Get Started</a>
 </div>
 
 
@@ -1962,6 +1964,7 @@ footer {
         </div>
 
         <button class="btn btn-primary" id="contactSendBtn" style="width:100%;justify-content:center;" onclick="sendContactForm()">Send Message</button>
+        <div style="position:absolute;left:-9999px;"><input type="text" id="contact-website" tabindex="-1" autocomplete="off"></div>
         <div id="contactSuccess" style="display:none;text-align:center;padding:40px 20px;">
           <div style="font-size:40px;margin-bottom:16px;">✓</div>
           <h3 style="font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:8px;">Message sent</h3>
@@ -2104,6 +2107,10 @@ async function sendContactForm() {
     alert('Please fill in your name, email, and message.');
     return;
   }
+
+  // Honeypot: if this hidden field is filled, it's a bot
+  var hp = document.getElementById('contact-website');
+  if (hp && hp.value) return;
 
   var btn = document.getElementById('contactSendBtn');
   btn.textContent = 'Sending...';

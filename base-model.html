@@ -2860,9 +2860,9 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="content" style="padding-top:12px;">
       <h2 class="concept-title">Congratulations</h2>
       <p>You've completed the Credit Bright Foundation Course.</p>
-      <p>Enter your name below to generate your certificate.</p>
-      <input type="text" class="name-input" id="cert-name" placeholder="Your full name" oninput="toggleCertBtn()">
-      <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" disabled onclick="generateCert()">Generate Certificate</button></div>
+      <p>Your certificate will be issued in the name on your account.</p>
+      <input type="text" class="name-input" id="cert-name" readonly style="background:var(--muted-bg);cursor:default;">
+      <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" onclick="generateCert()">Generate Certificate</button></div>
     </div>
   </div>
 </div>
@@ -2959,6 +2959,32 @@ async function cbInit() {
     // Prefer foundation-specific enrollment, fall back to bundle
     var foundationEnroll = enrollments.find(function(e) { return e.product === 'foundation'; });
     cbEnrollmentId = foundationEnroll ? foundationEnroll.id : enrollments[0].id;
+
+    // Auto-populate certificate name from profile
+    var certNameEl = document.getElementById('cert-name');
+    if (certNameEl) {
+      var userName = (user.user_metadata && user.user_metadata.full_name) || '';
+      if (!userName) {
+        var { data: profileData } = await sb.from('profiles').select('full_name').eq('id', user.id).maybeSingle();
+        if (profileData) userName = profileData.full_name || '';
+      }
+      certNameEl.value = userName;
+    }
+
+    // Load pre-assessment scores from Supabase (in case of browser restart)
+    var { data: savedPreScores } = await sb.from('assessment_responses')
+      .select('question_key, is_correct')
+      .eq('user_id', user.id).eq('course', courseKey).eq('assessment_type', 'pre')
+      .order('answered_at');
+    if (savedPreScores && savedPreScores.length > 0) {
+      savedPreScores.forEach(function(r) {
+        var qMatch = r.question_key.match(/q(\d+)$/);
+        if (qMatch) {
+          var qi = parseInt(qMatch[1]);
+          if (preScores[qi] === undefined) preScores[qi] = r.is_correct ? 1 : 0;
+        }
+      });
+    }
 
     // Check for resume bookmark
     var { data: progress } = await sb.from('section_progress')
@@ -3218,30 +3244,30 @@ function initPostAssessment() {
 function answerPost(qi, ai, el) {
   var origIdx = postShuffleMap[qi][ai];
   var correct = origIdx === assessmentQuestions[qi].correct;
-  // Lock score on first answer only
+  // Lock on first answer only: score, log, and disable buttons
   if (postScores[qi] === undefined) {
     postScores[qi] = correct ? 1 : 0;
     // Log to Supabase (first answer only)
     var aq = assessmentQuestions[qi];
     cbLogAssessment('post', qi, aq.q, aq.opts[origIdx], aq.opts[aq.correct], correct);
-  }
-  // Clear previous styling for exploration
-  var wrap = el.closest('.assessment-item');
-  var btns = wrap.querySelectorAll('.quiz-option');
-  btns.forEach(function(b) { b.classList.remove('selected', 'wrong'); });
-  // Apply correct or wrong styling
-  if (correct) {
-    el.classList.add('selected');
-  } else {
-    el.classList.add('wrong');
-  }
-  // Show feedback
-  var fb = document.getElementById('post-fb-' + qi);
-  fb.innerHTML = '<div class="feedback-box' + (correct ? '' : ' gold') + '"><p>' + assessmentQuestions[qi].feedback + '</p></div>';
-  fb.style.display = 'block';
-  // Check if all answered
-  if (postScores.filter(function(s) { return s !== undefined; }).length === 10) {
-    document.getElementById('post-nav').style.display = 'block';
+    // Apply styling
+    var wrap = el.closest('.assessment-item');
+    var btns = wrap.querySelectorAll('.quiz-option');
+    if (correct) {
+      el.classList.add('selected');
+    } else {
+      el.classList.add('wrong');
+    }
+    // Disable all buttons for this question
+    btns.forEach(function(b) { b.disabled = true; b.style.opacity = b.classList.contains('selected') || b.classList.contains('wrong') ? '1' : '0.5'; });
+    // Show feedback
+    var fb = document.getElementById('post-fb-' + qi);
+    fb.innerHTML = '<div class="feedback-box' + (correct ? '' : ' gold') + '"><p>' + assessmentQuestions[qi].feedback + '</p></div>';
+    fb.style.display = 'block';
+    // Check if all answered
+    if (postScores.filter(function(s) { return s !== undefined; }).length === 10) {
+      document.getElementById('post-nav').style.display = 'block';
+    }
   }
 }
 
@@ -4463,7 +4489,8 @@ function shuffleQuizOptions() {
 document.addEventListener('DOMContentLoaded', function() {
   initPreAssessment();
   initPostAssessment();
-  shuffleQuizOptions();
+  // Note: in-section quizzes are NOT shuffled. They are learning exercises, not tests.
+  // Pre/post assessments have their own shuffle logic built into their init functions.
   initSortExercise('s1');
   initMatchExercise('5c');
   // Set initial payment bar
