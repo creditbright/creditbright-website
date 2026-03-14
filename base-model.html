@@ -3397,7 +3397,11 @@ function answerQuiz(qid, idx, clickedEl) {
     var userAns = clickedEl.textContent.trim();
     var correctAns = '';
     for (var ci = 0; ci < data.style.length; ci++) {
-      if (data.style[ci] === 'green' && btns[ci]) { correctAns = btns[ci].textContent.trim(); break; }
+      if (data.style[ci] === 'green') {
+        var correctBtn = wrap.querySelector('[data-answer-index="' + ci + '"]');
+        if (correctBtn) correctAns = correctBtn.textContent.trim();
+        break;
+      }
     }
     cbLogAssessment('section', qid, qText, userAns, correctAns, isCorrect);
   }
@@ -3405,10 +3409,11 @@ function answerQuiz(qid, idx, clickedEl) {
     clickedEl.classList.add('selected');
   } else {
     clickedEl.classList.add('wrong');
-    // Find and reveal the correct answer
+    // Find and reveal the correct answer using data-answer-index
     for (var i = 0; i < data.style.length; i++) {
-      if (data.style[i] === 'green' && btns[i]) {
-        btns[i].classList.add('correct-reveal');
+      if (data.style[i] === 'green') {
+        var correctEl = wrap.querySelector('[data-answer-index="' + i + '"]');
+        if (correctEl) correctEl.classList.add('correct-reveal');
         break;
       }
     }
@@ -4485,6 +4490,8 @@ function shuffleQuizOptions() {
   wraps.forEach(function(wrap) {
     var btns = Array.from(wrap.querySelectorAll('.quiz-option'));
     if (btns.length < 2) return;
+    // Tag each button with its original index before shuffling
+    btns.forEach(function(btn, i) { btn.setAttribute('data-answer-index', i); });
     var parent = btns[0].parentNode;
     shuffleArray(btns);
     btns.forEach(function(btn) { parent.appendChild(btn); });
@@ -4494,8 +4501,7 @@ function shuffleQuizOptions() {
 document.addEventListener('DOMContentLoaded', function() {
   initPreAssessment();
   initPostAssessment();
-  // Note: in-section quizzes are NOT shuffled. They are learning exercises, not tests.
-  // Pre/post assessments have their own shuffle logic built into their init functions.
+  shuffleQuizOptions();
   initSortExercise('s1');
   initMatchExercise('5c');
   // Set initial payment bar
