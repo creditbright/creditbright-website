@@ -781,6 +781,7 @@ async function purchaseCourse(product, priceId) {
         priceId: priceId,
         userId: currentUser.id,
         userEmail: currentUser.email,
+        userName: currentUser.user_metadata?.full_name || '',
         successUrl: 'https://creditbright.com/website-dashboard.html?purchase=success',
         cancelUrl: 'https://creditbright.com/website-dashboard.html?purchase=cancelled'
       })
