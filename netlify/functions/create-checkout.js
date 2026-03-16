@@ -12,14 +12,32 @@ exports.handler = async function(event) {
     return { statusCode: 200, headers, body: '' };
   }
   try {
-    const { priceId, userId, userEmail, successUrl, cancelUrl } = JSON.parse(event.body);
+    const { priceId, userId, userEmail, userName, successUrl, cancelUrl } = JSON.parse(event.body);
     if (!priceId || !userEmail) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing required fields' }) };
     }
+
+    // Find or create Stripe customer so name is pre-filled on checkout
+    let customer;
+    const existing = await stripe.customers.list({ email: userEmail, limit: 1 });
+    if (existing.data.length > 0) {
+      customer = existing.data[0];
+      // Update name if we have one and they don't
+      if (userName && !customer.name) {
+        customer = await stripe.customers.update(customer.id, { name: userName });
+      }
+    } else {
+      customer = await stripe.customers.create({
+        email: userEmail,
+        name: userName || undefined,
+        metadata: { userId: userId || '' }
+      });
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      customer_email: userEmail,
+      customer: customer.id,
       allow_promotion_codes: true,
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: successUrl || 'https://creditbright.com/website-dashboard.html?purchase=success',
