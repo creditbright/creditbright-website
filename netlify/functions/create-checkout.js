@@ -21,7 +21,6 @@ exports.handler = async function(event) {
       mode: 'payment',
       customer_email: userEmail,
       allow_promotion_codes: true,
-      payment_method_collection: 'if_required',
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: successUrl || 'https://creditbright.com/website-dashboard.html?purchase=success',
       cancel_url: cancelUrl || 'https://creditbright.com/website-dashboard.html?purchase=cancelled',
