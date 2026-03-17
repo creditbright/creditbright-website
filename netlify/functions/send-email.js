@@ -21,7 +21,7 @@ var TEMPLATES = {
   certificate: function(firstName, certName, subjectArea, preScore, postScore) {
     return {
       subject: 'Congratulations. You earned your ' + certName + '.',
-      html: emailWrapper('<h1 style="font-family:Georgia,Times New Roman,serif;font-size:26px;font-weight:400;color:#1A1D1A;margin:0 0 16px;">You passed.</h1><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0 0 24px;">Hi ' + firstName + ', your ' + certName + ' has been issued.</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#E8F5EC;border-radius:10px;margin:0 0 24px;"><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Pre-assessment score</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + preScore + '%</td></tr><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Post-assessment score</td><td style="padding:8px 20px;font-size:15px;color:#2E7D4F;font-weight:600;text-align:right;">' + postScore + '%</td></tr></table><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0 0 24px;">This credential demonstrates real competence in ' + subjectArea + '. It goes in your file. It proves you know how credit works in Canada.</p><a href="https://creditbright.com/website-login.html" style="display:inline-block;background:#2E7D4F;color:#ffffff;font-size:15px;font-weight:600;padding:14px 32px;border-radius:10px;text-decoration:none;">View Certificate</a>')
+      html: emailWrapper('<h1 style="font-family:Georgia,Times New Roman,serif;font-size:26px;font-weight:400;color:#1A1D1A;margin:0 0 16px;">You passed.</h1><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0 0 24px;">Hi ' + firstName + ', your ' + certName + ' has been issued.</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#E8F5EC;border-radius:10px;margin:0 0 24px;"><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Pre-assessment score</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + preScore + '</td></tr><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Post-assessment score</td><td style="padding:8px 20px;font-size:15px;color:#2E7D4F;font-weight:600;text-align:right;">' + postScore + '</td></tr></table><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0 0 24px;">This credential demonstrates real competence in ' + subjectArea + '. It goes in your file. It proves you know how credit works in Canada.</p><a href="https://creditbright.com/website-login.html" style="display:inline-block;background:#2E7D4F;color:#ffffff;font-size:15px;font-weight:600;padding:14px 32px;border-radius:10px;text-decoration:none;">View Certificate</a>')
     };
   }
 };
@@ -40,15 +40,18 @@ exports.handler = async function(event) {
   try {
     var body = JSON.parse(event.body);
     var type = body.type;
-    var to = body.to;
+    var to = body.to || body.email;
+    var firstName = body.firstName || (body.name ? body.name.split(' ')[0] : '');
     var template;
 
     if (type === 'welcome') {
-      template = TEMPLATES.welcome(body.firstName);
+      template = TEMPLATES.welcome(firstName);
     } else if (type === 'purchase') {
-      template = TEMPLATES.purchase(body.firstName, body.productName, body.amount, body.date);
+      template = TEMPLATES.purchase(firstName, body.productName, body.amount, body.date);
     } else if (type === 'certificate') {
-      template = TEMPLATES.certificate(body.firstName, body.certName, body.subjectArea, body.preScore, body.postScore);
+      var certName = body.certName || body.course || 'Certificate';
+      var subjectArea = body.subjectArea || body.course || 'credit education';
+      template = TEMPLATES.certificate(firstName, certName, subjectArea, body.preScore, body.postScore);
     } else if (type === 'contact') {
       var contactHtml = emailWrapper('<h1 style="font-family:Georgia,Times New Roman,serif;font-size:26px;font-weight:400;color:#1A1D1A;margin:0 0 16px;">New contact form message</h1><table width="100%" style="background:#FAFAF8;border-radius:10px;margin:0 0 24px;"><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Name</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + body.name + '</td></tr><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Email</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + body.email + '</td></tr><tr><td style="padding:8px 20px;font-size:15px;color:#5A5F58;">Type</td><td style="padding:8px 20px;font-size:15px;color:#1A1D1A;font-weight:600;text-align:right;">' + (body.contactType || 'Not specified') + '</td></tr></table><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0 0 8px;font-weight:600;">Message:</p><p style="font-size:16px;line-height:1.7;color:#5A5F58;margin:0;">' + body.message.replace(/\n/g, '<br>') + '</p>');
 
