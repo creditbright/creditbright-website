@@ -621,6 +621,10 @@ async function handleSignup(e) {
 
   if (error) {
     showMessage(error.message, 'error');
+  } else if (data.user && data.user.identities && data.user.identities.length === 0) {
+    // Email already exists - Supabase returns empty identities to prevent enumeration
+    showMessage('An account with this email already exists. Please log in instead.', 'error');
+    setTimeout(() => switchTab('login'), 3000);
   } else if (data.session) {
     // Write consent records to consents table
     try {

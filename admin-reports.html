@@ -238,6 +238,8 @@ async function loadReport(uid){
     h+='</div>';
 
     // Confidence ratings
+
+    // Confidence ratings
     h+='<div class="sub-title">Confidence Self-Assessment</div>';
     if(confPre.length>0||confPost.length>0){
       h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">';
@@ -255,7 +257,8 @@ async function loadReport(uid){
     // Progress bar
     var pctD=cp.length>0?Math.min(Math.round(cp.length/maxS*100),100):0;
     h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pctD+'%"></div></div>';
-    h+='<div class="detail-label">'+cp.length+' of '+maxS+' sections visited ('+pctD+'%)</div>';
+    var displayCount=Math.min(cp.length,maxS);
+    h+='<div class="detail-label">'+displayCount+' of '+maxS+' sections visited ('+pctD+'%)</div>';
 
     // Certificate
     if(cc){h+='<div style="margin-top:16px;padding:14px 18px;background:var(--gold-light);border-radius:12px;font-size:13px;color:#7D6608;">🎓 Certificate <strong>'+(cc.certificate_number||'')+'</strong>';
