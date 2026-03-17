@@ -192,12 +192,23 @@ async function loadReport(uid){
   // ═══ ENROLLMENT HISTORY ═══
   h+='<div class="block"><div class="block-title">Enrollment History</div>';
   if(!enr.length)h+='<div class="detail-label">No purchases yet.</div>';
-  else enr.forEach(function(e){
-    var n=CN[e.product]||e.product;if(e.product==='bundle')n='Complete Bundle (all courses)';
-    var mb=(e.access_method||'paid')==='paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-blue">Promo</span>';
-    h+='<div class="section-row"><span class="section-row-name">'+n+' '+mb+'</span>';
-    h+=e.completed_at?'<span class="badge badge-green">Completed</span>':'<span class="badge badge-muted">Active</span>';
-    h+='</div>'});
+  else{
+    // Deduplicate: if bundle exists, skip individual course enrollments that the bundle covers
+    var hasBundle=enr.some(function(e){return e.product==='bundle'});
+    var bundleCourses=['foundation','getting_out_of_debt','negotiating_better_deals'];
+    var displayed={};
+    enr.forEach(function(e){
+      // Skip individual course if bundle covers it and we already showed the bundle
+      if(hasBundle&&bundleCourses.indexOf(e.product)!==-1)return;
+      // Skip duplicate products (keep most recent by checking completed_at)
+      if(displayed[e.product])return;
+      displayed[e.product]=true;
+      var n=CN[e.product]||e.product;if(e.product==='bundle')n='Complete Bundle (all courses)';
+      var mb=(e.access_method||'paid')==='paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-blue">Promo</span>';
+      h+='<div class="section-row"><span class="section-row-name">'+n+' '+mb+'</span>';
+      h+=e.completed_at?'<span class="badge badge-green">Completed</span>':'<span class="badge badge-muted">Active</span>';
+      h+='</div>'});
+  }
   h+='</div>';
 
   // ═══ COURSE BLOCKS ═══

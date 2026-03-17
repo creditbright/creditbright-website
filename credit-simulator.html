@@ -701,18 +701,33 @@ async function cbInit() {
   }
 }
 
-window.addEventListener('beforeunload', function() {
+var cbSessionRowId = null;
+
+async function cbLogSession() {
   if (!sb || !cbUser) return;
   var duration = Math.round((Date.now() - cbToolSessionStart) / 1000);
-  sb.from('tool_sessions').insert({
-    user_id: cbUser.id, tool: 'simulator',
-    actions_modelled: cbActionsModelled,
-    session_data: JSON.stringify({ actions_count: cbActionsModelled, actions: cbActionsList }),
-    started_at: new Date(cbToolSessionStart).toISOString(),
-    ended_at: new Date().toISOString(),
-    duration_seconds: duration
-  }).then(function() {});
-});
+  var sessionData = JSON.stringify({ actions_count: cbActionsModelled, actions: cbActionsList });
+  try {
+    if (!cbSessionRowId) {
+      var { data } = await sb.from('tool_sessions').insert({
+        user_id: cbUser.id, tool: 'simulator',
+        actions_modelled: cbActionsModelled,
+        session_data: sessionData,
+        started_at: new Date(cbToolSessionStart).toISOString(),
+        ended_at: new Date().toISOString(),
+        duration_seconds: duration
+      }).select('id').single();
+      if (data) cbSessionRowId = data.id;
+    } else {
+      await sb.from('tool_sessions').update({
+        actions_modelled: cbActionsModelled,
+        session_data: sessionData,
+        ended_at: new Date().toISOString(),
+        duration_seconds: duration
+      }).eq('id', cbSessionRowId);
+    }
+  } catch (e) { console.error('Session log error:', e); }
+}
 
 document.addEventListener('DOMContentLoaded', function() { cbInit(); });
 </script>
@@ -1100,6 +1115,7 @@ function simulate(actionId){
   document.getElementById('result-action-sub').textContent=a.name.toLowerCase();
 
   goScreen('s-results');
+  cbLogSession();
 }
 
 function factorBar(name,weight,impact,approxPts){

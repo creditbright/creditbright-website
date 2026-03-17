@@ -1280,6 +1280,19 @@ var cbEnrollmentId = null;
 var courseKey = 'negotiating_better_deals';
 var currentScreen = 'welcome';
 var screenEnteredAt = Date.now();
+var cbSectionTime = {};
+
+setInterval(function() {
+  if (!sb || !cbUser) return;
+  var elapsed = Math.round((Date.now() - screenEnteredAt) / 1000);
+  var sInfo = getSectionInfo(currentScreen);
+  var accumulated = (cbSectionTime[sInfo.key] || 0) + elapsed;
+  sb.from('section_progress').upsert({
+    user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
+    section_key: sInfo.key, section_title: sInfo.title,
+    time_spent_seconds: accumulated, completed_at: new Date().toISOString()
+  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+}, 30000);
 var cbResumeScreen = null;
 var cbAnsweredQuizzes = {};
 
@@ -1342,6 +1355,17 @@ async function cbInit() {
         });
       }
     }
+    // Load existing section times for accumulation
+    var { data: existingProgress } = await sb.from('section_progress')
+      .select('section_key, time_spent_seconds')
+      .eq('user_id', user.id).eq('course', courseKey);
+    if (existingProgress) {
+      existingProgress.forEach(function(sp) {
+        if (sp.section_key !== '_resume' && sp.time_spent_seconds) {
+          cbSectionTime[sp.section_key] = sp.time_spent_seconds;
+        }
+      });
+    }
     var { data: progress } = await sb.from('section_progress')
       .select('section_title').eq('user_id', user.id).eq('course', courseKey).eq('section_key', '_resume').maybeSingle();
     var gate = document.getElementById('cb-loading-gate');
@@ -1368,12 +1392,13 @@ function cbDismissResume() {
 function cbSaveProgress(fromScreen, toScreen) {
   if (!sb || !cbUser) return;
   var now = new Date().toISOString();
-  var timeSpent = Math.round((Date.now() - screenEnteredAt) / 1000);
+  var elapsed = Math.round((Date.now() - screenEnteredAt) / 1000);
   var fromSection = getSectionInfo(fromScreen);
+  cbSectionTime[fromSection.key] = (cbSectionTime[fromSection.key] || 0) + elapsed;
   sb.from('section_progress').upsert({
     user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
     section_key: fromSection.key, section_title: fromSection.title,
-    time_spent_seconds: timeSpent, completed_at: now
+    time_spent_seconds: cbSectionTime[fromSection.key], completed_at: now
   }, { onConflict: 'user_id,course,section_key' }).then(function() {});
   sb.from('section_progress').upsert({
     user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,

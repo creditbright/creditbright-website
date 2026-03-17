@@ -2948,6 +2948,20 @@ var cbUser = null;
 var cbEnrollmentId = null;
 var courseKey = 'foundation';
 var screenEnteredAt = Date.now();
+var cbSectionTime = {}; // Accumulated time per section key
+
+// Heartbeat: save time every 30 seconds
+setInterval(function() {
+  if (!sb || !cbUser) return;
+  var elapsed = Math.round((Date.now() - screenEnteredAt) / 1000);
+  var sInfo = getSectionInfo(currentScreen);
+  var accumulated = (cbSectionTime[sInfo.key] || 0) + elapsed;
+  sb.from('section_progress').upsert({
+    user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
+    section_key: sInfo.key, section_title: sInfo.title,
+    time_spent_seconds: accumulated, completed_at: new Date().toISOString()
+  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+}, 30000);
 var cbResumeScreen = null;
 var cbAnsweredQuizzes = {};
 
@@ -3041,6 +3055,18 @@ async function cbInit() {
       }
     }
 
+    // Load existing section times for accumulation
+    var { data: existingProgress } = await sb.from('section_progress')
+      .select('section_key, time_spent_seconds')
+      .eq('user_id', user.id).eq('course', courseKey);
+    if (existingProgress) {
+      existingProgress.forEach(function(sp) {
+        if (sp.section_key !== '_resume' && sp.time_spent_seconds) {
+          cbSectionTime[sp.section_key] = sp.time_spent_seconds;
+        }
+      });
+    }
+
     // Check for resume bookmark
     var { data: progress } = await sb.from('section_progress')
       .select('section_title')
@@ -3082,10 +3108,14 @@ function cbDismissResume() {
 function cbSaveProgress(fromScreen, toScreen) {
   if (!sb || !cbUser) return;
   var now = new Date().toISOString();
-  var timeSpent = Math.round((Date.now() - screenEnteredAt) / 1000);
+  var elapsed = Math.round((Date.now() - screenEnteredAt) / 1000);
   var fromSection = getSectionInfo(fromScreen);
 
-  // Update the section the student is leaving (accumulate time)
+  // Accumulate time for the section being left
+  cbSectionTime[fromSection.key] = (cbSectionTime[fromSection.key] || 0) + elapsed;
+  var timeSpent = cbSectionTime[fromSection.key];
+
+  // Update the section the student is leaving
   sb.from('section_progress').upsert({
     user_id: cbUser.id,
     enrollment_id: cbEnrollmentId,
@@ -3096,7 +3126,7 @@ function cbSaveProgress(fromScreen, toScreen) {
     completed_at: now
   }, { onConflict: 'user_id,course,section_key' }).then(function() {});
 
-  // Save resume bookmark: special row that tracks exact screen position
+  // Save resume bookmark
   sb.from('section_progress').upsert({
     user_id: cbUser.id,
     enrollment_id: cbEnrollmentId,
@@ -3172,10 +3202,42 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
 
 // ── Navigation ──
 var currentScreen = 'intro-0';
+var cbEmbedCalcLogged = false;
+var cbEmbedSimLogged = false;
+var cbEmbedCalcStart = null;
+var cbEmbedSimStart = null;
+
+function cbLogEmbeddedTool(toolName) {
+  if (!sb || !cbUser) return;
+  var start = toolName === 'calculator' ? cbEmbedCalcStart : cbEmbedSimStart;
+  if (!start) return;
+  var duration = Math.round((Date.now() - start) / 1000);
+  sb.from('tool_sessions').insert({
+    user_id: cbUser.id,
+    tool: toolName === 'calculator' ? 'calculator_embedded' : 'simulator_embedded',
+    session_data: JSON.stringify({ source: 'foundation_course' }),
+    started_at: new Date(start).toISOString(),
+    ended_at: new Date().toISOString(),
+    duration_seconds: duration
+  }).then(function() {});
+}
+
 function goTo(id) {
   var cur = document.getElementById(currentScreen);
   var nxt = document.getElementById(id);
   if (!cur || !nxt) { console.warn('Screen not found:', id); return; }
+
+  // Track embedded tool sessions
+  var enteringCalc = id.indexOf('mc-') === 0;
+  var enteringSim = id.indexOf('ms-') === 0;
+  var leavingCalc = currentScreen.indexOf('mc-') === 0 && !enteringCalc;
+  var leavingSim = currentScreen.indexOf('ms-') === 0 && !enteringSim;
+
+  if (enteringCalc && !cbEmbedCalcLogged) { cbEmbedCalcStart = Date.now(); cbEmbedCalcLogged = true; }
+  if (enteringSim && !cbEmbedSimLogged) { cbEmbedSimStart = Date.now(); cbEmbedSimLogged = true; }
+  if (leavingCalc && cbEmbedCalcStart) { cbLogEmbeddedTool('calculator'); cbEmbedCalcStart = null; }
+  if (leavingSim && cbEmbedSimStart) { cbLogEmbeddedTool('simulator'); cbEmbedSimStart = null; }
+
   // Save progress to Supabase on every navigation
   cbSaveProgress(currentScreen, id);
   cur.style.opacity = '0';
