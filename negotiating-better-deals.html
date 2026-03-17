@@ -193,6 +193,24 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
   .cert-main-title { font-size: 26px !important; }
 }
 
+
+/* Section Navigation Overlay */
+.cb-nav-btn{position:fixed;bottom:24px;right:24px;z-index:900;width:48px;height:48px;border-radius:50%;background:var(--bg-dark);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform 0.2s}
+.cb-nav-btn:hover{transform:scale(1.08)}
+.cb-nav-btn svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.cb-nav-overlay{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,0.5);display:none;justify-content:flex-end}
+.cb-nav-overlay.open{display:flex}
+.cb-nav-panel{width:300px;max-width:85vw;height:100%;background:var(--bg);overflow-y:auto;padding:24px 20px;box-shadow:-4px 0 24px rgba(0,0,0,0.15)}
+.cb-nav-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-muted);float:right;padding:0 4px}
+.cb-nav-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);margin:8px 0 16px}
+.cb-nav-item{display:block;width:100%;text-align:left;background:none;border:none;padding:12px 14px;margin-bottom:4px;border-radius:10px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:background 0.15s}
+.cb-nav-item:hover{background:var(--green-light)}
+.cb-nav-item.active{background:var(--green-light);color:var(--green-dark);font-weight:600}
+.cb-nav-item.cb-dashboard{color:var(--green-dark);font-weight:600;border-top:1px solid var(--border);margin-top:12px;padding-top:16px}
+.cb-nav-item .cb-nav-num{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:var(--border-light);font-size:11px;font-weight:600;margin-right:8px;color:var(--text-muted)}
+.cb-nav-item.active .cb-nav-num{background:var(--green);color:#fff}
+.cb-nav-privacy{font-size:11px;color:var(--text-muted);line-height:1.5;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+@media print{.cb-nav-btn,.cb-nav-overlay{display:none!important}}
 </style>
 </head>
 <body>
@@ -211,6 +229,26 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 <div class="phone-frame">
 
 <!-- WELCOME -->
+
+<!-- Section Navigation -->
+<button class="cb-nav-btn" onclick="cbNavOpen()" aria-label="Course menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+<div class="cb-nav-overlay" id="cb-nav-overlay" onclick="if(event.target===this)cbNavClose()">
+  <div class="cb-nav-panel">
+    <button class="cb-nav-close" onclick="cbNavClose()">&times;</button>
+    <div class="cb-nav-title">Course Sections</div>
+    <button class="cb-nav-item" onclick="cbNavGo('welcome')">Welcome</button>
+    <button class="cb-nav-item" onclick="cbNavGo('pre-0')">Pre-Assessment</button>
+    <button class="cb-nav-item" onclick="cbNavGo('s1-0')"><span class="cb-nav-num">1</span>The Negotiation Mindset</button>
+    <button class="cb-nav-item" onclick="cbNavGo('s2-0')"><span class="cb-nav-num">2</span>Which Terms Are Negotiable</button>
+    <button class="cb-nav-item" onclick="cbNavGo('s3-0')"><span class="cb-nav-num">3</span>How to Ask</button>
+    <button class="cb-nav-item" onclick="cbNavGo('s4-0')"><span class="cb-nav-num">4</span>Timing and Preparation</button>
+    <button class="cb-nav-item" onclick="cbNavGo('post-0')">Post-Assessment</button>
+    <button class="cb-nav-item" onclick="cbNavGo('cert-0')">Certificate</button>
+    <button class="cb-nav-item cb-dashboard" onclick="window.location.href='website-dashboard.html'">&#8592; Back to Dashboard</button>
+    <div class="cb-nav-privacy">Credit Bright is 100% independent. We are not affiliated with any credit bureau, bank, or government agency. Your progress is saved automatically.</div>
+  </div>
+</div>
+
 <div id="welcome" class="screen active intro-screen">
   <div class="intro-content">
     <div class="intro-label">Credit Bright Deep Dive</div>
@@ -235,7 +273,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>Five questions. Answer based on what you know right now. There is no penalty for guessing. This is just a starting point so we can measure what you learn.</p>
       <div id="pre-quiz-area"></div>
       <div id="pre-nav" style="display:none;margin-top:24px;">
-        <button class="btn-primary" onclick="goTo('pre-1')">Continue</button>
+        <button class="btn-primary" onclick="logPreAssessment(); goTo('pre-1')">Continue</button>
       </div>
     </div>
   </div>
@@ -274,6 +312,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       </div>
       <div id="conf-pre-nav" style="display:none;margin-top:20px;">
         <button class="btn-primary" onclick="goTo('s1-0')">Start the Course</button>
+        <p style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-top:16px;">All exercises run in your browser. No financial data is stored or sent to our servers.</p>
       </div>
     </div>
   </div>
@@ -1119,6 +1158,44 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>You saw these at the start. Now answer them again. Let us see what changed.</p>
       <div id="post-quiz-area"></div>
       <div id="post-nav" style="display:none;margin-top:24px;">
+        <button class="btn-primary" onclick="goTo('post-conf')">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="post-conf" class="screen">
+  <div class="screen-scroll">
+    <div class="logo-bar"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
+    <div class="content" style="padding-top:12px;">
+      <div class="section-badge">POST-ASSESSMENT</div>
+      <h2 class="concept-title">Last step</h2>
+      <p>Rate how confident you feel now about each of these.</p>
+      <div class="confidence-item">
+        <p class="confidence-text">I know which credit terms are negotiable.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('post',0,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('post',0,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('post',0,this)">Confident</button>
+        </div>
+      </div>
+      <div class="confidence-item">
+        <p class="confidence-text">I could call my bank right now and ask for a lower rate.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('post',1,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('post',1,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('post',1,this)">Confident</button>
+        </div>
+      </div>
+      <div class="confidence-item">
+        <p class="confidence-text">I know the best time to negotiate credit terms.</p>
+        <div class="confidence-options">
+          <button class="confidence-btn" data-val="1" onclick="setConfidence('post',2,this)">Not confident</button>
+          <button class="confidence-btn" data-val="2" onclick="setConfidence('post',2,this)">Somewhat</button>
+          <button class="confidence-btn" data-val="3" onclick="setConfidence('post',2,this)">Confident</button>
+        </div>
+      </div>
+      <div id="conf-post-nav" style="display:none;margin-top:20px;">
         <button class="btn-primary" onclick="goTo('post-1')">See Your Results</button>
       </div>
     </div>
@@ -1253,6 +1330,17 @@ async function cbInit() {
     if (savedPre && savedPre.length > 0) {
       preScore = savedPre.filter(function(r) { return r.is_correct; }).length;
       preAnswered = savedPre.length;
+      // If all pre-assessment questions already answered, show continue button
+      if (preAnswered >= quizQuestions.length) {
+        var preNav = document.getElementById('pre-nav');
+        if (preNav) preNav.style.display = 'block';
+        var preItems = document.querySelectorAll('#pre-screen .assessment-item, #s-pre .assessment-item');
+        if (preItems.length === 0) preItems = document.querySelectorAll('[id*="pre-q-"]');
+        preItems.forEach(function(item) {
+          var btns = item.querySelectorAll('.quiz-option');
+          btns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.5'; });
+        });
+      }
     }
     var { data: progress } = await sb.from('section_progress')
       .select('section_title').eq('user_id', user.id).eq('course', courseKey).eq('section_key', '_resume').maybeSingle();
@@ -1436,8 +1524,12 @@ function answerPrePost(phase, qi, ai) {
   }
   if (isNew) {
     if (phase === 'pre') preAnswered++;
-    else postAnswered++;
-    cbLogAssessment(phase, qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
+    else {
+      postAnswered++;
+      cbLogAssessment(phase, qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
+    }
+  } else if (phase === 'pre') {
+    // Pre-assessment: allow answer changes without incrementing count
   }
   // Recompute score from all answers
   var score = 0;
@@ -1469,6 +1561,14 @@ function answerPrePost(phase, qi, ai) {
         gateEl.innerHTML = '<div style="margin-top:28px;background:var(--gold-light);border-radius:14px;padding:24px;text-align:center;"><p style="font-weight:600;color:#7D6608;margin-bottom:8px;">You need 80% to earn your certificate.</p><p style="font-size:15px;color:#7D6608;margin-bottom:16px;">You scored ' + pct + '%. Review the sections you found challenging and retake the assessment when you are ready. There is no limit on attempts.</p><button class="btn-primary" onclick="resetPost()" style="background:linear-gradient(135deg,#E6A817,#F5C542);">Retake Assessment</button></div>';
       }
     }
+  }
+}
+
+function logPreAssessment() {
+  for (var qi in preAnswers) {
+    var ai = preAnswers[qi];
+    var isCorrect = ai === quizQuestions[qi].correct;
+    cbLogAssessment('pre', qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
   }
 }
 
@@ -1563,6 +1663,11 @@ function generateCert() {
 }
 
 // Shuffle in-section quiz option order on page load
+
+function cbNavOpen(){document.getElementById('cb-nav-overlay').classList.add('open')}
+function cbNavClose(){document.getElementById('cb-nav-overlay').classList.remove('open')}
+function cbNavGo(id){cbNavClose();goTo(id)}
+
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.quiz-wrap').forEach(function(wrap) {
     // Skip dynamically built pre/post test wraps
