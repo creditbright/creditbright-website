@@ -298,6 +298,15 @@ body {
   filter: grayscale(0.5);
 }
 
+.cert-card{background:var(--card);border:1.5px solid var(--green);border-radius:20px;padding:24px;text-align:center}
+.cert-card-icon{font-size:32px;margin-bottom:12px}
+.cert-card-title{font-family:'Instrument Serif',serif;font-size:18px;color:var(--text);margin-bottom:4px}
+.cert-card-number{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.cert-card-date{font-size:12px;color:var(--text-muted);margin-bottom:12px}
+.cert-card-scores{font-size:13px;color:var(--text-secondary);margin-bottom:16px}
+.cert-card-btn{display:inline-block;padding:10px 24px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none}
+.cert-card-btn:hover{background:var(--green-glow)}
+
 /* Purchase buttons */
 .card-purchase {
   display: inline-flex;
@@ -656,6 +665,15 @@ body {
 
     </div>
 
+    <!-- Certificates Section -->
+    <div id="certsSection" style="display:none;">
+      <div class="section-header">
+        <span class="section-label">Your Certificates</span>
+        <div class="section-line"></div>
+      </div>
+      <div id="certsGrid" class="card-grid"></div>
+    </div>
+
   </div>
 
   <div style="max-width:680px;margin:32px auto 0;padding:20px 24px;background:var(--muted-bg);border-radius:14px;font-size:13px;color:var(--text-muted);line-height:1.6;text-align:center;">
@@ -705,6 +723,9 @@ var currentUser = null;
 
   // Check enrollments
   await checkEnrollments();
+
+  // Load earned certificates
+  await loadCertificates();
 })();
 
 async function checkEnrollments() {
@@ -771,6 +792,47 @@ async function checkEnrollments() {
       }
     }
   }
+}
+
+async function loadCertificates() {
+  if (!currentUser) return;
+  var { data: certs } = await sb.from('certificates').select('*').eq('user_id', currentUser.id).order('issued_at');
+  if (!certs || certs.length === 0) return;
+
+  var certNames = {
+    'foundation': 'Credit Bright Foundation Certificate',
+    'getting_out_of_debt': 'Getting Out of Debt Certificate',
+    'negotiating_better_deals': 'Negotiating Better Deals Certificate'
+  };
+  var courseFiles = {
+    'foundation': 'base-model.html',
+    'getting_out_of_debt': 'getting-out-of-debt.html',
+    'negotiating_better_deals': 'negotiating-better-deals.html'
+  };
+
+  var html = '';
+  certs.forEach(function(c) {
+    var name = certNames[c.certificate_type] || c.certificate_type;
+    var issued = c.issued_at ? new Date(c.issued_at).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+    var pre = c.pre_assessment_score != null ? c.pre_assessment_score : '';
+    var post = c.post_assessment_score != null ? c.post_assessment_score : '';
+    var scores = '';
+    if (pre !== '' && post !== '') scores = 'Pre: ' + pre + ' | Post: ' + post;
+    else if (post !== '') scores = 'Score: ' + post;
+
+    html += '<div class="cert-card">';
+    html += '<div class="cert-card-icon">🎓</div>';
+    html += '<div class="cert-card-title">' + name + '</div>';
+    if (c.certificate_number) html += '<div class="cert-card-number">' + c.certificate_number + '</div>';
+    if (issued) html += '<div class="cert-card-date">Issued ' + issued + '</div>';
+    if (scores) html += '<div class="cert-card-scores">' + scores + '</div>';
+    var courseFile = courseFiles[c.certificate_type];
+    if (courseFile) html += '<a class="cert-card-btn" href="' + courseFile + '">View Certificate</a>';
+    html += '</div>';
+  });
+
+  document.getElementById('certsGrid').innerHTML = html;
+  document.getElementById('certsSection').style.display = 'block';
 }
 
 async function purchaseCourse(product, priceId) {
