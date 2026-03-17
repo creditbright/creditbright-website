@@ -304,7 +304,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
 
 /* Section Navigation Overlay */
-.cb-nav-btn{position:fixed;bottom:24px;right:24px;z-index:900;width:48px;height:48px;border-radius:50%;background:var(--bg-dark);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform 0.2s}
+.cb-nav-btn{position:fixed;bottom:24px;right:24px;z-index:900;height:44px;padding:0 16px 0 12px;border-radius:22px;background:var(--bg-dark);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform 0.2s;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;letter-spacing:0.05em}
+.cb-nav-btn-label{color:rgba(255,255,255,0.85)}
 .cb-nav-btn:hover{transform:scale(1.08)}
 .cb-nav-btn svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
 .cb-nav-overlay{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,0.5);display:none;justify-content:flex-end}
@@ -342,7 +343,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 <!-- WELCOME -->
 
 <!-- Section Navigation -->
-<button class="cb-nav-btn" onclick="cbNavOpen()" aria-label="Course menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+<button class="cb-nav-btn" onclick="cbNavOpen()" aria-label="Course menu"><svg viewBox="0 0 24 24" style="width:18px;height:18px"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg><span class="cb-nav-btn-label">Sections</span></button>
 <div class="cb-nav-overlay" id="cb-nav-overlay" onclick="if(event.target===this)cbNavClose()">
   <div class="cb-nav-panel">
     <button class="cb-nav-close" onclick="cbNavClose()">&times;</button>

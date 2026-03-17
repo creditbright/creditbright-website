@@ -797,7 +797,6 @@ async function checkEnrollments() {
 async function loadCertificates() {
   if (!currentUser) return;
   var { data: certs } = await sb.from('certificates').select('*').eq('user_id', currentUser.id).order('issued_at');
-  if (!certs || certs.length === 0) return;
 
   var certNames = {
     'foundation': 'Credit Bright Foundation Certificate',
@@ -811,25 +810,44 @@ async function loadCertificates() {
   };
 
   var html = '';
-  certs.forEach(function(c) {
-    var name = certNames[c.certificate_type] || c.certificate_type;
-    var issued = c.issued_at ? new Date(c.issued_at).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-    var pre = c.pre_assessment_score != null ? c.pre_assessment_score : '';
-    var post = c.post_assessment_score != null ? c.post_assessment_score : '';
-    var scores = '';
-    if (pre !== '' && post !== '') scores = 'Pre: ' + pre + ' | Post: ' + post;
-    else if (post !== '') scores = 'Score: ' + post;
 
-    html += '<div class="cert-card">';
-    html += '<div class="cert-card-icon">🎓</div>';
-    html += '<div class="cert-card-title">' + name + '</div>';
-    if (c.certificate_number) html += '<div class="cert-card-number">' + c.certificate_number + '</div>';
-    if (issued) html += '<div class="cert-card-date">Issued ' + issued + '</div>';
-    if (scores) html += '<div class="cert-card-scores">' + scores + '</div>';
-    var courseFile = courseFiles[c.certificate_type];
-    if (courseFile) html += '<a class="cert-card-btn" href="' + courseFile + '">View Certificate</a>';
-    html += '</div>';
-  });
+  if (!certs || certs.length === 0) {
+    html = '<div style="text-align:center;padding:32px 20px;color:var(--text-muted);font-size:14px;line-height:1.6;"><div style="font-size:32px;margin-bottom:12px;">🎓</div>Complete a course and pass the post-assessment to earn your first certificate.</div>';
+  } else {
+    certs.forEach(function(c) {
+      var name = certNames[c.certificate_type] || c.certificate_type;
+      var issued = c.issued_at ? new Date(c.issued_at).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+      var pre = c.pre_assessment_score != null ? c.pre_assessment_score : '';
+      var post = c.post_assessment_score != null ? c.post_assessment_score : '';
+      var scores = '';
+      if (pre !== '' && post !== '') scores = 'Pre: ' + pre + ' | Post: ' + post;
+      else if (post !== '') scores = 'Score: ' + post;
+
+      html += '<div class="cert-card">';
+      html += '<div class="cert-card-icon">🎓</div>';
+      html += '<div class="cert-card-title">' + name + '</div>';
+      if (c.certificate_number) html += '<div class="cert-card-number">' + c.certificate_number + '</div>';
+      if (issued) html += '<div class="cert-card-date">Issued ' + issued + '</div>';
+      if (scores) html += '<div class="cert-card-scores">' + scores + '</div>';
+      var courseFile = courseFiles[c.certificate_type];
+      if (courseFile) html += '<a class="cert-card-btn" href="' + courseFile + '">View Certificate</a>';
+      html += '</div>';
+    });
+
+    // Check for Master Certificate eligibility
+    var earnedTypes = certs.map(function(c) { return c.certificate_type; });
+    var hasFoundation = earnedTypes.indexOf('foundation') >= 0;
+    var hasGOD = earnedTypes.indexOf('getting_out_of_debt') >= 0;
+    var hasNBD = earnedTypes.indexOf('negotiating_better_deals') >= 0;
+
+    if (hasFoundation && hasGOD && hasNBD) {
+      html += '<div class="cert-card" style="border-color:var(--gold,#E6A817);background:linear-gradient(135deg,#FFFDF5,#FFF9E6);">';
+      html += '<div class="cert-card-icon">🏆</div>';
+      html += '<div class="cert-card-title" style="font-size:20px;">Credit Bright Master Certificate</div>';
+      html += '<div class="cert-card-date">All three courses completed. You have earned the highest credential Credit Bright offers.</div>';
+      html += '</div>';
+    }
+  }
 
   document.getElementById('certsGrid').innerHTML = html;
   document.getElementById('certsSection').style.display = 'block';

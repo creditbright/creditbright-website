@@ -645,7 +645,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
 
 /* Section Navigation Overlay */
-.cb-nav-btn{position:fixed;bottom:24px;right:24px;z-index:900;width:48px;height:48px;border-radius:50%;background:var(--bg-dark);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform 0.2s}
+.cb-nav-btn{position:fixed;bottom:24px;right:24px;z-index:900;height:44px;padding:0 16px 0 12px;border-radius:22px;background:var(--bg-dark);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform 0.2s;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;letter-spacing:0.05em}
+.cb-nav-btn-label{color:rgba(255,255,255,0.85)}
 .cb-nav-btn:hover{transform:scale(1.08)}
 .cb-nav-btn svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
 .cb-nav-overlay{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,0.5);display:none;justify-content:flex-end}
@@ -684,7 +685,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 <!-- ════════════════════════════════════════ -->
 
 <!-- Section Navigation -->
-<button class="cb-nav-btn" onclick="cbNavOpen()" aria-label="Course menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+<button class="cb-nav-btn" onclick="cbNavOpen()" aria-label="Course menu"><svg viewBox="0 0 24 24" style="width:18px;height:18px"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg><span class="cb-nav-btn-label">Sections</span></button>
 <div class="cb-nav-overlay" id="cb-nav-overlay" onclick="if(event.target===this)cbNavClose()">
   <div class="cb-nav-panel">
     <button class="cb-nav-close" onclick="cbNavClose()">&times;</button>
@@ -692,13 +693,13 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <button class="cb-nav-item" onclick="cbNavGo('intro-0')">Introduction</button>
     <button class="cb-nav-item" onclick="cbNavGo('pre-0')">Pre-Assessment</button>
     <button class="cb-nav-item" onclick="cbNavGo('s1-0')"><span class="cb-nav-num">1</span>Credit Is a Transaction</button>
-    <button class="cb-nav-item" onclick="cbNavGo('mc-1')">Mini Calculator</button>
+    <button class="cb-nav-item" onclick="cbNavGo('mc-1')">Credit Calculator</button>
     <button class="cb-nav-item" onclick="cbNavGo('s2-0')"><span class="cb-nav-num">2</span>The Credit Agreement</button>
     <button class="cb-nav-item" onclick="cbNavGo('s3-0')"><span class="cb-nav-num">3</span>How to Repay Your Debt</button>
     <button class="cb-nav-item" onclick="cbNavGo('s4-0')"><span class="cb-nav-num">4</span>How Lenders Decide</button>
     <button class="cb-nav-item" onclick="cbNavGo('s5-0')"><span class="cb-nav-num">5</span>The System Has Traps</button>
     <button class="cb-nav-item" onclick="cbNavGo('s6-0')"><span class="cb-nav-num">6</span>Building Credit</button>
-    <button class="cb-nav-item" onclick="cbNavGo('ms-1')">Mini Simulator</button>
+    <button class="cb-nav-item" onclick="cbNavGo('ms-1')">Credit Simulator</button>
     <button class="cb-nav-item" onclick="cbNavGo('s7-0')"><span class="cb-nav-num">7</span>Course Conclusion</button>
     <button class="cb-nav-item" onclick="cbNavGo('post-0')">Post-Assessment</button>
     <button class="cb-nav-item" onclick="cbNavGo('cert-0')">Certificate</button>
@@ -2020,7 +2021,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <div style="margin-top:16px;"><button class="btn-primary" onclick="checkMatching('fiveC')">Check Answers</button></div>
       <div id="fiveC-retry" style="display:none;margin-top:12px;">
         <p class="small" style="color:var(--gold);">Not quite. Think about what each factor measures: track record, income, savings, a pledged asset, or the broader economic picture.</p>
-        <button class="btn-text" onclick="checkMatching('fiveC')">Try Again</button>
+        <button class="btn-text" onclick="resetMatching('fiveC')">Try Again</button>
       </div>
       <div id="fiveC-nav" style="display:none;margin-top:20px;">
         <button class="btn-primary" onclick="goTo('s4-8')">Continue</button>
@@ -2970,13 +2971,13 @@ var sectionMap = {
   'intro': { key: 'intro', title: 'Introduction' },
   'pre': { key: 'pre_assessment', title: 'Pre-Assessment' },
   's1': { key: 'section_1', title: 'Credit Is a Transaction with a Price' },
-  'mc': { key: 'mini_calculator', title: 'Mini Calculator Activity' },
+  'mc': { key: 'mini_calculator', title: 'Credit Calculator' },
   's2': { key: 'section_2', title: 'The Credit Agreement and the Six Key Terms' },
   's3': { key: 'section_3', title: 'How to Repay Your Debt' },
   's4': { key: 'section_4', title: 'How Lenders Decide' },
   's5': { key: 'section_5', title: 'The System Has Traps' },
   's6': { key: 'section_6', title: 'Building and Strengthening Credit' },
-  'ms': { key: 'mini_simulator', title: 'Mini Simulator Activity' },
+  'ms': { key: 'mini_simulator', title: 'Credit Simulator' },
   's7': { key: 'section_7', title: 'Course Conclusion' },
   'post': { key: 'post_assessment', title: 'Post-Assessment' },
   'cert': { key: 'certificate', title: 'Certificate' }
@@ -4736,6 +4737,23 @@ function pickMatch(btn, value) {
   btns.forEach(function(b) { b.classList.remove('picked'); });
   btn.classList.add('picked');
   item.setAttribute('data-picked', value);
+}
+
+function resetMatching(group) {
+  var container = document.getElementById(group + '-match');
+  if (!container) return;
+  var items = container.querySelectorAll('.match-item');
+  items.forEach(function(item) {
+    item.classList.remove('correct', 'wrong');
+    var btns = item.querySelectorAll('.match-btn');
+    btns.forEach(function(b) { b.classList.remove('selected'); b.disabled = false; });
+    var fb = item.querySelector('.match-fb');
+    if (fb) fb.style.display = 'none';
+  });
+  var nav = document.getElementById(group + '-nav');
+  if (nav) nav.style.display = 'none';
+  var retry = document.getElementById(group + '-retry');
+  if (retry) retry.style.display = 'none';
 }
 
 function checkMatching(group) {
