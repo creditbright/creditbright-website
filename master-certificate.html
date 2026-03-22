@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Bright · Master Certificate</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAF8;--bg-dark:#1B2A1F;--bg-dark-2:#243028;--card:#FFFFFF;--border:#E8E5DE;--border-light:#F0EDE8;--text:#1A1D1A;--text-secondary:#5A5F58;--text-muted:#8A8E87;--green:#2E7D4F;--green-dark:#1B5E38;--green-light:#E8F5EC;--gold:#E6A817;--gold-light:#FFF8E1;--muted-bg:#F4F3F0}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:40px 20px}
+.container{width:100%;max-width:700px;text-align:center}
+
+/* Loading */
+.loading{font-size:15px;color:var(--text-muted);padding:60px 0}
+.loading .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Not eligible */
+.not-eligible{max-width:480px;margin:0 auto;padding:40px 24px}
+.not-eligible h2{font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:16px}
+.not-eligible p{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
+.check-row{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px}
+.check-row svg{width:20px;height:20px;flex-shrink:0}
+.check-yes{color:var(--green)}
+.check-no{color:var(--text-muted)}
+
+/* Certificate */
+.certificate-display{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:48px 32px;text-align:center;margin:0 auto;max-width:600px}
+.cert-logo{font-size:12px;letter-spacing:0.2em;color:var(--green);font-weight:600;text-transform:uppercase;margin-bottom:20px}
+.cert-badge{font-size:48px;margin-bottom:16px}
+.cert-main-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--text);margin-bottom:8px}
+.cert-subtitle{font-size:14px;color:var(--text-muted);margin-bottom:28px}
+.cert-name{font-family:'Instrument Serif',serif;font-size:32px;color:var(--green-dark);margin-bottom:28px;padding:14px 0;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)}
+.cert-detail{font-size:13px;color:var(--text-muted);margin-bottom:4px;line-height:1.6}
+.cert-courses{display:flex;flex-direction:column;gap:6px;margin:20px auto;max-width:360px;text-align:left}
+.cert-course-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text-secondary);padding:6px 0;border-bottom:1px solid var(--border-light)}
+.cert-course-row:last-child{border-bottom:none}
+.cert-course-score{font-weight:600;color:var(--green)}
+
+.btn-primary{display:inline-block;padding:14px 32px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.btn-primary:hover{background:#3DB865;transform:translateY(-1px)}
+.btn-back{display:inline-block;padding:12px 28px;background:var(--bg-dark);color:#fff;border-radius:12px;font-size:15px;font-weight:500;text-decoration:none;transition:all 0.2s}
+.btn-back:hover{opacity:0.9}
+.actions{margin-top:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+
+/* Print */
+@media print{
+  body{padding:0;background:#fff}
+  .actions,.not-eligible .btn-back{display:none!important}
+  .certificate-display{border:2px solid var(--gold)!important;padding:60px 40px!important;margin:40px auto!important;max-width:600px!important;box-shadow:none!important}
+  .cert-name{font-size:32px!important}
+  .cert-main-title{font-size:28px!important}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    Loading...
+  </div>
+
+  <div id="not-eligible" style="display:none">
+    <div class="not-eligible">
+      <h2>Master Certificate</h2>
+      <p>Complete all three Credit Bright courses and pass each post-assessment to earn the Master Certificate.</p>
+      <div id="checklist"></div>
+      <div style="margin-top:28px"><a class="btn-back" href="website-dashboard.html">Back to Dashboard</a></div>
+    </div>
+  </div>
+
+  <div id="certificate" style="display:none">
+    <div class="certificate-display" id="cert-printable">
+      <div style="margin-bottom:16px;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="cert-logo">CREDIT BRIGHT</div>
+      <div class="cert-badge">🏆</div>
+      <div class="cert-main-title">Master Certificate</div>
+      <div class="cert-subtitle">Certificate of Complete Credit Literacy</div>
+      <div style="font-size:14px;color:var(--text-muted);margin-bottom:8px;">This certifies that</div>
+      <div class="cert-name" id="cert-display-name"></div>
+      <div class="cert-detail">has successfully completed all three Credit Bright courses</div>
+      <div class="cert-detail">and demonstrated competence across the full credit education curriculum.</div>
+      <div class="cert-courses" id="cert-courses"></div>
+      <div class="cert-detail" style="margin-top:20px;" id="cert-date"></div>
+      <div class="cert-detail" style="margin-top:8px;font-size:11px;letter-spacing:0.05em;">Master Certificate ID: <span id="cert-id"></span></div>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" onclick="window.print()">Save as PDF</button>
+      <p style="font-size:13px;color:var(--text-muted);">Use your browser's "Save as PDF" option in the print dialog.</p>
+      <a class="btn-back" href="website-dashboard.html">Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = 'https://pohsjjmcasejogfjqoth.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_YBv330YZuhZ_FtJ67iytBw_iGJuUT3c';
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+var courseNames = {
+  'foundation': 'Foundation Course',
+  'getting_out_of_debt': 'Getting Out of Debt',
+  'negotiating_better_deals': 'Negotiating Better Deals'
+};
+
+(async function() {
+  try {
+    var { data: { user }, error } = await sb.auth.getUser();
+    if (error || !user) { window.location.href = 'website-login.html'; return; }
+
+    var { data: certs } = await sb.from('certificates').select('*').eq('user_id', user.id).order('issued_at');
+    if (!certs) certs = [];
+
+    var earnedMap = {};
+    certs.forEach(function(c) { earnedMap[c.certificate_type] = c; });
+
+    var required = ['foundation', 'getting_out_of_debt', 'negotiating_better_deals'];
+    var allEarned = required.every(function(k) { return earnedMap[k]; });
+
+    document.getElementById('loading').style.display = 'none';
+
+    if (!allEarned) {
+      var html = '';
+      required.forEach(function(k) {
+        var earned = earnedMap[k];
+        html += '<div class="check-row">';
+        if (earned) {
+          html += '<svg viewBox="0 0 24 24" class="check-yes"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          html += '<span class="check-yes">' + courseNames[k] + ' - Complete</span>';
+        } else {
+          html += '<svg viewBox="0 0 24 24" class="check-no"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/></svg>';
+          html += '<span class="check-no">' + courseNames[k] + ' - Not yet completed</span>';
+        }
+        html += '</div>';
+      });
+      document.getElementById('checklist').innerHTML = html;
+      document.getElementById('not-eligible').style.display = 'block';
+      return;
+    }
+
+    // Build Master Certificate
+    var fullName = user.user_metadata?.full_name || user.email.split('@')[0];
+    document.getElementById('cert-display-name').textContent = fullName;
+
+    // Course rows
+    var coursesHtml = '';
+    required.forEach(function(k) {
+      var c = earnedMap[k];
+      var score = c.post_assessment_score != null ? c.post_assessment_score : '';
+      coursesHtml += '<div class="cert-course-row"><span>' + courseNames[k] + '</span><span class="cert-course-score">' + score + '</span></div>';
+    });
+    document.getElementById('cert-courses').innerHTML = coursesHtml;
+
+    // Use the latest certificate date
+    var latestDate = certs.reduce(function(latest, c) {
+      var d = new Date(c.issued_at);
+      return d > latest ? d : latest;
+    }, new Date(0));
+    document.getElementById('cert-date').textContent = latestDate.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Generate master cert ID from user ID
+    var masterId = 'MC-' + user.id.substring(0, 8).toUpperCase() + '-' + latestDate.getFullYear();
+    document.getElementById('cert-id').textContent = masterId;
+
+    document.getElementById('certificate').style.display = 'block';
+
+  } catch (e) {
+    console.error('Error:', e);
+    document.getElementById('loading').innerHTML = 'Something went wrong. <a href="website-dashboard.html">Return to Dashboard</a>';
+  }
+})();
+</script>
+</body>
+</html>
