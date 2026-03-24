@@ -307,6 +307,25 @@ body {
 .cert-card-btn{display:inline-block;padding:10px 24px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none}
 .cert-card-btn:hover{background:var(--green-glow)}
 
+/* Feedback Form */
+.fb-section{max-width:680px;margin:32px auto 0}
+.fb-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:28px 24px}
+.fb-title{font-family:'Instrument Serif',serif;font-size:20px;color:var(--text);margin-bottom:4px}
+.fb-sub{font-size:14px;color:var(--text-muted);margin-bottom:20px}
+.fb-question{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;margin-top:20px}
+.fb-stars{display:flex;gap:6px}
+.fb-star{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.fb-star:hover,.fb-star.active{border-color:var(--gold,#E6A817);background:var(--gold-light,#FFF8E1)}
+.fb-yn{display:flex;gap:8px}
+.fb-yn-btn{padding:8px 20px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.15s;color:var(--text)}
+.fb-yn-btn:hover,.fb-yn-btn.active{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.fb-text{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:60px;background:var(--bg);color:var(--text)}
+.fb-text:focus{outline:none;border-color:var(--green)}
+.fb-submit{display:inline-block;padding:12px 28px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:20px;transition:all 0.2s}
+.fb-submit:hover{background:var(--green-glow)}
+.fb-submit:disabled{opacity:0.5;cursor:not-allowed}
+.fb-thanks{text-align:center;padding:24px;color:var(--green-dark);font-size:15px;font-weight:500}
+
 /* Purchase buttons */
 .card-purchase {
   display: inline-flex;
@@ -674,6 +693,47 @@ body {
       <div id="certsGrid" class="card-grid"></div>
     </div>
 
+    <!-- Feedback Section -->
+    <div id="feedbackSection" class="fb-section" style="display:none;">
+      <div class="section-header">
+        <span class="section-label">Your Feedback</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="fb-card" id="feedbackCard">
+        <div class="fb-title">How was your experience?</div>
+        <div class="fb-sub">Your feedback helps us improve Credit Bright for everyone.</div>
+
+        <div class="fb-question">Overall rating</div>
+        <div class="fb-stars" id="fbStars">
+          <div class="fb-star" onclick="setRating(1)">&#9733;</div>
+          <div class="fb-star" onclick="setRating(2)">&#9733;</div>
+          <div class="fb-star" onclick="setRating(3)">&#9733;</div>
+          <div class="fb-star" onclick="setRating(4)">&#9733;</div>
+          <div class="fb-star" onclick="setRating(5)">&#9733;</div>
+        </div>
+
+        <div class="fb-question">Did you learn something new?</div>
+        <div class="fb-yn" id="fbLearned">
+          <button class="fb-yn-btn" onclick="setYN('learned',true,this)">Yes</button>
+          <button class="fb-yn-btn" onclick="setYN('learned',false,this)">No</button>
+        </div>
+
+        <div class="fb-question">Would you recommend Credit Bright to someone?</div>
+        <div class="fb-yn" id="fbRecommend">
+          <button class="fb-yn-btn" onclick="setYN('recommend',true,this)">Yes</button>
+          <button class="fb-yn-btn" onclick="setYN('recommend',false,this)">No</button>
+        </div>
+
+        <div class="fb-question">What was the most useful part?</div>
+        <textarea class="fb-text" id="fbUseful" placeholder="The calculator, a specific section, the certificate..."></textarea>
+
+        <div class="fb-question">What would you improve?</div>
+        <textarea class="fb-text" id="fbImprove" placeholder="Anything that felt confusing, slow, or missing..."></textarea>
+
+        <button class="fb-submit" id="fbSubmitBtn" onclick="submitFeedback()">Submit Feedback</button>
+      </div>
+    </div>
+
   </div>
 
   <div style="max-width:680px;margin:32px auto 0;padding:20px 24px;background:var(--muted-bg);border-radius:14px;font-size:13px;color:var(--text-muted);line-height:1.6;text-align:center;">
@@ -726,6 +786,9 @@ var currentUser = null;
 
   // Load earned certificates
   await loadCertificates();
+
+  // Load feedback form
+  await loadFeedback();
 })();
 
 async function checkEnrollments() {
@@ -897,6 +960,60 @@ function launchCourse(product) {
   };
   var url = courseMap[product];
   if (url) window.location.href = url;
+}
+
+// ═══ FEEDBACK ═══
+var fbData = { rating: 0, learned: null, recommend: null };
+
+function setRating(n) {
+  fbData.rating = n;
+  var stars = document.querySelectorAll('#fbStars .fb-star');
+  stars.forEach(function(s, i) { s.classList.toggle('active', i < n); });
+}
+
+function setYN(field, val, btn) {
+  fbData[field] = val;
+  var siblings = btn.parentElement.querySelectorAll('.fb-yn-btn');
+  siblings.forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+async function submitFeedback() {
+  if (!currentUser) return;
+  if (fbData.rating === 0) { alert('Please select a rating.'); return; }
+
+  var btn = document.getElementById('fbSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    await sb.from('feedback').insert({
+      user_id: currentUser.id,
+      rating: fbData.rating,
+      learned_something: fbData.learned,
+      would_recommend: fbData.recommend,
+      most_useful: document.getElementById('fbUseful').value.trim() || null,
+      would_improve: document.getElementById('fbImprove').value.trim() || null
+    });
+    document.getElementById('feedbackCard').innerHTML = '<div class="fb-thanks">Thank you for your feedback! It helps us make Credit Bright better for everyone.</div>';
+  } catch (e) {
+    console.error('Feedback error:', e);
+    btn.disabled = false;
+    btn.textContent = 'Submit Feedback';
+    alert('Something went wrong. Please try again.');
+  }
+}
+
+async function loadFeedback() {
+  if (!currentUser) return;
+  try {
+    var { data } = await sb.from('feedback').select('id').eq('user_id', currentUser.id).limit(1);
+    if (data && data.length > 0) {
+      // Already submitted
+      document.getElementById('feedbackCard').innerHTML = '<div class="fb-thanks">Thank you for your feedback! It helps us make Credit Bright better for everyone.</div>';
+    }
+  } catch (e) {}
+  document.getElementById('feedbackSection').style.display = 'block';
 }
 
 async function handleSignOut() {

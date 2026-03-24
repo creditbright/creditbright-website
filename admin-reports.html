@@ -139,7 +139,7 @@ async function loadStudents(){
 async function loadReport(uid){
   var R=document.getElementById('report');R.className='report visible';R.innerHTML='<div class="loading">Building report...</div>';
   window.scrollTo({top:R.offsetTop-20,behavior:'smooth'});
-  var[pR,eR,sR,aR,tR,cR,cnR,epR]=await Promise.all([
+  var[pR,eR,sR,aR,tR,cR,cnR,epR,fbR]=await Promise.all([
     sb.from('profiles').select('*').eq('id',uid).single(),
     sb.from('enrollments').select('*').eq('user_id',uid),
     sb.from('section_progress').select('*').eq('user_id',uid).order('completed_at'),
@@ -147,8 +147,9 @@ async function loadReport(uid){
     sb.from('tool_sessions').select('*').eq('user_id',uid).order('started_at'),
     sb.from('certificates').select('*').eq('user_id',uid),
     sb.from('consents').select('*').eq('user_id',uid).order('recorded_at'),
-    sb.from('email_preferences').select('*').eq('user_id',uid)]);
-  var p=pR.data,enr=eR.data||[],prog=sR.data||[],assess=aR.data||[],tools=tR.data||[],certs=cR.data||[],consents=cnR.data||[],eprefs=epR.data||[];
+    sb.from('email_preferences').select('*').eq('user_id',uid),
+    sb.from('feedback').select('*').eq('user_id',uid).order('submitted_at')]);
+  var p=pR.data,enr=eR.data||[],prog=sR.data||[],assess=aR.data||[],tools=tR.data||[],certs=cR.data||[],consents=cnR.data||[],eprefs=epR.data||[],fbk=fbR.data||[];
   if(!p){R.innerHTML='<div class="empty-state">Student not found.</div>';return}
   var h='';
 
@@ -338,6 +339,25 @@ async function loadReport(uid){
       h+='</span><span class="section-row-time">'+fm(t.duration_seconds)+' · '+ft(t.started_at)+'</span></div>'})}
   h+='</div>';
 
+  // ═══ FEEDBACK ═══
+  h+='<div class="block"><div class="block-title">Student Feedback</div>';
+  if(fbk.length===0){
+    h+='<div class="detail-label" style="padding:8px 0">No feedback submitted yet.</div>';
+  }else{
+    fbk.forEach(function(fb){
+      var stars='';for(var i=0;i<5;i++)stars+=(i<fb.rating?'&#9733;':'&#9734;');
+      h+='<div style="margin-bottom:16px;padding:14px 18px;background:var(--muted-bg);border-radius:12px;">';
+      h+='<div style="font-size:18px;color:#E6A817;margin-bottom:8px;">'+stars+'</div>';
+      if(fb.learned_something!==null)h+='<div class="compliance-row"><span class="compliance-label">Learned something new</span><span class="compliance-value">'+(fb.learned_something?'Yes':'No')+'</span></div>';
+      if(fb.would_recommend!==null)h+='<div class="compliance-row"><span class="compliance-label">Would recommend</span><span class="compliance-value">'+(fb.would_recommend?'Yes':'No')+'</span></div>';
+      if(fb.most_useful)h+='<div style="margin-top:8px;font-size:13px;"><strong>Most useful:</strong> '+fb.most_useful+'</div>';
+      if(fb.would_improve)h+='<div style="margin-top:4px;font-size:13px;"><strong>Would improve:</strong> '+fb.would_improve+'</div>';
+      h+='<div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Submitted '+ft(fb.submitted_at)+'</div>';
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+
   // ═══ COMPLIANCE ═══
   h+='<div class="block"><div class="block-title">Compliance and Consent</div>';
 
@@ -359,6 +379,22 @@ async function loadReport(uid){
     h+='<span class="compliance-value">'+(c.granted?'<span class="badge badge-green">Granted</span>':'<span class="badge badge-red">Denied</span>');
     h+='<div class="compliance-date">'+fd(c.recorded_at)+'</div></span></div>'})}
   else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No consent records found')+'</div>'}
+  h+='</div>';
+
+  // ═══ FEEDBACK ═══
+  h+='<div class="block"><div class="block-title">Student Feedback</div>';
+  if(fbk.length>0){
+    fbk.forEach(function(f){
+      var stars='';for(var i=0;i<5;i++)stars+=(i<f.rating?'&#9733;':'&#9734;');
+      h+='<div style="padding:12px 0;border-bottom:1px solid var(--border-light)">';
+      h+='<div style="font-size:18px;color:#E6A817;margin-bottom:8px">'+stars+'</div>';
+      if(f.learned_something!==null)h+='<div class="detail-label">Learned something new: <strong>'+(f.learned_something?'Yes':'No')+'</strong></div>';
+      if(f.would_recommend!==null)h+='<div class="detail-label">Would recommend: <strong>'+(f.would_recommend?'Yes':'No')+'</strong></div>';
+      if(f.most_useful)h+='<div class="detail-label" style="margin-top:8px"><strong>Most useful:</strong> '+f.most_useful+'</div>';
+      if(f.would_improve)h+='<div class="detail-label" style="margin-top:4px"><strong>Would improve:</strong> '+f.would_improve+'</div>';
+      h+='<div class="detail-label" style="margin-top:6px;font-size:11px;color:var(--text-muted)">Submitted '+fd(f.submitted_at)+'</div>';
+      h+='</div>'});
+  }else{h+='<div class="detail-label" style="padding:8px 0">'+ef('No feedback submitted yet')+'</div>'}
   h+='</div>';
 
   R.innerHTML=h}
