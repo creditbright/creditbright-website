@@ -621,9 +621,13 @@ async function handleSignup(e) {
 
   if (error) {
     showMessage(error.message, 'error');
-  } else if (data.user && data.user.identities && data.user.identities.length === 0) {
-    // Email already exists - Supabase returns empty identities to prevent enumeration
+  } else if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
+    // Email already exists - Supabase returns empty or missing identities
     showMessage('An account with this email already exists. Please log in instead.', 'error');
+    setTimeout(() => switchTab('login'), 3000);
+  } else if (!data.session && data.user) {
+    // No session created - likely duplicate email with confirmation disabled
+    showMessage('An account with this email may already exist. Please try signing in instead.', 'error');
     setTimeout(() => switchTab('login'), 3000);
   } else if (data.session) {
     // Write consent records to consents table
