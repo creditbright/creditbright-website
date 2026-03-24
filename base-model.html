@@ -3090,6 +3090,14 @@ async function cbInit() {
     var gate = document.getElementById('cb-loading-gate');
     if (gate) gate.style.display = 'none';
 
+    // Check for direct screen navigation (e.g. ?screen=cert-1 from dashboard)
+    var urlParams = new URLSearchParams(window.location.search);
+    var directScreen = urlParams.get('screen');
+    if (directScreen) {
+      goTo(directScreen);
+      return;
+    }
+
     // Show resume modal if bookmark exists and it is not the intro
     if (progress && progress.section_title && progress.section_title !== 'intro-0') {
       cbResumeScreen = progress.section_title;

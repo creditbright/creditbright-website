@@ -893,7 +893,7 @@ async function loadCertificates() {
       if (issued) html += '<div class="cert-card-date">Issued ' + issued + '</div>';
       if (scores) html += '<div class="cert-card-scores">' + scores + '</div>';
       var courseFile = courseFiles[c.certificate_type];
-      if (courseFile) html += '<a class="cert-card-btn" href="' + courseFile + '">View Certificate</a>';
+      if (courseFile) html += '<a class="cert-card-btn" href="' + courseFile + '?screen=cert-1">View Certificate</a>';
       html += '</div>';
     });
 
