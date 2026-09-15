@@ -75,6 +75,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .btn-primary:active{transform:translateY(0)}
 .btn-primary:disabled{opacity:0.5;cursor:default;transform:none;box-shadow:none}
 .btn-secondary{display:block;width:100%;padding:14px;background:transparent;color:rgba(255,255,255,0.8);border:1.5px solid rgba(255,255,255,0.2);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s}
+.btn-text{background:none;border:none;color:var(--text-secondary);font-family:inherit;font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer;padding:6px 4px;opacity:0.85}
+.btn-text:hover{opacity:1;color:var(--text)}
 .btn-secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.35)}
 .quiz-wrap{margin:20px 0}
 .quiz-question{font-size:16px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.5}
@@ -148,16 +150,16 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .name-input{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text);background:var(--card);outline:none;transition:border-color 0.2s;text-align:center;margin-top:12px}
 .name-input:focus{border-color:var(--green)}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
-.screen-scroll::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:center;padding:20px 24px 24px;font-size:12px;color:var(--text-muted);letter-spacing:0.06em;opacity:0.5}
+.screen-scroll::after{content:'🍁 Built in Canada, for Canadians';display:block;text-align:center;padding:20px 24px 24px;font-size:12px;color:var(--text-muted);letter-spacing:0.06em;opacity:0.5}
 
 
 .calc-embed{padding:0}
 .calc-embed .calc-header{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));padding:16px 24px}
-.calc-embed .calc-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
-.calc-embed .calc-header-back:hover{color:rgba(255,255,255,0.8)}
+.calc-embed .calc-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.8);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
+.calc-embed .calc-header-back:hover{color:rgba(255,255,255,1)}
 .calc-embed .calc-header-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .calc-embed .calc-header-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:20px;color:#fff;line-height:1.2;margin-bottom:4px}
-.calc-embed .calc-header-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.5}
+.calc-embed .calc-header-sub{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5}
 .calc-embed .calc-body{padding:20px 24px}
 .calc-embed .input-group{margin-bottom:16px}
 .calc-embed .input-label{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
@@ -168,9 +170,9 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .calc-embed .input-unit{font-size:12px;font-weight:600;color:var(--text-muted);flex-shrink:0}
 .calc-embed .input-prefix{font-size:15px;font-weight:600;color:var(--text-muted);flex-shrink:0}
 .calc-embed .big-result{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:16px;padding:22px 20px;margin-bottom:14px;text-align:center}
-.calc-embed .big-result-label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.calc-embed .big-result-label{font-size:12px;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
 .calc-embed .big-result-number{font-family:'Instrument Serif',serif;font-size:36px;color:#fff;font-weight:400;line-height:1.1}
-.calc-embed .big-result-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
+.calc-embed .big-result-sub{font-size:12px;color:rgba(255,255,255,0.8);margin-top:4px}
 .calc-embed .result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
 .calc-embed .result-grid.two-col{grid-template-columns:1fr 1fr}
 .calc-embed .compare-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
@@ -186,6 +188,16 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .calc-embed .insight-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 16px;margin:14px 0}
 .calc-embed .insight-box p{font-size:13px;color:var(--text-secondary);line-height:1.55;margin:0}
 .calc-embed .savings-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green-light);border-radius:10px;padding:12px 14px;margin:14px 0}
+.calc-embed .savings-badge-icon{font-size:18px}
+.calc-embed .result-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--green);margin-bottom:10px}
+.calc-embed .result-label.muted{color:var(--text-muted);opacity:0.8}
+.calc-embed .muted-card{border-color:var(--border);background:var(--muted-bg);opacity:0.7}
+.calc-embed .card-entry-type{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.calc-embed .pill{padding:5px 10px;border:1px solid var(--border);border-radius:999px;font-size:11px;font-weight:600;color:var(--text-secondary);cursor:pointer;background:var(--card);transition:all 0.15s;user-select:none}
+.calc-embed .pill:hover{border-color:var(--green)}
+.calc-embed .pill.active{background:var(--green-light);border-color:var(--green);color:var(--green-dark)}
+.calc-embed .caution-note{background:var(--gold-light);border-radius:10px;padding:12px 14px;margin:12px 0;font-size:13px;color:#8B6914;line-height:1.55}
+.calc-embed .consol-warn{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#8B6914;background:var(--gold-light);padding:2px 6px;border-radius:4px;white-space:nowrap}
 .calc-embed .savings-badge-text{font-size:14px;font-weight:600;color:var(--green-dark)}
 .calc-embed .slider-wrap{margin-top:4px}
 .calc-embed .slider-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
@@ -325,6 +337,15 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 </head>
 <body>
 <div id="cb-loading-gate" class="cb-loading-gate"><div class="spinner"></div></div>
+<div id="cb-gate-overlay" class="cb-overlay">
+  <div class="cb-modal">
+    <h3>Not quite yet</h3>
+    <p id="cb-gate-text"></p>
+    <div class="cb-modal-btns">
+      <button class="cb-btn-resume" onclick="cbGateGo()">Take me there</button>
+    </div>
+  </div>
+</div>
 <div id="cb-resume-overlay" class="cb-overlay">
   <div class="cb-modal">
     <h3>Welcome back</h3>
@@ -354,8 +375,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <button class="cb-nav-item" onclick="cbNavGo('s2-0')"><span class="cb-nav-num">2</span>The Acceleration Toolkit</button>
     <button class="cb-nav-item" onclick="cbNavGo('s3-0')"><span class="cb-nav-num">3</span>Which One Fits You</button>
     <button class="cb-nav-item" onclick="cbNavGo('s4-0')"><span class="cb-nav-num">4</span>Danger Zones and Your Plan</button>
-    <button class="cb-nav-item" onclick="cbNavGo('post-0')">Post-Assessment</button>
-    <button class="cb-nav-item" onclick="cbNavGo('cert-0')">Certificate</button>
+    <button class="cb-nav-item" onclick="cbNavFinal()">Final Assessment</button>
+    <button class="cb-nav-item" onclick="cbNavCert()">Certificate</button>
     <button class="cb-nav-item cb-dashboard" onclick="window.location.href='website-dashboard.html'">&#8592; Back to Dashboard</button>
     <div class="cb-nav-privacy">Credit Bright is 100% independent. We are not affiliated with any credit bureau, bank, or government agency. Your progress is saved automatically.</div>
   </div>
@@ -452,13 +473,13 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:6%"></div></div></div>
     <div class="content">
       <h2 class="concept-title">The Trap You Already Know</h2>
-      <p>In the Foundation Course, you saw what happens when you pay only the minimum on a credit card. A $5,000 balance at 19.99% takes over 30 years to pay off. You end up paying more than $7,700 in interest alone. More than double what you originally borrowed.</p>
+      <p>In the Foundation Course, you saw what happens when you pay only the minimum on a credit card. A $5,000 balance at 19.99% takes nearly 19 years to pay off. You end up paying more than $7,300 in interest alone. More than you originally borrowed.</p>
       <p>That is the minimum payment trap. It works because the numbers on your monthly statement look manageable. $100 a month feels fine. But behind that small number, interest is compounding on your remaining balance every single month.</p>
 
       <div class="cost-box">
         <div class="cost-label">The Cost of Minimum Payments</div>
-        <div class="cost-amount">$7,700</div>
-        <div class="cost-desc">Interest paid on a $5,000 balance at 19.99%, paying only the minimum. That is $12,700 total for a $5,000 debt.</div>
+        <div class="cost-amount">$7,300</div>
+        <div class="cost-desc">Interest paid on a $5,000 balance at 19.99%, paying only the minimum. That is $12,313 total for a $5,000 debt.</div>
       </div>
 
       <p class="emphasis">You already know this trap. The question now is: what are you going to do about it?</p>
@@ -466,7 +487,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <div class="quiz-wrap" id="quiz-1-1">
         <p class="quiz-question">You have a $5,000 credit card balance at 19.99%. You increase your monthly payment from the minimum to $150. What happens?</p>
         <button class="quiz-option" onclick="answerQuiz('1-1',0,this)">It takes about the same time because interest keeps compounding.</button>
-        <button class="quiz-option" onclick="answerQuiz('1-1',1,this)">You pay it off in about 4 years and save over $5,600 in interest.</button>
+        <button class="quiz-option" onclick="answerQuiz('1-1',1,this)">You pay it off in about 4 years and save nearly $5,000 in interest.</button>
         <button class="quiz-option" onclick="answerQuiz('1-1',2,this)">You pay it off in about 15 years and save a few hundred dollars.</button>
       </div>
       <div id="feedback-1-1" style="display:none;"></div>
@@ -633,6 +654,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>Debt consolidation replaces several debts with one. You take out a single loan &mdash; usually a personal loan or a line of credit &mdash; and use it to pay off all your existing balances. Instead of three or four payments at different rates, you have one payment at one rate.</p>
       <p>In Canada, personal consolidation loans from banks and credit unions typically range from 7% to 15%, depending on your credit profile. If you are carrying credit card debt at 19.99%, even a consolidation loan at 12% saves you money on every dollar.</p>
       <p><strong>Why it works.</strong> A lower average interest rate means more of your payment goes to principal. One payment means less chance of missing a due date. And a fixed term means you have a guaranteed payoff date &mdash; something revolving credit never gives you.</p>
+      <p><strong>Watch the payment, not just the rate.</strong> Consolidating $12,000 of cards at 19.99% into a loan at 10% over four years costs about $304 a month. The minimum payments on those cards were about $300. Your monthly cost barely moves. That is not the point. Paying $304 a month against the cards would take you 65 months and cost $7,702 in interest. The loan is finished in 48 months and costs $2,609. Same money out the door each month. Seventeen months and $5,093 saved.</p>
       <p><strong>Why it fails.</strong> Consolidation only works if you close the old accounts or stop using them. If you consolidate $15,000 of credit card debt into a loan but then run the cards back up, you end up with the loan plus the new card balances. That is worse than where you started.</p>
 
       
@@ -709,7 +731,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="content">
       <h2 class="concept-title">Windfalls</h2>
       <p>A windfall is any lump sum of money that arrives outside your regular income. A tax refund. An annual bonus. An inheritance. A gift. Money from selling something you no longer need.</p>
-      <p>In Canada, the average tax refund is around $2,000. For someone carrying high-interest debt, that $2,000 can save hundreds of dollars in future interest if it goes to the right place.</p>
+      <p>Suppose you get a $2,000 tax refund. If you are carrying high-interest debt, that $2,000 can save you hundreds of dollars in future interest, but only if it goes to the right place.</p>
       <p><strong>Where to put it.</strong> The same logic as your monthly extra budget, but amplified. If you are using the avalanche, the windfall goes to your highest-rate debt. If you are using the snowball, it goes to your smallest balance. If the windfall is large enough to clear a balance entirely, even better &mdash; one fewer debt, one fewer payment, and that freed-up money rolls into the next target.</p>
       <p><strong>The temptation.</strong> A $2,000 tax refund feels like found money. The pull to spend it is real. But here is the math: $2,000 applied to a credit card at 19.99% saves you roughly $400 in interest per year. That is a 20% return on your money, guaranteed, risk-free. No investment in the world reliably beats that.</p>
 
@@ -799,8 +821,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
       <p>This is the simplest case. One debt, one potential move. The question is whether the balance transfer saves her money.</p>
       <p>At $250 per month, Priya can pay $3,000 over 12 months. The transfer fee adds $120 to her balance, making it $6,120. After 12 months at 0%, she still owes $3,120. When the rate jumps to 19.99%, she is back to paying interest on that remaining amount.</p>
-      <p>Without the transfer, at 19.99%, roughly $100 of her $250 payment goes to interest every month in the early stages. So after 12 months, her balance would still be around $4,500.</p>
-      <p class="emphasis">The balance transfer puts her $1,380 further ahead after one year. The $120 fee paid for itself many times over.</p>
+      <p>Without the transfer, at 19.99%, roughly $100 of her $250 payment goes to interest every month in the early stages. So after 12 months, her balance would still be around $4,025.</p>
+      <p class="emphasis">The balance transfer puts her $905 further ahead after one year. The $120 fee paid for itself many times over.</p>
 
       <div class="quiz-wrap" id="quiz-3-1">
         <p class="quiz-question">When does a balance transfer make the most sense for a single credit card balance?</p>
@@ -824,12 +846,14 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
       <div class="scenario-card">
         <div class="scenario-label">Scenario</div>
-        <div class="scenario-text">Marcus has four debts: a $2,000 store card at 12%, a $5,000 Visa at 19.99%, a $3,000 personal line of credit at 8%, and a $15,000 car loan at 6.5%. His total minimums are $580. He has $150 extra per month. He is tired of juggling four payments and wants a simpler plan.</div>
+        <div class="scenario-text">Marcus has four debts: a $2,000 store card at 12%, a $5,000 Visa at 19.99%, a $3,000 personal line of credit at 8%, and a $15,000 car loan at 6.5%. His total minimums are $528. He has $150 extra per month. He is tired of juggling four payments and wants a simpler plan.</div>
       </div>
 
       <p>Marcus has two good options. The first is straightforward: use the avalanche. Put the $150 toward his Visa (highest rate at 19.99%) while paying minimums on everything else. When the Visa is gone, roll that payment into the store card.</p>
-      <p>The second option is consolidation. If Marcus can get a personal loan at 9% for the three non-car debts ($10,000 total), he replaces three payments with one. His weighted average rate on those three debts drops from about 15% to 9%. And he gets a fixed end date.</p>
-      <p><strong>The decision comes down to discipline.</strong> If Marcus can stick to the avalanche for 18 months without missing a payment, it works. If he finds juggling four payments stressful and is at risk of slipping, consolidation simplifies his life and still saves him money.</p>
+      <p>The second option is consolidation. Marcus can get a personal loan at 9%. But which debts should go into it?</p>
+      <p><strong>One rule decides it: only roll in a debt that costs more than the loan.</strong> The Visa at 19.99% costs more than 9%, so it goes in. The store card at 12% costs more than 9%, so it goes in. But the line of credit at 8% and the car loan at 6.5% already cost less than 9%. Rolling those into a 9% loan would <em>raise</em> their rate. Leave them where they are.</p>
+      <p>So Marcus consolidates $7,000, not everything he owes. Two debts become one payment at 9%, with a fixed end date. The cheap debts stay put.</p>
+      <p><strong>The decision comes down to discipline.</strong> If Marcus can stick to the avalanche until the Visa is gone, about 22 months without missing a payment, it works. If he finds juggling four payments stressful and is at risk of slipping, consolidation simplifies his life and still saves him money.</p>
 
       
 
@@ -869,7 +893,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
       <p>Aisha might be tempted to put the $3,000 toward her mortgage. After all, it is her largest debt. But rate matters more than size.</p>
       <p>$3,000 applied to a 19.99% credit card saves her roughly $600 per year in interest. That same $3,000 applied to a 5.2% mortgage saves about $156 per year. The credit card wins by a factor of nearly four.</p>
-      <p>What about refinancing the mortgage? Current rates would need to be significantly below 5.2% to justify the penalty of breaking her fixed term. With 3 years left, the IRD penalty could be substantial. Better to wait for renewal, negotiate a lower rate then, and use the inheritance where it does the most good: the credit card.</p>
+      <p>What about refinancing the mortgage? Current rates would need to be significantly below 5.2% to justify the penalty of breaking her fixed term. With 3 years left, the interest rate differential penalty, the IRD we met earlier, based on the gap between her rate and current rates, could be substantial. Better to wait for renewal, negotiate a lower rate then, and use the inheritance where it does the most good: the credit card.</p>
 
       <div class="quiz-wrap" id="quiz-3-3">
         <p class="quiz-question">Aisha has a $320,000 mortgage at 5.2% and a $4,000 credit card at 19.99%. She receives a $3,000 inheritance. Where should it go?</p>
@@ -934,11 +958,11 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       </div>
       <div class="danger-card">
         <div class="danger-title">The promotional rate expiring</div>
-        <div class="danger-body">You transfer $5,000 to a 0% card for 12 months. You pay $200 a month, clearing $2,400 by the end. The remaining $2,600 now sits at 22.99%. You are paying more interest than before you transferred. The fix: calculate your required monthly payment before transferring. If you cannot clear the balance in time, the transfer may not be worth it.</div>
+        <div class="danger-body">You transfer $5,000 to a 0% card for 12 months. You pay $200 a month, clearing $2,400. The remaining $2,600 then jumps to 22.99%. Those twelve interest-free months genuinely saved you money, roughly $860 against staying put, so the transfer was not the mistake. The mistake is what usually happens next: the balance stops feeling urgent, the payments drift, and the promotional window closes with most of the debt still there. The fix: before you transfer, divide the balance by the number of promotional months. That is your real payment. Here it is $417, not $200. If you cannot commit to that number, you are borrowing time you will have to pay for later.</div>
       </div>
       <div class="danger-card">
         <div class="danger-title">Ignoring the penalty math on refinancing</div>
-        <div class="danger-body">You break a fixed-rate mortgage in Canada to save 1% on your rate. The IRD penalty is $12,000. Over the remaining term, the rate savings total $8,000. You paid $12,000 to save $8,000. The fix: always use the Calculator. Enter the penalty as an upfront fee on the new offer and compare total costs.</div>
+        <div class="danger-body">You break a fixed-rate mortgage in Canada to save 1% on your rate. The interest rate differential penalty, the IRD, is $12,000. Over the remaining term, the rate savings total $8,000. You paid $12,000 to save $8,000. The fix: always use the Calculator. Enter the penalty as an upfront fee on the new offer and compare total costs.</div>
       </div>
       <div class="danger-card">
         <div class="danger-title">Spending the windfall</div>
@@ -968,7 +992,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p><strong>If your total debt payments exceed 40% of your gross income,</strong> you are in a zone where lenders see risk. You should too. This is where strategies alone may not be enough.</p>
       <p><strong>If you are missing payments regularly</strong> despite your best efforts, the problem may be structural. Your income may not support your debt load. That is not a failure. It is a situation that requires professional support.</p>
       <p><strong>If you are losing sleep over debt,</strong> that matters. Financial stress affects your health, your relationships, and your ability to make good decisions.</p>
-      <p>In Canada, non-profit credit counselling is available at no cost. Credit Counselling Canada is the national association. A credit counsellor can review your full situation, negotiate with your creditors on your behalf, and in some cases arrange a Debt Management Plan (DMP) that consolidates your payments at reduced or zero interest.</p>
+      <p>In Canada, non-profit credit counselling is available, and the first assessment is normally free. Credit Counselling Canada is the national association; use it to find an accredited agency near you rather than as a provider itself. Be clear on cost before you commit: the assessment is free, but a Debt Management Plan usually carries a setup fee and a modest monthly administration fee. Two other things to know before you sign one: it is reported to the credit bureaus for its duration and a while after, and it repays your debts in full, so it is not debt forgiveness. Creditors join voluntarily, so not all of them will. A credit counsellor can review your full situation, negotiate with your creditors on your behalf, and in some cases arrange a Debt Management Plan (DMP) that consolidates your payments at reduced or zero interest.</p>
       <p>The Government of Canada provides a comprehensive guide to debt help and credit counselling resources: <a href="https://www.canada.ca/en/financial-consumer-agency/services/debt/debt-help.html" target="_blank" rel="noopener" style="color:var(--green);font-weight:600;">canada.ca/debt-help</a></p>
       <p>If your debt is more severe, a Licensed Insolvency Trustee (LIT) can explain options like a Consumer Proposal, which legally reduces what you owe, or bankruptcy as a last resort.</p>
       <p class="emphasis">Asking for help is not giving up. It is choosing a different tool for a harder problem.</p>
@@ -999,7 +1023,10 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
       <div class="capability-box"><p>You can now audit any debt situation, choose the right combination of strategies, test every option in the Calculator, and protect yourself from the traps. Debt is a project. You have the tools to finish it.</p></div>
 
-      <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('resources')">Your Resources</button></div>
+      <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="/credit-calculator.html" target="_blank" rel="noopener" style="text-decoration:none;"><button class="btn-primary">Open the Credit Calculator</button></a>
+        <button class="btn-secondary" onclick="goTo('resources')">Your Resources</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1015,10 +1042,13 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Your Resources</h2>
       <p>Everything referenced throughout the course, in one place. Bookmark this page. Come back whenever you need it.</p>
 
+      <p class="emphasis" style="margin-top:24px;">Your Credit Bright Tools</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">&#129518;</div><div><div class="resource-card-name">Credit Calculator</div><div class="resource-card-desc">The tool you used throughout this course. Enter your real debts, set your extra payment, compare avalanche against snowball, and test a consolidation loan before you sign anything.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="/credit-calculator.html" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">Open the Calculator &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">&#128200;</div><div><div class="resource-card-name">Credit Simulator</div><div class="resource-card-desc">See how a decision moves your credit score before you make it. Test paying down a card, closing an account, or taking on a new loan.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="/credit-simulator.html" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">Open the Simulator &rarr;</a></div></div></div></div>
+
       <p class="emphasis" style="margin-top:24px;">Check Your Credit</p>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">Equifax &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from one of Canada&rsquo;s two credit bureaus. Check it at least once a year for errors or accounts you don&rsquo;t recognise.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">Equifax &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from one of Canada&rsquo;s two credit bureaus. Check it at least once a year for errors or accounts you don&rsquo;t recognize.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca &rarr;</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">TransUnion &ndash; Free Credit Report</div><div class="resource-card-desc">Request your free credit report from Canada&rsquo;s other credit bureau. Comparing both reports can catch errors one bureau may have that the other doesn&rsquo;t.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/product/consumer-disclosure" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca &rarr;</a></div></div></div></div>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📱</div><div><div class="resource-card-name">Credit Karma</div><div class="resource-card-desc">Check your credit score for free, anytime. Also provides alerts when something changes on your credit file.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditkarma.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditkarma.ca &rarr;</a></div></div></div></div>
 
       <div class="divider"></div>
       <p class="emphasis">Build Your Credit</p>
@@ -1027,17 +1057,18 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
       <div class="divider"></div>
       <p class="emphasis">Dispute Errors &amp; Report Fraud</p>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">Equifax &ndash; Dispute a Credit Report Error</div><div class="resource-card-desc">Found something wrong on your Equifax report? File a dispute. They must investigate within 30 days.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/dispute-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca/dispute &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">Equifax &ndash; Dispute a Credit Report Error</div><div class="resource-card-desc">Found something wrong on your Equifax report? File a dispute. They will generally investigate within about 30 days.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/dispute-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca/dispute &rarr;</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">TransUnion &ndash; Fraud Victim Resources</div><div class="resource-card-desc">If you suspect identity theft, TransUnion provides tools to place a fraud alert and begin the resolution process.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/assistance/fraud-victims-resources" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca/fraud &rarr;</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🛡️</div><div><div class="resource-card-name">Canadian Anti-Fraud Centre</div><div class="resource-card-desc">Canada&rsquo;s central agency for reporting fraud and identity theft. If someone has used your identity, this is where you report it.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://antifraudcentre-centreantifraude.ca/index-eng.htm" target="_blank" style="color:var(--green);text-decoration:none;">antifraudcentre-centreantifraude.ca &rarr;</a></div></div></div></div>
 
       <div class="divider"></div>
       <p class="emphasis">Get Help</p>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal body that oversees banks and financial institutions. Educational tools, complaint handling, and a database of your rights.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">OBSI &ndash; Ombudsman for Banking Services and Investments</div><div class="resource-card-desc">If your bank will not resolve a complaint, or 56 days pass, take it here. Since November 2024 every federally regulated bank in Canada must be a member. It is free, independent, and unlike FCAC it can actually decide your case.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.obsi.ca" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">obsi.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal regulator for consumer protection at banks. Educational tools and a database of your rights. Note that FCAC does not settle individual disputes.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac &rarr;</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🤝</div><div><div class="resource-card-name">Credit Counselling Canada</div><div class="resource-card-desc">A national network of non-profit agencies offering free or low-cost help with budgeting, debt management, and financial planning.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditcounsellingcanada.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditcounsellingcanada.ca &rarr;</a></div></div></div></div>
 
-      <p style="margin-top:20px;" class="small">You don&rsquo;t need to memorise these. Just know they&rsquo;re here. Come back whenever you need them.</p>
-      <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('post-0')">Take the Final Assessment</button></div>
+      <p style="margin-top:20px;" class="small">You don&rsquo;t need to memorize these. Just know they&rsquo;re here. Come back whenever you need them.</p>
+      <div style="margin-top:28px;"><button class="btn-primary" onclick="cbNavFinal()">Take the Final Assessment</button></div>
     </div>
   </div>
 </div>
@@ -1126,7 +1157,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <div class="certificate-prompt">
         <div class="cert-icon">&#127942;</div>
         <div class="cert-title">You Earned It</div>
-        <div class="cert-desc">Your certificate will be issued in the name on your account.</div>
+        <div class="cert-desc" id="cert-name-hint">Check the name below. This is what will be printed on your certificate.</div>
       </div>
       <input type="text" class="name-input" id="cert-name" readonly style="background:var(--muted-bg);cursor:default;">
       <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" onclick="generateCert()">Generate Certificate</button></div>
@@ -1182,6 +1213,7 @@ var cbUser = null;
 var cbEnrollmentId = null;
 var courseKey = 'getting_out_of_debt';
 var currentScreen = 'welcome';
+var cbSectionLastScreen = {};
 var screenEnteredAt = Date.now();
 var cbSectionTime = {};
 
@@ -1193,8 +1225,11 @@ setInterval(function() {
   sb.from('section_progress').upsert({
     user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
     section_key: sInfo.key, section_title: sInfo.title,
-    time_spent_seconds: accumulated, completed_at: new Date().toISOString()
-  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+    // A 30-second heartbeat is NOT evidence of completion. Writing completed_at here
+    // marked a section done merely because the tab was open. Time is time; completion
+    // is completion. (A proper last_seen_at column is the real fix; noted for Supabase.)
+    time_spent_seconds: accumulated
+  }, { onConflict: 'user_id,course,section_key' }).then(cbWriteResult);
 }, 30000);
 var cbResumeScreen = null;
 var cbAnsweredQuizzes = {};
@@ -1238,6 +1273,17 @@ async function cbInit() {
         var { data: profileData } = await sb.from('profiles').select('full_name').eq('id', user.id).maybeSingle();
         if (profileData) userName = profileData.full_name || '';
       }
+      if (userName) {
+          certNameEl.readOnly = true;
+      } else {
+        // No name on the account. Let them type it, or the certificate is unreachable.
+        certNameEl.readOnly = false;
+        certNameEl.style.background = '';
+        certNameEl.style.cursor = 'text';
+        certNameEl.placeholder = 'Type your full name';
+        var lbl = document.getElementById('cert-name-hint');
+        if (lbl) lbl.textContent = 'We do not have a name on your account. Type the name you would like on your certificate.';
+      }
       certNameEl.value = userName;
     }
     // Load pre-assessment scores from Supabase (in case of browser restart)
@@ -1266,6 +1312,7 @@ async function cbInit() {
       existingProgress.forEach(function(sp) {
         if (sp.section_key !== '_resume' && sp.time_spent_seconds) {
           cbSectionTime[sp.section_key] = sp.time_spent_seconds;
+          if (cbSectionLastScreenId[sp.section_key]) cbSectionsSeen[sp.section_key] = true;
         }
       });
     }
@@ -1276,7 +1323,12 @@ async function cbInit() {
     // Check for direct screen navigation (e.g. ?screen=cert-1 from dashboard)
     var urlParams = new URLSearchParams(window.location.search);
     var directScreen = urlParams.get('screen');
-    if (directScreen) { goTo(directScreen); return; }
+    if (directScreen) {
+      // ?screen= used to walk straight past every gate.
+      if (directScreen === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+      if (directScreen.indexOf('cert-') === 0 && !cbCanCertify()) { cbNavFinal(); return; }
+      goTo(directScreen); return;
+    }
     if (progress && progress.section_title && progress.section_title !== 'welcome') {
       cbResumeScreen = progress.section_title;
       var sInfo = getSectionInfo(cbResumeScreen);
@@ -1284,9 +1336,19 @@ async function cbInit() {
       document.getElementById('cb-resume-overlay').classList.add('visible');
     }
   } catch (e) {
+    // FAIL CLOSED. The old code hid the gate on any unexpected error, which meant the
+    // paid course became visible precisely when auth was broken. Keep the gate up.
     console.error('CB init error:', e);
     var gate = document.getElementById('cb-loading-gate');
-    if (gate) gate.style.display = 'none';
+    if (gate) {
+      gate.style.display = '';
+      gate.innerHTML = '<div style="max-width:340px;margin:0 auto;text-align:center;padding:24px;">'
+        + '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">We could not verify your access</div>'
+        + '<div style="font-size:14px;color:#666;line-height:1.5;margin-bottom:18px;">Something went wrong while checking your account. Please try again, or sign in.</div>'
+        + '<button onclick="window.location.reload()" style="padding:10px 18px;border:none;border-radius:8px;background:#1F7A5C;color:#fff;font-weight:600;cursor:pointer;margin-right:8px;">Retry</button>'
+        + '<button onclick="window.location.href=\'website-login.html\'" style="padding:10px 18px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;">Sign in</button>'
+        + '</div>';
+    }
   }
 }
 function cbResume() {
@@ -1296,6 +1358,79 @@ function cbResume() {
 function cbDismissResume() {
   document.getElementById('cb-resume-overlay').classList.remove('visible');
 }
+// Work out the last screen of each section once, from the DOM. Reaching that screen is
+// the only thing that legitimately means "this section is complete".
+var cbSectionLastScreenId = {};
+(function() {
+  var ids = [];
+  document.querySelectorAll('.screen').forEach(function(el) { if (el.id) ids.push(el.id); });
+  ids.forEach(function(id) {
+    var m = id.match(/^(s\d+)-(\d+)$/);   // lesson screens only, not calculator overlays
+    if (!m) return;
+    var sec = m[1], n = parseInt(m[2], 10);
+    if (cbSectionLastScreenId[sec] === undefined || n > cbSectionLastScreenId[sec].n) {
+      cbSectionLastScreenId[sec] = { n: n, id: id };
+    }
+  });
+})();
+// ── Final-assessment gate ────────────────────────────────────────────────────────────
+// You used to be able to take the pre-assessment, jump straight to the final exam from the
+// Sections menu, pass, and print a certificate without reading a single lesson screen.
+var cbSectionsSeen = {};
+function cbMarkSectionSeen(screenId) {
+  // Credit a section only when the learner reaches its FINAL screen. Marking it on arrival
+  // at any screen let the gate open itself: every blocked attempt dropped you into the next
+  // unseen section, which then counted as done.
+  var m = screenId && screenId.match(/^(s\d+)-(\d+)$/);
+  if (!m) return;
+  var last = cbSectionLastScreenId[m[1]];
+  if (last && last.id === screenId) cbSectionsSeen[m[1]] = true;
+}
+function cbSectionsRemaining() {
+  var missing = [];
+  Object.keys(cbSectionLastScreenId).sort().forEach(function(sec) {
+    if (!cbSectionsSeen[sec]) missing.push(sec);
+  });
+  return missing;
+}
+var cbGateTarget = null;
+// The last raw browser dialog. Everything else here uses a styled notice.
+function cbGateNotice(title, body) {
+  var t = document.getElementById('cb-gate-text');
+  var ov = document.getElementById('cb-gate-overlay');
+  if (t && ov) { t.textContent = body; cbGateTarget = null; ov.classList.add('visible'); return; }
+  alert(body);
+}
+
+function cbGateGo() {
+  var ov = document.getElementById('cb-gate-overlay');
+  if (ov) ov.classList.remove('visible');
+  if (cbGateTarget) goTo(cbGateTarget);
+}
+function cbCanTakeFinal() { return cbSectionsRemaining().length === 0; }
+function cbNavFinal() {
+  if (typeof cbNavClose === 'function') cbNavClose();
+  if (cbCanTakeFinal()) { goTo('post-0'); return; }
+  var missing = cbSectionsRemaining();
+  var n = missing.length;
+  // A raw browser alert() looked wrong in an otherwise fully styled app. Use the same
+  // modal the resume prompt uses.
+  cbGateTarget = missing[0] + '-0';
+  var t = document.getElementById('cb-gate-text');
+  if (t) t.textContent = 'The final assessment unlocks once you have worked through the course. You still have '
+    + n + (n === 1 ? ' section' : ' sections') + ' to go.';
+  var ov = document.getElementById('cb-gate-overlay');
+  if (ov) { ov.classList.add('visible'); return; }
+  goTo(cbGateTarget);
+}
+
+function cbIsSectionComplete(screenId) {
+  var m = screenId && screenId.match(/^(s\d+)-(\d+)$/);
+  if (!m) return false;
+  var last = cbSectionLastScreenId[m[1]];
+  return !!last && last.id === screenId;
+}
+
 function cbSaveProgress(fromScreen, toScreen) {
   if (!sb || !cbUser) return;
   var now = new Date().toISOString();
@@ -1305,14 +1440,27 @@ function cbSaveProgress(fromScreen, toScreen) {
   sb.from('section_progress').upsert({
     user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
     section_key: fromSection.key, section_title: fromSection.title,
-    time_spent_seconds: cbSectionTime[fromSection.key], completed_at: now
-  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+    // Only mark complete if they actually reached the end of this section.
+    time_spent_seconds: cbSectionTime[fromSection.key],
+    completed_at: cbIsSectionComplete(fromScreen) ? now : undefined
+  }, { onConflict: 'user_id,course,section_key' }).then(cbWriteResult);
   sb.from('section_progress').upsert({
     user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
-    section_key: '_resume', section_title: toScreen, completed_at: now
-  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+    section_key: '_resume', section_title: toScreen
+  }, { onConflict: 'user_id,course,section_key' }).then(cbWriteResult);
   screenEnteredAt = Date.now();
 }
+// Supabase reports a rejected write in the returned { error } object rather than by
+// throwing, so an empty .then() swallowed every failure. A learner could complete the
+// course, see success on screen, and have nothing recorded at all. Surface it instead.
+function cbWriteResult(res) {
+  if (res && res.error) {
+    console.error('Credit Bright: database write failed', res.error);
+    if (typeof cbWriteFailures !== 'undefined') cbWriteFailures++;
+  }
+}
+var cbWriteFailures = 0;
+
 function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer, correctAnswer, isCorrect) {
   if (!sb || !cbUser) return;
   sb.from('assessment_responses').insert({
@@ -1321,7 +1469,7 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
     question_text: questionText, user_answer: userAnswer,
     correct_answer: correctAnswer, is_correct: isCorrect,
     answered_at: new Date().toISOString()
-  }).then(function() {});
+  }).then(cbWriteResult);
 }
 async function cbIssueCertificate(certName, certId, preScore, postScore) {
   if (!sb || !cbUser) return;
@@ -1332,7 +1480,7 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
       issued_at: new Date().toISOString()
     });
     await sb.from('enrollments').update({ completed_at: new Date().toISOString() })
-      .eq('user_id', cbUser.id).eq('product', 'getting_out_of_debt');
+      .eq('id', cbEnrollmentId);
     await fetch('/.netlify/functions/send-email', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1361,11 +1509,14 @@ function cbLogEmbeddedTool() {
     started_at: new Date(cbEmbedCalcStart).toISOString(),
     ended_at: new Date().toISOString(),
     duration_seconds: duration
-  }).then(function() {});
+  }).then(cbWriteResult);
 }
 
 function goTo(id) {
+  cbMarkSectionSeen(id);
   cbSaveProgress(currentScreen, id);
+  var cbSecPrefix = getSectionPrefix(id);
+  if (/^s[1-7]$/.test(cbSecPrefix) && !/[cs]$/.test(id)) { cbSectionLastScreen[cbSecPrefix] = id; }
 
   // Track embedded calculator sessions
   var enteringCalc = calcConfigs && calcConfigs[id];
@@ -1417,8 +1568,8 @@ var quizQuestions = [
   { q: "You are carrying a $5,000 credit card balance at 19.99% and a $2,000 store card at 12%. You have $100 extra per month. Under the avalanche method, where does the extra $100 go?", opts: ["The store card, because it has the smaller balance", "The credit card, because it has the highest interest rate", "Split equally between both debts"], correct: 1, fb_right: "The avalanche targets the highest interest rate. At 19.99%, the credit card is costing you the most per dollar per month. Every extra dollar there reduces the most expensive interest first.", fb_wrong: "Under the avalanche, the extra money goes to the debt with the highest interest rate. The credit card at 19.99% costs you the most per dollar per month, so that is where the extra $100 goes." },
   { q: "You transfer a $4,000 credit card balance to a 0% promotional card for 10 months with a 2% transfer fee. What is the main risk?", opts: ["The transfer fee makes it more expensive than keeping the original card", "If you do not pay off the balance before the promo ends, the rate jumps and you may be worse off", "Balance transfers always damage your credit score"], correct: 1, fb_right: "The main risk is the promotional period ending with a balance remaining. The new rate is often 19.99% or higher. If you cannot clear the balance in time, you end up paying interest on whatever is left, plus the transfer fee you already paid.", fb_wrong: "The main risk is not paying off the balance before the promotional rate expires. The rate jumps, often to 19.99% or higher, and you are paying interest on whatever remains plus the transfer fee. The fee alone is usually small. The expiring promo rate is the real danger." },
   { q: "You consolidate three credit card debts into a single personal loan. What is the most important thing to do next?", opts: ["Use the freed-up credit cards for new purchases since the balances are zero", "Stop using the credit cards to avoid accumulating new debt on top of the loan", "Transfer the consolidation loan to a balance transfer card"], correct: 1, fb_right: "The number one danger after consolidation is re-spending on the now-empty credit cards. If you run them back up, you end up with the loan plus new card debt. Keep the accounts open for credit reporting, but stop using them.", fb_wrong: "After consolidation, the most important step is to stop using the credit cards. If you run them back up, you will have both the consolidation loan and new card debt. That is worse than where you started." },
-  { q: "You receive a $2,000 tax refund. You have a $3,000 credit card at 19.99% and a $280,000 mortgage at 4.5%. Where does the refund go?", opts: ["Split it between the mortgage and the credit card", "All toward the credit card, because 19.99% costs nearly four times more per dollar than 4.5%", "Into a savings account for emergencies"], correct: 1, fb_right: "The credit card at 19.99% costs you nearly four times more per dollar than the 4.5% mortgage. That $2,000 saves roughly $400 per year on the credit card versus about $90 on the mortgage. Always target the highest rate.", fb_wrong: "The $2,000 goes to the credit card. At 19.99%, every dollar there costs you nearly four times more than a dollar on a 4.5% mortgage. Windfalls have the biggest impact when applied to the highest-rate debt." },
-  { q: "A Canadian is overwhelmed by debt and struggling to keep up with payments. What should they do first?", opts: ["Take out another loan to cover the payments", "Contact a non-profit credit counselling agency for a free assessment", "Stop paying all debts and wait for them to expire"], correct: 1, fb_right: "Non-profit credit counselling, like Credit Counselling Canada, provides free assessments. A counsellor can review your situation, negotiate with creditors, and arrange a Debt Management Plan if needed. Asking for help is choosing the right tool for a harder problem.", fb_wrong: "The right first step is contacting a non-profit credit counselling agency like Credit Counselling Canada. They offer free assessments, can negotiate with creditors, and may arrange a Debt Management Plan. Taking on more debt or ignoring the problem makes things worse." }
+  { q: "You receive a $2,000 tax refund. You have a $3,000 credit card at 19.99% and a $280,000 mortgage at 4.5%. Where does the refund go?", opts: ["Split it between the mortgage and the credit card", "All toward the credit card, because 19.99% costs nearly four times more per dollar than 4.5%", "Into a savings account for emergencies"], correct: 1, fb_right: "The credit card at 19.99% costs you more than four times as much per dollar as the 4.5% mortgage. That $2,000 saves roughly $400 a year on the credit card versus about $90 on the mortgage. Always target the highest rate.", fb_wrong: "The $2,000 goes to the credit card. At 19.99%, every dollar there costs you more than four times what a dollar on a 4.5% mortgage costs. Windfalls have the biggest impact when applied to the highest-rate debt." },
+  { q: "A Canadian is overwhelmed by debt and struggling to keep up with payments. What should they do first?", opts: ["Take out another loan to cover the payments", "Contact a non-profit credit counselling agency for a free assessment", "Stop paying all debts and wait for them to expire"], correct: 1, fb_right: "Non-profit credit counselling, like Credit Counselling Canada, provides free assessments. A counsellor can review your situation, negotiate with creditors, and arrange a Debt Management Plan if needed. Asking for help is choosing the right tool for a harder problem.", fb_wrong: "The right first step is contacting a non-profit credit counselling agency like Credit Counselling Canada. They offer free assessments, can negotiate with creditors, and may arrange a Debt Management Plan. Taking on more debt makes things worse. And waiting for debts to expire is not a plan: there are two separate clocks. A debt usually stays on your credit report for six years, while the window in which a creditor can sue you is shorter, about two years in most provinces, three in Quebec, and six in Newfoundland and Labrador, PEI and the territories. Crucially, if that window has not already closed, making a payment or even acknowledging the debt in writing restarts it from zero. Never assume an old debt is dead without checking your province." }
 ];
 var preScore = 0, postScore = 0;
 
@@ -1426,9 +1577,10 @@ function buildQuiz(phase) {
   var area = document.getElementById(phase + '-quiz-area');
   var html = '';
   quizQuestions.forEach(function(qq, i) {
+    var layout = cbPhaseLayout[phase][i];
     html += '<div class="quiz-wrap" id="' + phase + '-q-' + i + '">';
     html += '<p class="quiz-question">' + qq.q + '</p>';
-    qq.opts.forEach(function(opt, j) {
+    layout.opts.forEach(function(opt, j) {
       html += '<button class="quiz-option" onclick="answerPrePost(\'' + phase + '\',' + i + ',' + j + ')">' + opt + '</button>';
     });
     html += '</div>';
@@ -1436,17 +1588,54 @@ function buildQuiz(phase) {
   });
   area.innerHTML = html;
 }
-// Shuffle pre/post quiz options so correct answer is not always in the same position
-quizQuestions.forEach(function(qq) {
-  var indices = qq.opts.map(function(_, i) { return i; });
-  for (var i = indices.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp;
+// Assign each question's correct-answer position so that a learner can never spot a pattern.
+// Three properties, and all three matter:
+//   1. Aware of each quiz's own option count (some have 2 options, most have 3).
+//   2. Never the same position twice in a row, so a run cannot form.
+//   3. Spread evenly across positions, so no letter is over-represented.
+// A plain random shuffle failed all three: it produced an exploitable run of 3+ identical
+// positions on roughly two thirds of read-throughs.
+function cbAssignAnswerPositions(optionCounts) {
+  var used = {}, out = [], prev = null;
+  for (var q = 0; q < optionCounts.length; q++) {
+    var o = optionCounts[q];
+    var cands = [];
+    for (var i = 0; i < o; i++) if (i !== prev) cands.push(i);
+    if (!cands.length) for (var j = 0; j < o; j++) cands.push(j);
+    var lowest = Infinity;
+    cands.forEach(function(c) { var u = used[c] || 0; if (u < lowest) lowest = u; });
+    var pool = cands.filter(function(c) { return (used[c] || 0) === lowest; });
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    used[pick] = (used[pick] || 0) + 1;
+    out.push(pick);
+    prev = pick;
   }
-  var newOpts = indices.map(function(idx) { return qq.opts[idx]; });
-  qq.correct = indices.indexOf(qq.correct);
-  qq.opts = newOpts;
-});
+  return out;
+}
+
+// Shuffle pre/post quiz options so correct answer is not always in the same position
+// Build a SEPARATE option layout for each phase. The old code shuffled quizQuestions once
+// and rendered both pre and post from it, so every answer sat in the same slot both times
+// and a learner could just remember the position. That corrupts the before/after number,
+// which is the one thing we sell to an employer.
+var cbPhaseLayout = { pre: [], post: [] };
+function cbBuildPhaseLayout(phase) {
+  var targets = cbAssignAnswerPositions(quizQuestions.map(function(q){ return q.opts.length; }));
+  cbPhaseLayout[phase] = quizQuestions.map(function(qq, qi) {
+    var target = targets[qi] % qq.opts.length;
+    var correctOpt = qq.opts[qq.correct];
+    var distractors = qq.opts.filter(function(_, i) { return i !== qq.correct; });
+    for (var i = distractors.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = distractors[i]; distractors[i] = distractors[j]; distractors[j] = t;
+    }
+    var opts = [], d = 0;
+    for (var p = 0; p < qq.opts.length; p++) opts.push(p === target ? correctOpt : distractors[d++]);
+    return { opts: opts, correct: target };
+  });
+}
+cbBuildPhaseLayout('pre');
+cbBuildPhaseLayout('post');
 buildQuiz('pre');
 buildQuiz('post');
 
@@ -1455,12 +1644,14 @@ var preAnswers = {}, postAnswers = {};
 function answerPrePost(phase, qi, ai) {
   var wrap = document.getElementById(phase + '-q-' + qi);
   var btns = wrap.querySelectorAll('.quiz-option');
-  var correct = quizQuestions[qi].correct;
+  var correct = cbPhaseLayout[phase][qi].correct;
   var isCorrect = ai === correct;
   var answers = phase === 'pre' ? preAnswers : postAnswers;
   var isNew = !(qi in answers);
-  // For post-assessment: lock after first answer
-  if (phase === 'post' && !isNew) return;
+  // Lock BOTH assessments on first answer. The pre-assessment used to allow changes,
+  // which meant the "before" score was whatever the learner settled on after thinking
+  // about it. That number is the baseline we sell to an employer. It has to be honest.
+  if (!isNew) return;
   answers[qi] = ai;
   btns.forEach(function(b) {
     b.classList.remove('selected', 'wrong', 'correct-reveal');
@@ -1484,7 +1675,7 @@ function answerPrePost(phase, qi, ai) {
     if (phase === 'pre') preAnswered++;
     else {
       postAnswered++;
-      cbLogAssessment(phase, qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
+      cbLogAssessment(phase, qi, quizQuestions[qi].q, cbPhaseLayout[phase][qi].opts[ai], cbPhaseLayout[phase][qi].opts[cbPhaseLayout[phase][qi].correct], isCorrect);
     }
   } else if (phase === 'pre') {
     // Pre-assessment: allow answer changes without incrementing count
@@ -1492,7 +1683,7 @@ function answerPrePost(phase, qi, ai) {
   var score = 0;
   var answersObj = phase === 'pre' ? preAnswers : postAnswers;
   for (var k in answersObj) {
-    if (answersObj[k] === quizQuestions[k].correct) score++;
+    if (answersObj[k] === cbPhaseLayout[phase][k].correct) score++;
   }
   if (phase === 'pre') preScore = score;
   else postScore = score;
@@ -1523,8 +1714,8 @@ function answerPrePost(phase, qi, ai) {
 function logPreAssessment() {
   for (var qi in preAnswers) {
     var ai = preAnswers[qi];
-    var isCorrect = ai === quizQuestions[qi].correct;
-    cbLogAssessment('pre', qi, quizQuestions[qi].q, quizQuestions[qi].opts[ai], quizQuestions[qi].opts[quizQuestions[qi].correct], isCorrect);
+    var isCorrect = ai === cbPhaseLayout['pre'][qi].correct;
+    cbLogAssessment('pre', qi, quizQuestions[qi].q, cbPhaseLayout['pre'][qi].opts[ai], cbPhaseLayout['pre'][qi].opts[cbPhaseLayout['pre'][qi].correct], isCorrect);
   }
 }
 
@@ -1538,18 +1729,18 @@ function resetPost() {
 }
 
 var sectionQuizData = {
-  '1-1': { correct: 1, fb_right: "Exactly. Paying $150 instead of the minimum cuts the timeline from 30+ years to about 4 years, and saves over $5,600 in interest. That is the power of paying more than the minimum. Open your Credit Calculator, Door 2, and try it with your own numbers.", fb_wrong: "Paying $150 per month on a $5,000 balance at 19.99% gets you debt-free in about 4 years and saves over $5,600 in interest. The difference between the minimum and a fixed payment is enormous. Try it in your Credit Calculator." },
+  '1-1': { correct: 1, fb_right: "Exactly. Paying $150 instead of the minimum cuts the timeline from nearly 19 years to about 4 years, and saves nearly $5,000 in interest. That is the power of paying more than the minimum. Open your Credit Calculator, Door 2, and try it with your own numbers.", fb_wrong: "Paying $150 per month on a $5,000 balance at 19.99% gets you debt-free in about 4 years and saves nearly $5,000 in interest. The difference between the minimum and a fixed payment is enormous. Try it in your Credit Calculator." },
   '1-2': { correct: 1, fb_right: "The avalanche targets the highest interest rate. The credit card at 19.99% is costing you the most money every month. Every extra dollar there reduces the most expensive interest first. The snowball would target the store card instead, for the quick win.", fb_wrong: "Under the avalanche, the extra money goes to the highest interest rate, which is the credit card at 19.99%. That is the debt costing you the most per dollar per month. The store card at 12% would be the snowball target, since it has the smallest balance." },
   '1-3': { correct: 1, fb_right: "Your extra budget is $175. That is the money above your minimums that you can put toward one target debt. Enter your debts in the Credit Calculator and set $175 as your extra monthly payment to see how it changes your timeline.", fb_wrong: "$175 is your extra budget: the difference between your $600 available and your $425 in minimums. The $425 is already spoken for. The $600 is your total. The $175 is what you can use to accelerate." },
   '2-1': { correct: 1, fb_right: "A balance transfer saves money only if you clear the balance before the promotional rate expires. The 2% fee is small. The real risk is the rate jumping to 19.99% or higher on whatever balance remains when the promo ends.", fb_wrong: "A balance transfer is not automatically better. It saves money only when you pay off the full balance within the promotional period. If the balance remains when the promo ends, the rate jumps and you may end up paying more than if you had stayed with the original card." },
   '2-2': { correct: 1, fb_right: "The biggest risk of consolidation is re-spending on the now-empty credit cards. If you run them back up, you end up with both the loan and new card debt. That is worse than where you started. The fix is simple: stop using the cards.", fb_wrong: "The biggest risk is re-spending on the freed-up credit cards. After consolidation, the cards show zero balances. If you use them again, you end up with the loan plus new card debt. Keep the accounts open for credit reporting, but stop using them." },
   '2-3': { correct: 1, fb_right: "Always do the math. Enter your current mortgage in the Calculator, then compare with the refinanced terms, adding the $6,000 penalty as an upfront fee. If the total cost of the new mortgage plus penalty is lower than the original, refinance. If not, wait for renewal.", fb_wrong: "A lower rate does not automatically mean refinancing wins. The penalty for breaking a fixed-rate mortgage in Canada can be substantial. You must calculate whether the interest savings exceed the penalty. Use the Calculator to compare both options with the penalty included as a fee." },
-  '2-4': { correct: 1, fb_right: "Under the avalanche, the windfall goes to the highest rate. The credit card at 19.99% costs you nearly four times more per dollar than the store card at 12%. That $2,000 saves roughly $400 per year in interest on the credit card.", fb_wrong: "Under the avalanche, the windfall goes to the highest interest rate: the credit card at 19.99%. Splitting it dilutes the impact. Paying off the store card is the snowball approach, which targets the smallest balance for a quick win. The avalanche always targets the highest rate." },
+  '2-4': { correct: 1, fb_right: "Under the avalanche, the windfall goes to the highest rate. The credit card at 19.99% costs you about 1.7 times more per dollar than the store card at 12%. That $2,000 saves roughly $400 per year in interest on the credit card.", fb_wrong: "Under the avalanche, the windfall goes to the highest interest rate: the credit card at 19.99%. Splitting it dilutes the impact. Paying off the store card is the snowball approach, which targets the smallest balance for a quick win. The avalanche always targets the highest rate." },
   '3-1': { correct: 1, fb_right: "A balance transfer is most powerful when you can clear the balance within the promotional window. If you cannot, the rate jumps and the transfer fee becomes wasted money. Calculate your required monthly payment before transferring.", fb_wrong: "A balance transfer works best when you can pay off most or all of the balance before the promotional rate expires. Making only minimum payments during the promo period will likely leave a large balance that gets hit with a high rate when the promo ends." },
   '3-2': { correct: 1, fb_right: "Consolidation is about more than math. If juggling four payments creates stress and risk of missed payments, a single consolidated payment can keep you on track. The avalanche saves slightly more in total interest, but only if you stick with it.", fb_wrong: "Consolidation makes sense when the complexity of multiple debts threatens your ability to stay on track. If the consolidation rate is higher than all existing debts, it costs more. And if you plan to keep using the cards after consolidating, you will end up deeper in debt." },
-  '3-3': { correct: 1, fb_right: "Rate determines where a windfall does the most work. At 19.99%, the credit card costs nearly four times more per dollar than the 4.5% mortgage. The $3,000 saves roughly $600 per year on the card versus $135 on the mortgage. Always target the highest rate.", fb_wrong: "The credit card at 19.99% costs nearly four times more per dollar than the 4.5% mortgage. Windfalls go where the interest rate is highest. Size of debt does not matter. Rate per dollar does." },
+  '3-3': { correct: 1, fb_right: "Rate determines where a windfall does the most work. At 19.99%, the credit card costs nearly four times more per dollar than the 5.2% mortgage. Aisha's $3,000 saves roughly $600 a year on the card versus about $156 on the mortgage. Always target the highest rate.", fb_wrong: "The credit card at 19.99% costs nearly four times more per dollar than the 5.2% mortgage. Aisha's $3,000 saves about $600 a year against the card and about $156 against the mortgage. Windfalls go where the rate is highest. The size of the debt does not matter. The rate per dollar does." },
   '4-1': { correct: 1, fb_right: "The number one danger after consolidation is re-spending on the now-empty credit cards. Keep the accounts open for credit reporting, but stop using them. If you run them back up, you end up with the loan plus new card debt. That is the most common way consolidation fails.", fb_wrong: "After consolidation, you must stop using the credit cards. Keep the accounts open for credit reporting, but do not add new balances. Celebrating with a purchase or stacking another balance transfer defeats the purpose. The cards are at zero. Keep them there." },
-  '4-2': { correct: 1, fb_right: "Non-profit credit counselling agencies like Credit Counselling Canada offer free assessments. They can negotiate with creditors, arrange Debt Management Plans, and help you find the right path forward. Asking for help is choosing the right tool for a harder problem.", fb_wrong: "Taking on more debt to cover payments is a spiral. Ignoring debts damages your credit for years. The right first step is contacting a non-profit credit counselling agency like Credit Counselling Canada for a free assessment." }
+  '4-2': { correct: 1, fb_right: "Non-profit credit counselling agencies like Credit Counselling Canada offer free assessments. They can negotiate with creditors, arrange Debt Management Plans, and help you find the right path forward. Asking for help is choosing the right tool for a harder problem.", fb_wrong: "Taking on more debt to cover payments is a spiral. Ignoring debts damages your credit for years, and waiting for them to fall off the report is not a strategy: the reporting clock and the legal clock are different. A debt typically stays on your report for six years, while the period in which a creditor can sue is shorter, about two years in most provinces, three in Quebec, and six in Newfoundland and Labrador, PEI and the territories. If that window has not already closed, a payment or a written acknowledgement can restart it from zero. The right first step is contacting a non-profit credit counselling agency like Credit Counselling Canada for a free assessment." }
 };
 
 function answerQuiz(qid, ai, clickedEl) {
@@ -1588,9 +1779,33 @@ function answerQuiz(qid, ai, clickedEl) {
 function toggleCertBtn() {
   document.getElementById('cert-gen-btn').disabled = document.getElementById('cert-name').value.trim() === '';
 }
+// Can this learner legitimately have a certificate? The Sections menu had an
+// unrestricted "Certificate" button, so anyone could open the course, click it, type a
+// name and walk away with a credential having answered nothing. This is the browser-side
+// stop-gap; real enforcement belongs on the server.
+function cbCanCertify() {
+  return typeof postScore === 'number' && postScore >= 4;
+}
+
 function generateCert() {
-  var name = document.getElementById('cert-name').value.trim();
-  if (!name) return;
+  if (!cbCanCertify()) {
+    cbGateNotice('Not yet', 'You need at least 80% on the final assessment before the certificate unlocks. Take it again when you are ready.');
+    goTo('post-0');
+    return;
+  }
+  var nameEl = document.getElementById('cert-name');
+  var name = nameEl.value.trim();
+  if (!name) {
+    // This used to just `return`, so a student who passed clicked the button and NOTHING
+    // happened. No message, no border, no navigation. A silently dead button.
+    nameEl.style.borderColor = 'var(--red)';
+    nameEl.readOnly = false;
+    nameEl.style.background = '';
+    nameEl.focus();
+    var h = document.getElementById('cert-name-hint');
+    if (h) h.textContent = 'Please enter the name you would like on your certificate.';
+    return;
+  }
   document.getElementById('cert-display-name').textContent = name;
   document.getElementById('cert-score').textContent = Math.round((postScore / quizQuestions.length) * 100) + '%';
   var d = new Date();
@@ -1616,10 +1831,35 @@ function calcAPR(P, pmt, mo, fees) {
   return ((lo + hi) / 2) * 100;
 }
 function calcMinPay(bal, rate) { return Math.max(Math.round(bal * 0.01 + bal * (rate / 100 / 12)), 25); }
+// Match the standalone calculator: revolving debts carry a minimum payment;
+// installment debts (car, personal, mortgage) derive their payment from a TERM.
+function calcIsRevolving(t) { return t === 'card' || t === 'loc'; }
+function calcDebtPayment(d) {
+  // An explicit payment always wins. Without this, a consolidation loan pushed in with
+  // its correct amortised payment was IGNORED and silently recomputed from a 5-year
+  // default, which made the consolidation Term box do nothing at all.
+  if (typeof d.payment === 'number' && isFinite(d.payment) && d.payment > 0) return d.payment;
+  if (calcIsRevolving(d.type)) return d.minPay || calcMinPay(d.balance, d.rate);
+  var mo = (d.term || 5) * 12;
+  // Canadian mortgages compound semi-annually (Interest Act s.6). Using the monthly formula
+  // gave the same mortgage a different payment here than in the standalone Calculator.
+  if (d.type === 'mortgage') return calcPmtMortgage(d.balance, d.rate, mo);
+  return calcPmtMonthly(d.balance, d.rate, mo);
+}
+// MUST match credit-calculator.html exactly. The old version rounded the minimum payment
+// and broke a month early, so the flagship $5,000 example came out $8 different in the
+// course than in the tool the course teaches you to use.
 function simMinPayment(bal, annualRate) {
-  var months = 0, totalInterest = 0, b = bal, r = annualRate / 100 / 12;
-  while (b > 0.5 && months < 600) { var interest = b * r; var minPay = Math.max(Math.round(b * 0.01 + interest), 25); if (minPay >= b + interest) { totalInterest += b * r; break; } totalInterest += interest; b = b + interest - minPay; months++; }
-  return { months: months, totalInterest: Math.round(totalInterest) };
+  var r = annualRate / 100 / 12, b = bal, tot = 0, mo = 0;
+  while (b > 0.50 && mo < 600) {
+    var i = b * r;
+    var mp = Math.max(b * 0.01 + i, 25);
+    mp = Math.min(mp, b + i);
+    b -= (mp - i);
+    tot += mp;
+    mo++;
+  }
+  return { months: mo, totalInterest: Math.round(tot - (bal - b)) };
 }
 function simFixedPayment(bal, annualRate, payment) {
   var months = 0, totalInterest = 0, b = bal, r = annualRate / 100 / 12;
@@ -1628,14 +1868,14 @@ function simFixedPayment(bal, annualRate, payment) {
 }
 
 var calcConfigs = {
-  's1-1c': { door: 'debt-one', type: 'card', amount: 5000, rate: 19.99, term: 0, label: 'Drag the payment slider. Watch what happens when you pay more than the minimum. How much would you need to pay each month to be debt-free in under 5 years?' },
-  's1-2c': { door: 'debt-several', debts: [{name:'Store Card',balance:1200,rate:12,minPay:35,type:'card'},{name:'Credit Card',balance:4000,rate:19.99,minPay:100,type:'card'},{name:'Car Loan',balance:10000,rate:6,minPay:193,type:'car'}], label: 'Three debts loaded. Toggle between Avalanche and Snowball. See how the order and total interest change.' },
+  's1-1c': { door: 'debt-one', type: 'card', amount: 5000, rate: 19.99, term: 0, label: 'Drag the payment slider. Watch what happens when you pay more than the minimum. How much would you need to pay each month to be debt-free in under 3 years?' },
+  's1-2c': { door: 'debt-several', debts: [{name:'Store Card',balance:1200,rate:12,minPay:35,type:'card'},{name:'Credit Card',balance:4000,rate:19.99,minPay:100,type:'card'},{name:'Car Loan',balance:10000,rate:6,term:5,type:'car'}], label: 'Three debts loaded. Toggle between Avalanche and Snowball. See how the order and total interest change.' },
   's1-3c': { door: 'debt-several', debts: [{name:'Credit Card',balance:0,rate:19.99,minPay:0,type:'card'}], label: 'Enter your own debts. Add each one, set the balance, rate, and minimum payment. Then set your extra monthly budget and choose a strategy.' },
   's2-1c': { door: 'debt-one', type: 'card', amount: 5000, rate: 19.99, term: 0, label: 'This is a $5,000 credit card at 19.99%. Now try changing the rate to 0% to see what a balance transfer does to your payments during the promotional period.' },
-  's2-2c': { door: 'offer', type: 'personal', amount: 12000, rate: 10, term: 48, fees: 0, label: 'This is the consolidation loan replacing the three credit cards above. $12,000 at 10% over 4 years. Try changing the rate or term to see how it compares to paying 19.99% on the cards.' },
-  's2-3c': { door: 'offer', type: 'mortgage', amount: 300000, rate: 4.2, term: 300, fees: 6000, label: 'A refinanced mortgage at 4.2% with a $6,000 penalty entered as a fee. The APR reflects the true cost including the penalty. Compare with your current rate of 5.5%. Pay attention to Total Paid: the new loan at 4.2% with the $6,000 fee costs far less over 25 years than staying at 5.5%.' },
-  's2-4c': { door: 'debt-one', type: 'card', amount: 3000, rate: 19.99, term: 0, label: 'A $3,000 credit card at 19.99%. Try changing the balance to $1,000 (as if you applied a $2,000 tax refund). Watch the timeline and interest change.' },
-  's3-2c': { door: 'debt-several', debts: [{name:'Store Card',balance:2000,rate:12,minPay:50,type:'card'},{name:'Visa',balance:5000,rate:19.99,minPay:125,type:'card'},{name:'Line of Credit',balance:3000,rate:8,minPay:60,type:'card'},{name:'Car Loan',balance:15000,rate:6.5,minPay:293,type:'car'}], label: "Marcus's four debts loaded. Set extra payment to $150. Compare Avalanche vs Snowball. Then open the consolidation comparison below to see if a $10,000 loan at 9% over 5 years beats the current plan.", consolRate: 9, consolTerm: 5, consolPreselect: [0,1,2] }
+  's2-2c': { door: 'offer', type: 'personal', amount: 12000, rate: 10, term: 48, fees: 0, compareRate: 19.99, compareLabel: 'Your cards', label: 'This is the consolidation loan replacing the three credit cards above. $12,000 at 10% over 4 years. Open the comparison below: the same $12,000 at the 19.99% card rate costs far more.' },
+  's2-3c': { door: 'offer', type: 'mortgage', amount: 300000, rate: 4.2, term: 36, amortMonths: 300, fees: 6000, compareRate: 5.5, compareLabel: 'Staying put', label: 'You have three years left on a five-year term at 5.5%. Breaking it costs a $6,000 penalty, entered here as a fee. The question is not whether 4.2% is the better rate. It obviously is. The question is whether the interest you save over the three years you actually have left beats the $6,000 it costs to get out. Open Compare With Another Offer and read the total cost on each side. Note the payment is calculated over a 25-year amortization, but the term is only 36 months, because that is all the rate is fixed for. The total cost counts what you pay over those three years plus what you still owe at renewal.' },
+  's2-4c': { door: 'debt-one', type: 'card', amount: 3000, rate: 19.99, term: 0, label: 'A $3,000 credit card at 19.99%. Enter your $2,000 tax refund in the Lump Sum field. The calculator will show you exactly what that one payment saves you, in interest and in months.' },
+  's3-2c': { door: 'debt-several', debts: [{name:'Store Card',balance:2000,rate:12,minPay:50,type:'card'},{name:'Visa',balance:5000,rate:19.99,minPay:125,type:'card'},{name:'Line of Credit',balance:3000,rate:8,minPay:60,type:'card'},{name:'Car Loan',balance:15000,rate:6.5,term:5,type:'car'}], label: "Marcus's four debts loaded. Set extra payment to $150. Compare Avalanche vs Snowball. Then open the consolidation comparison. The loan is 9%. Only roll in debts that cost MORE than 9%. Try checking the 8% Line of Credit and watch the warning appear.", consolRate: 9, consolTerm: 5, consolPreselect: [0,1] }
 };
 
 function renderCalc(screenId) {
@@ -1663,10 +1903,93 @@ function renderCalcOffer(container, config, screenId) {
   html += '<div class="input-group"><div class="input-label">' + (isMortgage ? 'Penalty / Fees' : 'Fees') + '</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-fees" value="' + (config.fees || 0) + '" oninput="calcOfferUpdate(\'' + screenId + '\')"></div></div>';
   html += '<div class="divider"></div>';
   html += '<div id="' + screenId + '-results"></div>';
+  // Compare-with-another-offer panel. The standalone calculator has this; the course
+  // version did not, which is why a lone monthly payment sat on screen with nothing
+  // to weigh it against.
+  if (config.compareRate) {
+    html += '<div class="consol-trigger" id="' + screenId + '-cmp-trigger" onclick="calcToggleOfferCompare(\'' + screenId + '\')">&#128260; Compare With Another Offer</div>';
+    html += '<div class="consol-section" id="' + screenId + '-cmp-section">';
+    html += '<div style="font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:10px;" id="' + screenId + '-cmp-sub">Same ' + calcFmt(config.amount) + ', different terms. What does the other option cost?</div>';
+    html += '<div class="consol-config">';
+    html += '<div class="input-group"><div class="input-label">Rate (%)</div><input type="number" step="0.1" class="input-field" id="' + screenId + '-cmp-rate" value="' + config.compareRate + '" oninput="calcOfferCompareUpdate(\'' + screenId + '\')"></div>';
+    html += '<div class="input-group"><div class="input-label">Term (mo)</div><input type="number" class="input-field" id="' + screenId + '-cmp-term" value="' + config.term + '" oninput="calcOfferCompareUpdate(\'' + screenId + '\')"></div>';
+    html += '<div class="input-group"><div class="input-label">Fees ($)</div><input type="number" class="input-field" id="' + screenId + '-cmp-fees" value="0" oninput="calcOfferCompareUpdate(\'' + screenId + '\')"></div></div>';
+    html += '<div id="' + screenId + '-cmp-results"></div>';
+    html += '</div>';
+  }
   html += '<div class="tool-disclaimer">This calculator is for educational purposes only.' + (isMortgage ? ' Uses Canadian-standard semi-annual compounding for mortgages.' : '') + '</div>';
   html += '</div>';
   container.innerHTML = html;
   calcOfferUpdate(screenId);
+}
+
+function calcToggleOfferCompare(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  container._cmpOpen = !container._cmpOpen;
+  var trigger = document.getElementById(screenId + '-cmp-trigger');
+  var section = document.getElementById(screenId + '-cmp-section');
+  trigger.classList.toggle('open', container._cmpOpen);
+  section.classList.toggle('open', container._cmpOpen);
+  trigger.innerHTML = container._cmpOpen ? '&#9662; Compare With Another Offer' : '&#128260; Compare With Another Offer';
+  if (container._cmpOpen) calcOfferCompareUpdate(screenId);
+}
+
+function calcOfferCompareUpdate(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  if (!container || !container._cmpOpen) return;
+  var config = calcConfigs[screenId];
+  var isMortgage = config.type === 'mortgage';
+  var amount = parseFloat(document.getElementById(screenId + '-amount').value) || 0;
+
+  var rA = parseFloat(document.getElementById(screenId + '-rate').value) || 0;
+  var tA = parseInt(document.getElementById(screenId + '-term').value) || 1;
+  var fA = parseFloat(document.getElementById(screenId + '-fees').value) || 0;
+  var rB = parseFloat(document.getElementById(screenId + '-cmp-rate').value) || 0;
+  var tB = parseInt(document.getElementById(screenId + '-cmp-term').value) || tA;
+  var fB = parseFloat(document.getElementById(screenId + '-cmp-fees').value) || 0;
+
+  // A mortgage is amortized over one period and its rate is only fixed for a shorter term.
+  // config.amortMonths says "spread the payment over this long", while the term input says
+  // "you only get this rate for this long". Comparing payment x term would assume the loan
+  // is repaid at renewal, which it is not, so we count the balance still owing instead.
+  var amortA = (isMortgage && config.amortMonths) ? config.amortMonths : tA;
+  var amortB = (isMortgage && config.amortMonths) ? config.amortMonths : tB;
+  var pA = isMortgage ? calcPmtMortgage(amount, rA, amortA) : calcPmtMonthly(amount, rA, amortA);
+  var pB = isMortgage ? calcPmtMortgage(amount, rB, amortB) : calcPmtMonthly(amount, rB, amortB);
+  function cmpBalanceAfter(P, rate, pay, months) {
+    var sa = rate / 100 / 2, m = Math.pow(1 + sa, 1/6) - 1, b = P;
+    for (var i = 0; i < months; i++) { b = b * (1 + m) - pay; if (b < 0) b = 0; }
+    return b;
+  }
+  var totA, totB;
+  if (isMortgage && config.amortMonths) {
+    // Total cost of holding this rate for the term: payments made, plus the fee to get it,
+    // plus whatever you still owe when the term ends and you have to renew.
+    totA = pA * tA + fA + cmpBalanceAfter(amount, rA, pA, tA);
+    totB = pB * tB + fB + cmpBalanceAfter(amount, rB, pB, tB);
+  } else {
+    totA = pA * tA + fA;
+    totB = pB * tB + fB;
+  }
+  var intA = totA - amount, intB = totB - amount;
+
+  var sub = document.getElementById(screenId + '-cmp-sub');
+  if (sub) sub.textContent = 'Same ' + calcFmt(amount) + ', different terms. What does the other option cost?';
+  var meaningful = Math.abs(totA - totB) > 5;
+  var aWins = totA <= totB;
+  var html = '<div class="result-grid two-col" style="margin-top:12px;">';
+  html += '<div class="compare-card ' + (!meaningful ? '' : (aWins ? 'green-card' : 'red-card')) + '"><div class="compare-card-label">This Offer (' + rA.toFixed(2) + '%)</div>';
+  html += '<div class="compare-card-number">' + calcFmt(pA) + '/mo</div>';
+  html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + calcFmt(intA) + ' total cost</div></div>';
+  html += '<div class="compare-card ' + (!meaningful ? '' : (aWins ? 'red-card' : 'green-card')) + '"><div class="compare-card-label">' + (config.compareLabel || 'Other Offer') + ' (' + rB.toFixed(2) + '%)</div>';
+  html += '<div class="compare-card-number">' + calcFmt(pB) + '/mo</div>';
+  html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + calcFmt(intB) + ' total cost</div></div>';
+  html += '</div>';
+  var diff = Math.abs(totA - totB);
+  if (diff > 5) {
+    html += '<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">' + (aWins ? 'This offer' : (config.compareLabel || 'The other offer')) + ' saves ' + calcFmt(diff) + ' in total</span></div>';
+  }
+  document.getElementById(screenId + '-cmp-results').innerHTML = html;
 }
 
 function calcOfferUpdate(screenId) {
@@ -1676,10 +1999,29 @@ function calcOfferUpdate(screenId) {
   var term = parseInt(document.getElementById(screenId + '-term').value) || 1;
   var fees = parseFloat(document.getElementById(screenId + '-fees').value) || 0;
   var isMortgage = config.type === 'mortgage';
-  var pmt = isMortgage ? calcPmtMortgage(amount, rate, term) : calcPmtMonthly(amount, rate, term);
-  var totalPaid = pmt * term;
-  var totalInterest = totalPaid - amount;
-  var apr = fees > 0 ? calcAPR(amount, pmt, term, fees) : rate;
+  // Where the exercise sets amortMonths, the payment is spread over the amortization while
+  // the term is only how long the rate is fixed. Using the term as the amortization would
+  // have shown a $300,000 mortgage as an $8,879 monthly payment.
+  var amortM = (isMortgage && config.amortMonths) ? config.amortMonths : term;
+  var pmt = isMortgage ? calcPmtMortgage(amount, rate, amortM) : calcPmtMonthly(amount, rate, amortM);
+  var totalInterest, totalPaid;
+  if (isMortgage && config.amortMonths) {
+    var sa = rate / 100 / 2, mrate = Math.pow(1 + sa, 1/6) - 1, bal = amount;
+    for (var bi = 0; bi < term; bi++) { bal = bal * (1 + mrate) - pmt; if (bal < 0) bal = 0; }
+    // Over the term: interest actually paid, and the full cost including what you still owe.
+    totalInterest = (pmt * term) - (amount - bal);
+    totalPaid = (pmt * term) + fees + bal;
+  } else {
+    // Fees are real money out of your pocket. Leaving them out of Total Paid made the
+    // calculator contradict the very lesson it teaches: that APR reveals the true cost.
+    totalInterest = (pmt * term) - amount;
+    totalPaid = (pmt * term) + fees;
+  }
+  // With a mortgage term shorter than its amortization the loan is not repaid within the
+  // term, so the APR solver cannot converge and a single APR figure is not meaningful.
+  // Solve over the amortization, which is what the rate is actually quoted against.
+  var aprMonths = (isMortgage && config.amortMonths) ? config.amortMonths : term;
+  var apr = fees > 0 ? calcAPR(amount, pmt, aprMonths, fees) : rate;
   var html = '<div class="big-result"><div class="big-result-label">Monthly Payment</div><div class="big-result-number">' + calcFmt(pmt) + '</div>';
   if (isMortgage) html += '<div class="big-result-sub">Semi-annual compounding (Canadian standard)</div>';
   html += '</div>';
@@ -1690,8 +2032,10 @@ function calcOfferUpdate(screenId) {
     html += '<div class="insight-box"><p>The APR (' + apr.toFixed(2) + '%) is higher than the rate (' + rate.toFixed(1) + '%) because it includes the $' + Math.round(fees).toLocaleString('en-CA') + ' in fees. This is the true cost of borrowing.</p></div>';
   }
   document.getElementById(screenId + '-results').innerHTML = html;
+  // Refresh the open compare panel. This used to check _consolOpen, a flag the offer
+  // door never sets, so changing the main offer left the comparison showing stale figures.
   var container2 = document.getElementById('calc-' + screenId);
-  if (container2 && container2._consolOpen) { calcRenderConsolChecks(screenId, container2); calcEmbedConsol(screenId); }
+  if (container2 && container2._cmpOpen) calcOfferCompareUpdate(screenId);
 }
 
 function renderCalcDebtOne(container, config, screenId) {
@@ -1708,6 +2052,7 @@ function renderCalcDebtOne(container, config, screenId) {
   var sliderMin = calcMinPay(config.amount, config.rate);
   html += '<input type="range" id="' + screenId + '-pay-slider" min="' + sliderMin + '" max="1000" value="150" oninput="calcDebtOneSlide(\'' + screenId + '\')">';
   html += '<div class="slider-labels"><span>$' + sliderMin + '</span><span>$1,000</span></div></div></div>';
+  html += '<div class="input-group"><div class="input-label">Lump Sum Payment (optional)</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-lump" value="' + (config.lump || '') + '" placeholder="e.g. 2000" oninput="calcDebtOneUpdate(\'' + screenId + '\')"></div></div>';
   html += '<div class="divider"></div>';
   html += '<div id="' + screenId + '-results"></div>';
   html += '<div class="tool-disclaimer">This calculator is for educational purposes only.</div>';
@@ -1732,19 +2077,82 @@ function calcDebtOneUpdate(screenId) {
   var lbls = sl.parentElement.querySelector('.slider-labels');
   if (lbls) lbls.querySelector('span').textContent = '$' + mn;
   document.getElementById(screenId + '-pay-display').textContent = '$' + parseInt(sl.value).toLocaleString('en-CA');
-  var payment = parseInt(sl.value) || 150;
+  var payment = parseInt(sl.value) || mn;
   var minResult = simMinPayment(bal, rate);
   var fixedResult = simFixedPayment(bal, rate, payment);
+
+  function calcTimeStr(m) {
+    if (m >= 600) return '30+ yrs';
+    if (m < 24) return m + ' mo';
+    return (m / 12).toFixed(1) + ' yrs';
+  }
+
   var html = '';
-  html += '<div class="big-result"><div class="big-result-label">At $' + payment + '/month</div>';
-  html += '<div class="big-result-number">' + (fixedResult.months >= 600 ? '30+ yrs' : (fixedResult.months < 12 ? fixedResult.months + ' mo' : Math.round(fixedResult.months / 12) + ' years')) + '</div>';
-  html += '<div class="big-result-sub">to pay off</div></div>';
-  html += '<div class="result-grid two-col">';
-  html += '<div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(fixedResult.totalInterest) + '</div></div>';
-  html += '<div class="compare-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(bal + fixedResult.totalInterest) + '</div></div></div>';
-  if (minResult.months > fixedResult.months) {
-    var saved = minResult.totalInterest - fixedResult.totalInterest;
-    if (saved > 0) html += '<div class="savings-badge"><span class="savings-badge-text">You save ' + calcFmt(saved) + ' vs minimum payments</span></div>';
+  // TWO ways to pay "the minimum", and the difference between them is the best lesson here.
+  // The bank's minimum SHRINKS as the balance falls (1% + interest, recalculated monthly).
+  // A FIXED payment of the same size today does not. Same money now; 13 years apart.
+  // Labelling both as "the minimum" made this look like a contradiction. It is a lesson.
+  html += '<div class="result-label muted">The Bank\'s Minimum <span style="font-weight:400;text-transform:none;letter-spacing:0">(it shrinks every month)</span></div>';
+  html += '<div class="result-grid">';
+  html += '<div class="compare-card muted-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number">' + calcTimeStr(minResult.months) + '</div></div>';
+  html += '<div class="compare-card muted-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(bal + minResult.totalInterest) + '</div></div>';
+  html += '<div class="compare-card muted-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(minResult.totalInterest) + '</div></div>';
+  html += '</div>';
+  // The learner's path: a FIXED payment, held steady.
+  html += '<div class="result-label">Your Payment <span style="font-weight:400;text-transform:none;letter-spacing:0">(held steady each month)</span></div>';
+  html += '<div class="result-grid">';
+  html += '<div class="compare-card green-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number">' + calcTimeStr(fixedResult.months) + '</div></div>';
+  html += '<div class="compare-card green-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(bal + fixedResult.totalInterest) + '</div></div>';
+  html += '<div class="compare-card green-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(fixedResult.totalInterest) + '</div></div>';
+  html += '</div>';
+
+  // Only claim a saving when the learner is genuinely paying above the minimum.
+  // The old code compared a flat payment against a DECLINING minimum, so it reported
+  // a "saving" even with the slider dragged to the floor. That is what confused Matt.
+  // Compare against the slider's actual floor, not a separately-derived minimum. These two
+  // used to be computed from different inputs, so editing the balance silently stopped the
+  // lesson callout from ever appearing.
+  var slider = document.getElementById(screenId + '-pay-slider');
+  var floor = slider ? (parseFloat(slider.min) || mn) : mn;
+  var atMinimum = payment <= Math.max(floor, mn) + 5;
+  var savedMoney = minResult.totalInterest - fixedResult.totalInterest;
+  var savedTime = minResult.months - fixedResult.months;
+  if (!atMinimum && savedMoney > 10) {
+    html += '<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">You save ' + calcFmt(savedMoney) + ' and ' + (savedTime < 24 ? savedTime + ' months' : (savedTime / 12).toFixed(1) + ' years') + '</span></div>';
+  } else if (atMinimum) {
+    // The two panels above now show very different numbers for the SAME dollar amount.
+    // That is the point. Explain it, or it reads as a contradiction.
+    var frozenSaved = minResult.totalInterest - fixedResult.totalInterest;
+    var frozenYears = ((minResult.months - fixedResult.months) / 12).toFixed(1);
+    if (frozenSaved > 50) {
+      // Show the NEXT month's minimum explicitly. Matt's worry was that a student sees the
+      // slider floor and thinks that is "the minimum", not realising it drops next month.
+      var nextBal = bal + (bal * (rate / 100 / 12)) - payment;
+      var nextMin = Math.max(Math.round(nextBal * 0.01 + nextBal * (rate / 100 / 12)), 25);
+      html += '<div class="savings-badge"><span class="savings-badge-icon">&#128161;</span><span class="savings-badge-text">This is your minimum <em>today</em>. Next month the bank will ask for about ' + calcFmt(nextMin) + ', then a little less, then a little less again. That is why it takes ' + (minResult.months / 12).toFixed(1) + ' years. Keep paying ' + calcFmt(payment) + ' and never let it drop and you are done in ' + (fixedResult.months / 12).toFixed(1) + ' years instead, saving ' + calcFmt(frozenSaved) + '. Better still, drag the slider up: paying more than the minimum is what really gets you out.</span></div>';
+    } else {
+      html += '<div class="savings-badge" style="background:var(--muted-bg)"><span class="savings-badge-text" style="color:var(--text-secondary)">You are paying the minimum. Drag the slider up to see what a bigger payment does.</span></div>';
+    }
+  }
+
+  // Lump sum: what does one payment today do to the whole debt?
+  var lumpEl = document.getElementById(screenId + '-lump');
+  var lump = lumpEl ? (parseFloat(lumpEl.value) || 0) : 0;
+  if (lump < 0) lump = 0;
+  if (lump > bal) lump = bal;
+  if (lump > 0 && lump < bal) {
+    var after = simFixedPayment(bal - lump, rate, payment);
+    var intSaved = fixedResult.totalInterest - after.totalInterest;
+    var moSaved = fixedResult.months - after.months;
+    html += '<div class="result-label" style="margin-top:14px">With Your ' + calcFmt(lump) + ' Lump Sum</div>';
+    html += '<div class="result-grid">';
+    html += '<div class="compare-card green-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number">' + calcTimeStr(after.months) + '</div></div>';
+    html += '<div class="compare-card green-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(bal + after.totalInterest) + '</div></div>';
+    html += '<div class="compare-card green-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(after.totalInterest) + '</div></div>';
+    html += '</div>';
+    html += '<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">That ' + calcFmt(lump) + ' saves you ' + calcFmt(intSaved) + ' in interest and ' + (moSaved < 24 ? moSaved + ' months' : (moSaved/12).toFixed(1) + ' years') + '</span></div>';
+  } else if (lump >= bal && bal > 0) {
+    html += '<div class="savings-badge"><span class="savings-badge-icon">&#127881;</span><span class="savings-badge-text">That clears the debt outright. You save ' + calcFmt(fixedResult.totalInterest) + ' in interest.</span></div>';
   }
   document.getElementById(screenId + '-results').innerHTML = html;
 }
@@ -1780,6 +2188,7 @@ function renderCalcDebtSeveral(container, config, screenId) {
   html += '<div id="' + screenId + '-consol-results" style="display:none;"></div>';
   html += '<div id="' + screenId + '-consol-empty" style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:8px;">Check at least one debt to see the comparison.</div>';
   html += '</div>';
+  html += '<div id="' + screenId + '-strat-note"></div>';
   html += '<div class="tool-disclaimer">This calculator is for educational purposes only.</div>';
   html += '</div>';
   container.innerHTML = html;
@@ -1796,22 +2205,48 @@ function calcRenderCards(screenId, container) {
   var debts = container._debts;
   var html = '';
   debts.forEach(function(d, i) {
-    var isRev = d.type === 'card' || d.type === 'loc';
+    var isRev = calcIsRevolving(d.type);
+    var thirdLabel = isRev ? 'Min Pay' : 'Term (yr)';
+    var thirdField = isRev ? 'minPay' : 'term';
+    var thirdVal = isRev ? (d.minPay || '') : (d.term || '');
     html += '<div class="card-entry"><div class="card-entry-header"><div class="card-entry-name">' + d.name + '</div>';
     if (debts.length > 1) html += '<div class="card-entry-remove" onclick="calcRemoveDebt(\'' + screenId + '\',' + i + ')">Remove</div>';
     html += '</div><div class="card-entry-inputs">';
     html += '<div class="input-group"><div class="input-label">Balance</div><input type="number" class="input-field" value="' + (d.balance || '') + '" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'balance\',this.value)"></div>';
     html += '<div class="input-group"><div class="input-label">Rate (%)</div><input type="number" class="input-field" value="' + (d.rate || '') + '" step="0.01" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'rate\',this.value)"></div>';
-    html += '<div class="input-group"><div class="input-label">' + (isRev ? 'Min Pay' : 'Payment') + '</div><input type="number" class="input-field" value="' + (d.minPay || '') + '" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'minPay\',this.value)"></div>';
+    html += '<div class="input-group"><div class="input-label">' + thirdLabel + '</div><input type="number" class="input-field" value="' + thirdVal + '" onchange="calcUpdateDebt(\'' + screenId + '\',' + i + ',\'' + thirdField + '\',this.value)"></div>';
+    html += '</div>';
+    // Debt type decides whether we ask for a minimum payment or a term. Without this,
+    // every debt a learner added was treated as a credit card.
+    html += '<div class="card-entry-type">';
+    [['card','Credit Card'],['loc','LOC'],['personal','Personal Loan'],['car','Car Loan']].forEach(function(t) {
+      html += '<div class="pill sm' + (d.type === t[0] ? ' active' : '') + '" onclick="calcSetDebtType(\'' + screenId + '\',' + i + ',\'' + t[0] + '\')">' + t[1] + '</div>';
+    });
     html += '</div></div>';
   });
   document.getElementById(screenId + '-cards').innerHTML = html;
+}
+
+function calcSetDebtType(screenId, idx, type) {
+  var container = document.getElementById('calc-' + screenId);
+  // Clicking a debt-type chip before the widget finished initialising threw a TypeError.
+  if (!container || !container._debts || !container._debts[idx]) return;
+  var d = container._debts[idx];
+  d.type = type;
+  // Switching between revolving and installment changes which field we need.
+  if (calcIsRevolving(type)) { delete d.term; if (!d.minPay) d.minPay = calcMinPay(d.balance, d.rate); }
+  else { delete d.minPay; if (!d.term) d.term = 5; }
+  calcRenderCards(screenId, container);
+  calcPaydownUpdate(screenId, container);
+  if (container._consolOpen) calcEmbedConsol(screenId);
 }
 
 function calcUpdateDebt(screenId, idx, field, val) {
   var container = document.getElementById('calc-' + screenId);
   container._debts[idx][field] = parseFloat(val) || 0;
   calcPaydownUpdate(screenId, container);
+  // The consolidation panel was showing stale balances and a stale warning after an edit.
+  if (container._consolOpen) calcEmbedConsol(screenId);
 }
 
 function calcAddDebt(screenId) {
@@ -1825,8 +2260,11 @@ function calcRemoveDebt(screenId, idx) {
   var container = document.getElementById('calc-' + screenId);
   if (container._debts.length <= 1) return;
   container._debts.splice(idx, 1);
+  // Keep the consolidation selection aligned, or the ticks shift onto the wrong debts.
+  if (container._consolSelected) container._consolSelected.splice(idx, 1);
   calcRenderCards(screenId, container);
   calcPaydownUpdate(screenId, container);
+  if (container._consolOpen) calcEmbedConsol(screenId);
 }
 
 function calcSetStrat(screenId, strat) {
@@ -1843,30 +2281,86 @@ function calcPaydownSlide(screenId) {
   calcPaydownUpdate(screenId);
 }
 
+
+// The paydown engine.
+// The learner commits ONE fixed monthly budget: the sum of every debt's scheduled
+// payment, plus whatever extra they can find. That budget never changes. As each debt
+// clears, the money that used to service it stays in the budget and gets redirected at
+// the next target. THAT is the avalanche/snowball cascade.
+// Modelling it as a fixed budget (rather than releasing a cleared debt's whole minimum
+// on top of the payment already made that month) is what keeps the simulation honest.
+function calcSimPaydown(debts, extra, strategy, fixedBudget) {
+  var ds = debts.map(function(d) {
+    return { balance: d.balance, rate: d.rate, minPay: calcDebtPayment(d), name: d.name };
+  });
+  var startBal = ds.reduce(function(sum, d) { return sum + d.balance; }, 0);
+  // fixedBudget lets a caller hold the monthly outlay CONSTANT across two scenarios.
+  // Without it, a consolidation comparison secretly also compares two different monthly
+  // budgets, and credits consolidation for a saving that was really just paying less.
+  var scheduled = ds.reduce(function(sum, d) { return sum + d.minPay; }, 0);
+  var budgetPerMonth = (typeof fixedBudget === 'number' && fixedBudget > 0)
+    ? Math.max(fixedBudget, scheduled)
+    : scheduled + extra;
+
+  var months = 0, totalPaid = 0, prevBal = startBal;
+  var nonAmortising = false;
+
+  while (months < 600) {
+    var live = ds.filter(function(d) { return d.balance > 0.005; });
+    if (!live.length) break;
+    months++;
+    var budget = budgetPerMonth;
+
+    // Interest accrues on every live debt.
+    live.forEach(function(d) { d.balance += d.balance * (d.rate / 100 / 12); });
+
+    // Each debt takes its scheduled payment (or its payoff amount, if smaller).
+    live.forEach(function(d) {
+      if (d.balance <= 0.005 || budget <= 0.005) return;
+      var pay = Math.min(d.minPay, d.balance, budget);
+      d.balance -= pay; budget -= pay; totalPaid += pay;
+      if (d.balance <= 0.005) d.balance = 0;
+    });
+
+    // Everything left in the budget hits the target, and cascades onward.
+    while (budget > 0.005) {
+      var active = ds.filter(function(d) { return d.balance > 0.005; });
+      if (!active.length) break;
+      active.sort(function(a, b) {
+        return strategy === 'avalanche' ? b.rate - a.rate : a.balance - b.balance;
+      });
+      var t = active[0];
+      var apply = Math.min(budget, t.balance);
+      t.balance -= apply; budget -= apply; totalPaid += apply;
+      if (t.balance <= 0.005) t.balance = 0;
+    }
+
+    // If the budget cannot even hold the balance still, the debt never clears.
+    // Say so rather than returning a confident, meaningless number.
+    var nowBal = ds.reduce(function(sum, d) { return sum + d.balance; }, 0);
+    if (months >= 12 && nowBal >= prevBal) { nonAmortising = true; break; }
+    prevBal = nowBal;
+  }
+
+  var remaining = ds.reduce(function(sum, d) { return sum + d.balance; }, 0);
+  var paidOff = remaining <= 0.5 && !nonAmortising && months < 600;
+  return {
+    months: months,
+    totalPaid: Math.round(totalPaid),
+    totalInterest: Math.round(totalPaid - (startBal - remaining)),
+    remainingBalance: Math.round(remaining),
+    paidOff: paidOff,
+    nonAmortising: nonAmortising || (!paidOff && remaining > 0.5),
+    monthlyBudget: Math.round(budgetPerMonth)
+  };
+}
+
 function calcPaydownUpdate(screenId, container) {
   if (!container) container = document.getElementById('calc-' + screenId);
   var debts = container._debts;
   var strategy = container._strategy;
   var extra = parseInt(document.getElementById(screenId + '-extra-slider').value) || 0;
-  function simPD(ds, ex, strat) {
-    var dd = ds.map(function(d) { return {balance:d.balance, rate:d.rate, minPay:d.minPay||calcMinPay(d.balance,d.rate), name:d.name}; });
-    var months=0, totalInt=0;
-    while(dd.some(function(d){return d.balance>0.5;}) && months<600) {
-      var sorted=dd.filter(function(d){return d.balance>0.5;});
-      if(strat==='avalanche') sorted.sort(function(a,b){return b.rate-a.rate;});
-      else sorted.sort(function(a,b){return a.balance-b.balance;});
-      var extraLeft=ex;
-      dd.forEach(function(d){
-        if(d.balance<=0.5)return;
-        var interest=d.balance*(d.rate/100/12); totalInt+=interest;
-        var pay=d.minPay;
-        if(d===sorted[0]) pay+=extraLeft;
-        d.balance=Math.max(0,d.balance+interest-pay);
-      });
-      months++;
-    }
-    return {months:months, totalInterest:Math.round(totalInt)};
-  }
+  var simPD = calcSimPaydown;
   var avalResult = simPD(debts, extra, 'avalanche');
   var snowResult = simPD(debts, extra, 'snowball');
   var avalEl = document.getElementById(screenId + '-aval-int');
@@ -1875,6 +2369,34 @@ function calcPaydownUpdate(screenId, container) {
   if (snowEl) snowEl.textContent = calcFmt(snowResult.totalInterest);
   var result = strategy === 'avalanche' ? avalResult : snowResult;
   var otherResult = strategy === 'avalanche' ? snowResult : avalResult;
+
+  // With no extra payment the two strategies necessarily produce the same answer: every
+  // dollar is already committed to minimums, so there is no surplus to aim at either
+  // target. Say so, rather than showing two identical numbers and letting the learner
+  // conclude the tool is broken.
+  var stratNote = document.getElementById(screenId + '-strat-note');
+  if (stratNote) {
+    if (extra <= 0) {
+      stratNote.innerHTML = '<div class="caution-note">Both strategies show the same result right now, and that is correct. With no extra payment, every dollar is already committed to your minimums, so there is nothing spare to aim at either target. Add an extra amount below and the two will separate.</div>';
+    } else {
+      stratNote.innerHTML = '';
+    }
+  }
+
+  // If the budget cannot outrun the interest, this debt never clears. Say so plainly.
+  // Reporting a payoff date here would be worse than useless: it would be a lie told
+  // to the person whose situation is most dangerous.
+  if (result.nonAmortising) {
+    var warn = '<div class="caution-note"><strong>These payments will never clear this debt.</strong> '
+      + 'The interest is growing faster than the payments are shrinking the balance. '
+      + 'You need a bigger monthly payment, a lower rate, or help. Raise the extra payment above '
+      + 'and watch for the point where the numbers start to move.</div>';
+    document.getElementById(screenId + '-results').innerHTML = warn;
+    if (avalEl) avalEl.textContent = '--';
+    if (snowEl) snowEl.textContent = '--';
+    return;
+  }
+
   var html = '<div class="big-result"><div class="big-result-label">' + (strategy === 'avalanche' ? 'Avalanche' : 'Snowball') + ' Strategy</div>';
   html += '<div class="big-result-number">' + (result.months < 12 ? result.months + ' mo' : Math.round(result.months/12*10)/10 + ' years') + '</div>';
   html += '<div class="big-result-sub">to be debt-free</div></div>';
@@ -1924,13 +2446,25 @@ function calcRenderConsolChecks(screenId, container) {
   var sel = container._consolSelected || debts.map(function() { return false; });
   while (sel.length < debts.length) sel.push(false);
   container._consolSelected = sel;
+  // The one rule that decides whether a debt belongs in the loan: is it more expensive
+  // than the loan? Rolling in a cheaper debt RAISES its rate and costs you money.
+  var rateEl = document.getElementById(screenId + '-consol-rate');
+  var loanRate = rateEl ? (parseFloat(rateEl.value) || 0) : ((calcConfigs[screenId] || {}).consolRate || 0);
   var html = '';
+  var rolledInCheaper = false;
   debts.forEach(function(d, i) {
     var label = d.name + (d.balance > 0 ? ' (' + calcFmt(d.balance) + ' at ' + d.rate + '%)' : '');
+    var cheaper = loanRate > 0 && d.balance > 0 && d.rate < loanRate;
+    if (cheaper && sel[i]) rolledInCheaper = true;
     html += '<div class="consol-check ' + (sel[i] ? 'on' : 'off') + '" onclick="calcToggleConsolDebt(\'' + screenId + '\',' + i + ')">';
     html += '<input type="checkbox" ' + (sel[i] ? 'checked' : '') + ' style="pointer-events:none">';
-    html += '<span>' + label + '</span></div>';
+    html += '<span>' + label + '</span>';
+    if (cheaper) html += '<span class="consol-warn">already below ' + loanRate + '%</span>';
+    html += '</div>';
   });
+  if (rolledInCheaper) {
+    html += '<div class="caution-note">You have rolled in a debt that already costs less than ' + loanRate + '%. Moving it into the loan raises its rate. Only consolidate debts that cost more than the loan.</div>';
+  }
   document.getElementById(screenId + '-consol-checks').innerHTML = html;
 }
 
@@ -1944,6 +2478,7 @@ function calcToggleConsolDebt(screenId, idx) {
 function calcEmbedConsol(screenId) {
   var container = document.getElementById('calc-' + screenId);
   if (!container || !container._consolOpen) return;
+  calcRenderConsolChecks(screenId, container);
   var debts = container._debts;
   var sel = container._consolSelected || [];
   var strategy = container._strategy;
@@ -1966,53 +2501,53 @@ function calcEmbedConsol(screenId) {
   var consolFees = parseFloat(document.getElementById(screenId + '-consol-fees').value) || 0;
 
   // Current plan simulation
-  function simPD(ds, ex, strat) {
-    var dd = ds.map(function(d) { return {balance:d.balance, rate:d.rate, minPay:d.minPay||calcMinPay(d.balance,d.rate)}; });
-    var months=0, totalInt=0, totalPaid=0;
-    while(dd.some(function(d){return d.balance>0.5;}) && months<600) {
-      var sorted=dd.filter(function(d){return d.balance>0.5;});
-      if(strat==='avalanche') sorted.sort(function(a,b){return b.rate-a.rate;});
-      else sorted.sort(function(a,b){return a.balance-b.balance;});
-      var extraLeft=ex;
-      dd.forEach(function(d){
-        if(d.balance<=0.5)return;
-        var interest=d.balance*(d.rate/100/12); totalInt+=interest;
-        var pay=d.minPay;
-        if(d===sorted[0]) pay+=extraLeft;
-        pay=Math.min(pay, d.balance+interest);
-        totalPaid+=pay;
-        d.balance=Math.max(0,d.balance+interest-pay);
-      });
-      months++;
-    }
-    return {months:months, totalInterest:Math.round(totalInt), totalPaid:Math.round(totalPaid)};
-  }
+  var simPD = calcSimPaydown;
 
+  // Per the spec (s3.8): both scenarios use the SAME EXTRA payment, and each keeps its own
+  // required payments. Consolidating genuinely changes what you MUST pay each month, so we
+  // model that and then show the difference rather than normalising it away.
   var currentResult = simPD(debts, extra, strategy);
 
   // Consolidation: keep unselected debts, replace selected with one loan
   var consolDebts = [];
   debts.forEach(function(d, i) {
-    if (!sel[i]) consolDebts.push({balance:d.balance, rate:d.rate, minPay:d.minPay||calcMinPay(d.balance,d.rate), type:d.type});
+    // Carry the debt's real payment across explicitly. Passing only minPay let
+    // calcDebtPayment quietly re-derive installment debts from a 5-year default.
+    if (!sel[i]) consolDebts.push({balance:d.balance, rate:d.rate, type:d.type,
+                                   term:d.term, minPay:d.minPay, payment:calcDebtPayment(d)});
   });
   var consolMo = consolTerm * 12;
   var consolMp = calcPmtMonthly(consolBal + consolFees, consolRate, consolMo);
-  consolDebts.push({balance: consolBal + consolFees, rate: consolRate, minPay: consolMp, type: 'personal'});
+  consolDebts.push({balance: consolBal + consolFees, rate: consolRate, type: 'personal',
+                    term: consolTerm, payment: consolMp});
   var consolResult = simPD(consolDebts, extra, strategy);
 
-  var currentBetter = currentResult.totalInterest <= consolResult.totalInterest;
+  if (currentResult.nonAmortising || consolResult.nonAmortising) {
+    document.getElementById(screenId + '-consol-results').innerHTML =
+      '<div class="caution-note">At these payments one of these plans never clears the debt, so a comparison would be meaningless. Raise the extra payment.</div>';
+    return;
+  }
+  // Judge on total money out the door, including the consolidation fee. Judging on
+  // interest alone let a fee-heavy loan be crowned the winner while costing more.
+  var currentCost = currentResult.totalPaid;
+  var consolCost = consolResult.totalPaid;
+  var currentBetter = currentCost <= consolCost;
   var consolBetter = !currentBetter;
-  var savedInt = Math.abs(currentResult.totalInterest - consolResult.totalInterest);
+  var savedInt = Math.abs(currentCost - consolCost);
   var savedMo = Math.abs(currentResult.months - consolResult.months);
 
   var html = '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:10px;">Comparison</div>';
   html += '<div class="consol-vs">';
   html += '<div class="consol-vs-card' + (currentBetter ? ' better' : '') + '"><div class="consol-vs-label">Current Plan</div>';
+  html += '<div class="consol-vs-row"><strong>' + calcFmt(currentResult.monthlyBudget) + '</strong>per month</div>';
   html += '<div class="consol-vs-row"><strong>' + calcFmt(currentResult.totalInterest) + '</strong>total interest</div>';
+  html += '<div class="consol-vs-row"><strong>' + calcFmt(currentResult.totalPaid) + '</strong>total paid</div>';
   html += '<div class="consol-vs-row"><strong>' + (currentResult.months < 24 ? currentResult.months + ' mo' : Math.round(currentResult.months/12) + ' yr') + '</strong>to debt-free</div></div>';
   html += '<div class="consol-vs-mid"><div class="vs-badge">vs</div></div>';
   html += '<div class="consol-vs-card' + (consolBetter ? ' better' : '') + '"><div class="consol-vs-label">Consolidation</div>';
+  html += '<div class="consol-vs-row"><strong>' + calcFmt(consolResult.monthlyBudget) + '</strong>per month</div>';
   html += '<div class="consol-vs-row"><strong>' + calcFmt(consolResult.totalInterest) + '</strong>total interest</div>';
+  html += '<div class="consol-vs-row"><strong>' + calcFmt(consolResult.totalPaid) + '</strong>total paid</div>';
   html += '<div class="consol-vs-row"><strong>' + (consolResult.months < 24 ? consolResult.months + ' mo' : Math.round(consolResult.months/12) + ' yr') + '</strong>to debt-free</div></div>';
   html += '</div>';
   if (savedInt > 10) {
@@ -2022,10 +2557,16 @@ function calcEmbedConsol(screenId) {
   if (consolBetter) {
     html += '<div class="caution-note" style="font-size:12px;">Consolidation only works if you stop using the accounts you paid off. Keep them open for credit reporting, but do not add new balances.</div>';
   }
+  var moDiff = consolResult.monthlyBudget - currentResult.monthlyBudget;
+  if (Math.abs(moDiff) > 1) {
+    html += '<div class="caution-note">These two plans do not cost the same each month. Consolidating '
+      + (moDiff < 0 ? 'LOWERS' : 'RAISES') + ' your monthly payment by ' + calcFmt(Math.abs(moDiff))
+      + '. Some of the difference above comes from that, not from the loan itself. Look at total paid, not just interest.</div>';
+  }
   document.getElementById(screenId + '-consol-results').innerHTML = html;
 }
 
-// Shuffle in-section quiz option order on page load
+// (In-section quiz shuffle lives in the DOMContentLoaded handler at the foot of this file.)
 
 function shareCert(platform) {
   var certName = 'Credit Bright Getting Out of Debt Certificate';
@@ -2040,20 +2581,59 @@ function shareCert(platform) {
 
 function cbNavOpen(){document.getElementById('cb-nav-overlay').classList.add('open')}
 function cbNavClose(){document.getElementById('cb-nav-overlay').classList.remove('open')}
-function cbNavGo(id){cbNavClose();goTo(id)}
+function cbNavCert(){
+  cbNavClose();
+  if (cbCanCertify()) { goTo('cert-0'); }
+  else { goTo('post-0'); }
+}
+function cbNavGo(id){
+  if (id === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+  // Never allow a direct jump to the certificate without having earned it.
+  if (id === 'cert-0' && !cbCanCertify()) { cbNavFinal(); return; }
+  cbNavClose();
+  var p = getSectionPrefix(id);
+  if (/^s[1-7]$/.test(p) && cbSectionLastScreen[p]) { goTo(cbSectionLastScreen[p]); }
+  else { goTo(id); }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Collect the in-section quizzes (pre/post have their own pass above).
+  var wraps = [];
   document.querySelectorAll('.quiz-wrap').forEach(function(wrap) {
     if (wrap.id.indexOf('pre-') === 0 || wrap.id.indexOf('post-') === 0) return;
-    var btns = Array.from(wrap.querySelectorAll('.quiz-option'));
-    if (btns.length < 2) return;
-    // Add data-answer-index before shuffling to track original position
+    if (wrap.querySelectorAll('.quiz-option').length >= 2) wraps.push(wrap);
+  });
+  // Balance WITHIN each section, not just across the course. A section of 3 questions
+  // gets one answer in each of A, B and C, so a same-position run is impossible.
+  var bySection = {};
+  wraps.forEach(function(w) {
+    var sec = w.id.split('-')[1];
+    (bySection[sec] = bySection[sec] || []).push(w);
+  });
+  var targetFor = {};
+  Object.keys(bySection).forEach(function(sec) {
+    var group = bySection[sec];
+    var seq = cbAssignAnswerPositions(group.map(function(w){ return w.querySelectorAll('.quiz-option').length; }));
+    group.forEach(function(w, i) { targetFor[w.id] = seq[i]; });
+  });
+  wraps.forEach(function(wrap, qi) {
+    var btns = Array.prototype.slice.call(wrap.querySelectorAll('.quiz-option'));
+    // Tag each button with its TRUE answer index before anything moves.
     btns.forEach(function(b, i) { b.setAttribute('data-answer-index', i); });
-    for (var i = btns.length - 1; i > 0; i--) {
+    var qid = wrap.id.replace('quiz-', '');
+    var data = sectionQuizData[qid];
+    if (!data) return;
+    var target = (targetFor[wrap.id] || 0) % btns.length;
+    var correctBtn = btns[data.correct];
+    var others = btns.filter(function(_, i) { return i !== data.correct; });
+    for (var i = others.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
-      var tmp = btns[i]; btns[i] = btns[j]; btns[j] = tmp;
+      var t = others[i]; others[i] = others[j]; others[j] = t;
     }
-    btns.forEach(function(b) { wrap.appendChild(b); });
+    var o = 0;
+    for (var p = 0; p < btns.length; p++) {
+      wrap.appendChild(p === target ? correctBtn : others[o++]);
+    }
   });
   cbInit();
 });

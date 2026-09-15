@@ -28,14 +28,14 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);min-hei
 .logo-text{font-size:12px;font-weight:700;letter-spacing:0.2em;color:rgba(255,255,255,0.4)}
 .header-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:#fff;line-height:1.2;margin-bottom:4px}
 .header-title-sm{font-size:20px;margin-bottom:0}
-.header-sub{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.5}
-.header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:12px;transition:color 0.2s}
-.header-back:hover{color:rgba(255,255,255,0.8)}
+.header-sub{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.5}
+.header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.8);cursor:pointer;margin-bottom:12px;transition:color 0.2s}
+.header-back:hover{color:rgba(255,255,255,1)}
 .header-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .screen{display:none;flex-direction:column;flex:1}
 .screen.active{display:flex}
 .scroll-area{flex:1;padding:24px}
-.scroll-area::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:right;padding:16px 0 4px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.04em;color:var(--text-muted);opacity:0.5}
+.scroll-area::after{content:'🍁 Built in Canada, for Canadians';display:block;text-align:right;padding:16px 0 4px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.04em;color:var(--text-muted);opacity:0.5}
 .door-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:24px;margin-bottom:14px;cursor:pointer;transition:all 0.25s ease;position:relative;overflow:hidden}
 .door-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 24px rgba(46,125,79,0.08)}
 .door-card:active{transform:translateY(0)}
@@ -80,9 +80,9 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
 .divider{height:1px;background:var(--border-light);margin:24px 0}
 .result-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--green);margin-bottom:16px}
 .big-result{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:20px;padding:28px 24px;margin-bottom:16px;text-align:center}
-.big-result-label{font-size:13px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.big-result-label{font-size:13px;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
 .big-result-number{font-family:'Instrument Serif',serif;font-size:42px;color:#fff;font-weight:400;line-height:1.1;transition:all 0.3s ease}
-.big-result-sub{font-size:14px;color:rgba(255,255,255,0.45);margin-top:6px;line-height:1.5}
+.big-result-sub{font-size:14px;color:rgba(255,255,255,0.8);margin-top:6px;line-height:1.5}
 .result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
 .result-grid.two-col{grid-template-columns:1fr 1fr}
 .compare-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:18px 12px;text-align:center;transition:all 0.3s ease}
@@ -112,6 +112,7 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
 .insight-box p{font-size:14px;color:var(--text-secondary);line-height:1.65;margin:0}
 .context-note{font-size:13px;color:var(--text-muted);line-height:1.55;font-style:italic;margin:12px 0}
 .caution-note{background:var(--gold-light);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:13px;color:#8B6914;line-height:1.55}
+.consol-warn{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#8B6914;background:var(--gold-light);padding:2px 6px;border-radius:4px;white-space:nowrap}
 .action-line{background:var(--green-light);border-radius:14px;padding:18px 20px;margin-top:20px;display:flex;gap:12px;align-items:flex-start}
 .action-line-icon{font-size:18px;flex-shrink:0;margin-top:1px}
 .action-line-text{font-size:14px;color:var(--green-dark);line-height:1.55;font-weight:500}
@@ -295,7 +296,7 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
     </div>
     <div class="door-card animate-in delay-3" onclick="openDoor('strength')">
       <div class="door-icon strength">📊</div>
-      <div class="door-title">Strengthen my credit</div>
+      <div class="door-title">Your credit ratios</div>
       <div class="door-desc">Check your credit utilization and debt service ratios. See how a lender sees you.</div>
       <div class="door-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
     </div>
@@ -445,7 +446,8 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
         <div class="input-group"><div class="input-label">Minimum Payment</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d2r-minpay" value="" oninput="calcD2()"></div><div class="helper-text" id="d2r-minpay-helper">Estimated. Check your statement for your actual minimum payment.</div></div>
         <div id="d2r-var-note" style="display:none"><div class="caution-note">Lines of credit are typically variable rate. These projections assume today's rate holds.</div></div>
         <div class="input-group"><div class="slider-wrap"><div class="slider-header"><div class="input-label" style="margin:0">I can pay each month</div><div class="slider-value">$<span id="d2r-pay-display">150</span></div></div><input type="range" id="d2r-payment" min="50" max="500" value="150" step="10" oninput="calcD2()"><div class="slider-labels"><span>$50</span><span id="d2r-slider-mid">$250</span><span id="d2r-slider-max">$500</span></div></div></div>
-      </div>
+        <div class="input-group"><div class="input-label">Lump Sum Payment (optional)</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="d2r-lump" value="" placeholder="e.g. 2000" oninput="calcD2()"></div><div class="helper-text">A tax refund, bonus, or gift. See what one payment today does to the whole debt.</div></div>
+        </div>
 
       <!-- Installment debt inputs -->
       <div id="d2-installment-inputs" style="display:none">
@@ -459,6 +461,7 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
             <div class="freq-pill" onclick="setD2Freq(this,'biweekly')">Biweekly</div>
             <div class="freq-pill" onclick="setD2Freq(this,'accel')">Accelerated Biweekly</div>
           </div>
+          <div class="context-note" id="d2-freq-note">12 payments per year.</div>
         </div>
         <div id="d2i-caution" style="display:none"></div>
         <div id="d2i-var-note" style="display:none"><div class="caution-note">If your rate is variable, these projections assume it stays at today's rate. Your actual results will change as rates move.</div></div>
@@ -469,15 +472,16 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
 
       <!-- Revolving results -->
       <div id="d2-revolving-results">
-        <div class="result-label" style="color:var(--text-muted);opacity:0.7">Minimum Payment Path</div>
+        <div class="result-label" style="color:var(--text-muted);opacity:0.7">The Bank's Minimum <span style="font-weight:400;text-transform:none;letter-spacing:0">(it shrinks every month)</span></div>
         <div class="result-grid">
           <div class="compare-card muted-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number" id="d2r-min-time">19 yrs</div></div>
           <div class="compare-card muted-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number" id="d2r-min-total">$12,313</div></div>
           <div class="compare-card muted-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number" id="d2r-min-int">$7,313</div></div>
         </div>
-        <div class="result-label">Your Path</div>
+        <div class="result-label">Your Payment <span style="font-weight:400;text-transform:none;letter-spacing:0">(held steady each month)</span></div>
         <div class="result-grid">
           <div class="compare-card green-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number" id="d2r-your-time">3.4 yrs</div></div>
+        <div id="d2r-lump-result"></div>
           <div class="compare-card green-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number" id="d2r-your-total">$6,820</div></div>
           <div class="compare-card green-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number" id="d2r-your-int">$1,820</div></div>
         </div>
@@ -557,7 +561,7 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
   <div class="header header-compact">
     <div class="header-back" onclick="goHome()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Credit Calculator</div>
     <div class="logo-bar" style="margin-bottom:8px"><svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 17.5c0-1.5-1.2-2.8-2.3-4A6 6 0 1 1 16.3 13.5c-1.1 1.2-2.3 2.5-2.3 4" stroke="#43A66A" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M9.5 18.5h5" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><path d="M10 21h4" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="3" stroke="#43A66A" stroke-width="1.5" stroke-linecap="round"/><line x1="4.5" y1="4.5" x2="6" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/><line x1="19.5" y1="4.5" x2="18" y2="6" stroke="#8BC6A0" stroke-width="1.5" stroke-linecap="round"/></svg><span class="logo-text">CREDIT BRIGHT</span></div>
-    <div class="header-title header-title-sm">Strengthen My Credit</div>
+    <div class="header-title header-title-sm">Your Credit Ratios</div>
   </div>
   <div class="scroll-area">
     <div class="mode-toggle" id="d3-mode">
@@ -619,7 +623,7 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
       <div class="result-row"><span class="result-row-label">All debt payments</span><span class="result-row-value" id="dti-all-total">$2,300</span></div>
       <div class="result-row"><span class="result-row-label">Room for more debt</span><span class="result-row-value" id="dti-room">$0/mo</span></div>
 
-      <div class="insight-box"><p><strong>TDS (Total Debt Service)</strong> includes housing costs plus all other debt payments, divided by your gross income. Canadian lenders typically require TDS under 44%. CMHC will not insure a mortgage above this threshold.</p></div>
+      <div class="insight-box"><p><strong>TDS (Total Debt Service)</strong> includes housing costs plus all other debt payments, divided by your gross income. Canadian lenders typically require TDS under 44%, and GDS, which counts housing costs alone, under 39%. You have to pass both. CMHC, Sagen and Canada Guaranty all work to broadly these limits.</p></div>
       <div class="action-line"><div class="action-line-icon">👉</div><div class="action-line-text" id="dti-action-text">Your TDS is 46%. Clearing $100/month in debt payments would bring you to 44%.</div></div>
     </div>
   </div>
@@ -652,9 +656,19 @@ async function cbInit() {
     var gate = document.getElementById('cb-loading-gate');
     if (gate) gate.style.display = 'none';
   } catch (e) {
+    // FAIL CLOSED. The old code hid the gate on any unexpected error, which meant the
+    // tool opened for anyone precisely when the auth check was broken.
     console.error('CB init error:', e);
     var gate = document.getElementById('cb-loading-gate');
-    if (gate) gate.style.display = 'none';
+    if (gate) {
+      gate.style.display = '';
+      gate.innerHTML = '<div style="max-width:340px;margin:0 auto;text-align:center;padding:24px;color:#fff;">'
+        + '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">We could not verify your access</div>'
+        + '<div style="font-size:14px;opacity:0.75;line-height:1.5;margin-bottom:18px;">Something went wrong while checking your account. Please try again, or sign in.</div>'
+        + '<button onclick="window.location.reload()" style="padding:10px 18px;border:none;border-radius:8px;background:#43A66A;color:#fff;font-weight:600;cursor:pointer;margin-right:8px;">Retry</button>'
+        + '<button onclick="window.location.href=\'website-login.html\'" style="padding:10px 18px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;background:transparent;color:#fff;cursor:pointer;">Sign in</button>'
+        + '</div>';
+    }
   }
 }
 
@@ -672,13 +686,13 @@ var cbSessionRowId = null;
 async function cbLogSession() {
   if (!sb || !cbUser) return;
   var duration = Math.round((Date.now() - cbToolSessionStart) / 1000);
-  var doorNames = { 'offer': 'Before You Sign', 'debt': 'After You Signed', 'strength': 'Strengthen My Credit' };
+  var doorNames = { 'offer': 'Before You Sign', 'debt': 'After You Signed', 'strength': 'Your Credit Ratios' };
   var doorsLabel = cbDoorsVisited.map(function(d) { return doorNames[d] || d; }).join(', ');
   var sessionData = JSON.stringify({ doors: cbDoorsVisited, calculations: cbCalculations });
 
   try {
     if (!cbSessionRowId) {
-      var { data } = await sb.from('tool_sessions').insert({
+      var { data, error: insErr } = await sb.from('tool_sessions').insert({
         user_id: cbUser.id, tool: 'calculator',
         calculator_door: doorsLabel || null,
         session_data: sessionData,
@@ -686,14 +700,16 @@ async function cbLogSession() {
         ended_at: new Date().toISOString(),
         duration_seconds: duration
       }).select('id').single();
+      if (insErr) console.error('CB: session insert failed', insErr);
       if (data) cbSessionRowId = data.id;
     } else {
-      await sb.from('tool_sessions').update({
+      var { error: updErr } = await sb.from('tool_sessions').update({
         calculator_door: doorsLabel || null,
         session_data: sessionData,
         ended_at: new Date().toISOString(),
         duration_seconds: duration
       }).eq('id', cbSessionRowId);
+      if (updErr) console.error('CB: session update failed', updErr);
     }
   } catch (e) { console.error('Session log error:', e); }
 }
@@ -722,15 +738,19 @@ function simBiweekly(P,annualRate,monthlyPmt,freq){
   return{totalPaid:tot,periods:periods,years:(periods/26),interest:tot-P,payment:bwPay}
 }
 function calcMinPay(bal,rate){return Math.max(Math.round(bal*0.01+bal*(rate/100/12)),25)}
+// A declining-minimum estimate: 1% of the balance plus that month's interest, floor $25.
 function simMinPayment(bal,annualRate){
   var r=annualRate/100/12,b=bal,tot=0,mo=0,mx=600;
   while(b>0.50&&mo<mx){var i=b*r;var mp=Math.max(b*0.01+i,25);mp=Math.min(mp,b+i);b-=(mp-i);tot+=mp;mo++}
-  return{months:mo,total:tot,interest:tot-bal}
+  return{months:mo,total:tot,interest:tot-(bal-b),remainingBalance:b,paidOff:b<=0.5,nonAmortising:b>0.5}
 }
+// A FIXED payment. If it does not cover the interest, the balance grows and the debt never
+// clears. The old code ran to the 600-month cap and reported that as a payoff, with an
+// interest figure computed as if the principal had been repaid. It had not.
 function simFixedPayment(bal,annualRate,payment){
   var r=annualRate/100/12,b=bal,tot=0,mo=0,mx=600;
   while(b>0.50&&mo<mx){var i=b*r;var p=Math.min(payment,b+i);b=b+i-p;tot+=p;mo++}
-  return{months:mo,total:tot,interest:tot-bal}
+  return{months:mo,total:tot,interest:tot-(bal-b),remainingBalance:b,paidOff:b<=0.5&&mo<mx,nonAmortising:b>0.5}
 }
 
 // ═══ DOOR 1: BEFORE YOU SIGN ═══
@@ -760,7 +780,7 @@ function setD1Type(el,type){
   calcD1();
   if(document.getElementById('d1-compare-section').classList.contains('open'))calcD1Compare();
 }
-function setD1Freq(el,f){d1Freq=f;document.querySelectorAll('#d1-freq-section .freq-pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');var n=document.getElementById('d1-freq-note');if(f==='monthly')n.textContent='12 payments per year.';else if(f==='biweekly')n.textContent='26 payments per year. Same annual cost, spread over more pay periods.';else n.textContent='26 half-payments per year. Equals 13 months of payments. The extra goes straight to principal.';calcD1()}
+function setD1Freq(el,f){d1Freq=f;document.querySelectorAll('#d1-freq-section .freq-pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');var n=document.getElementById('d1-freq-note');if(f==='monthly')n.textContent='12 payments per year.';else if(f==='biweekly')n.textContent='26 payments per year, but the SAME total each year. Your monthly payment is split across more pay periods, so you finish at about the same time.';else n.textContent='Half your monthly payment, 26 times a year. That works out to 13 monthly payments instead of 12. The extra one goes straight at the principal, which is what shortens the mortgage.';calcD1()}
 
 function calcD1(){cbTrackCalc();
   var isRev=(d1Type==='card'||d1Type==='loc');
@@ -777,10 +797,10 @@ function calcD1(){cbTrackCalc();
   var freqSav=document.getElementById('d1-freq-savings');freqSav.style.display='none';
   var monthlyRef=mp*months;
   if(isMort&&d1Freq!=='monthly'){
-    var bw=simBiweekly(P,rate,mp,d1Freq);totalInt=bw.interest;totalPaid=bw.totalPaid;payDisp=fmt(bw.payment);payLabel='Biweekly Payment';
+    var bw=simBiweekly(P,rate,mp,d1Freq);totalInt=bw.interest;totalPaid=bw.totalPaid+fees;payDisp=fmt(bw.payment);payLabel='Biweekly Payment';
     var saved=monthlyRef-bw.totalPaid,yrsSaved=((months/12)-bw.years).toFixed(1);
-    if(saved>100){freqSav.style.display='block';document.getElementById('d1-freq-text').textContent='Saves '+fmt(saved)+' in interest and pays off '+yrsSaved+' years sooner'}
-  }else{totalPaid=mp*months;totalInt=totalPaid-P;payDisp=fmt(mp);payLabel='Monthly Payment'}
+    if(saved>100){freqSav.style.display='block';document.getElementById('d1-freq-text').textContent='Saves '+fmt(saved)+' in interest'+(parseFloat(yrsSaved)>=0.1?(' and pays off '+yrsSaved+' years sooner'):' over the same term')}
+  }else{totalInt=(mp*months)-P;totalPaid=(mp*months)+fees;payDisp=fmt(mp);payLabel='Monthly Payment'}
   document.getElementById('d1-pay-label').textContent=payLabel;
   document.getElementById('d1-monthly').textContent=payDisp;
   document.getElementById('d1-total').textContent=fmt(totalPaid);
@@ -889,7 +909,14 @@ function setD2Type(el,type){
   }
   calcD2();
 }
-function setD2Freq(el,f){d2Freq=f;document.querySelectorAll('#d2-mort-freq .freq-pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');calcD2()}
+function setD2Freq(el,f){d2Freq=f;document.querySelectorAll('#d2-mort-freq .freq-pill').forEach(function(p){p.classList.remove('active')});el.classList.add('active');
+  var n2=document.getElementById('d2-freq-note');
+  if(n2){
+    if(f==='monthly')n2.textContent='12 payments per year.';
+    else if(f==='biweekly')n2.textContent='26 payments per year, but the SAME total each year. Your monthly payment is split across more pay periods, so you finish at about the same time.';
+    else n2.textContent='Half your monthly payment, 26 times a year. That works out to 13 monthly payments instead of 12. The extra one goes straight at the principal, which is what shortens the mortgage.';
+  }
+  calcD2()}
 function updateD2RSlider(bal){
   var sl=document.getElementById('d2r-payment');var mx=Math.max(200,Math.round(bal*0.10/10)*10);
   var rate=parseFloat(document.getElementById('d2r-rate').value)||0;
@@ -922,10 +949,64 @@ function calcD2Rev(){
   document.getElementById('d2r-your-int').textContent=fmt(yourSim.interest);
   var savedMoney=minSim.interest-yourSim.interest,savedTime=minSim.months-yourSim.months;
   var sb=document.getElementById('d2r-savings');
-  if(savedMoney>10){sb.style.display='flex';document.getElementById('d2r-savings-text').textContent='You save '+fmt(savedMoney)+' and '+(savedTime<24?savedTime+' months':(savedTime/12).toFixed(1)+' years')}else sb.style.display='none';
   var act=document.getElementById('d2-action-text');
-  if(payment<=minp+5)act.textContent='You\'re paying the minimum. Even '+fmt(minp+50)+'/month would save you '+fmt(simFixedPayment(bal,rate,minp+50).interest<minSim.interest?minSim.interest-simFixedPayment(bal,rate,minp+50).interest:0)+' in interest.';
-  else act.textContent='Paying '+fmt(payment)+'/month saves you '+fmt(savedMoney)+' compared to minimums.';
+
+  // If the payment does not cover the interest, this debt NEVER clears. Never show a
+  // payoff date in that case: it is a reassuring lie told to the person in most danger.
+  if(yourSim.nonAmortising){
+    document.getElementById('d2r-your-time').textContent='Never';
+    document.getElementById('d2r-your-total').textContent='--';
+    document.getElementById('d2r-your-int').textContent='--';
+    sb.style.display='none';
+    act.textContent='This payment does not even cover the monthly interest. The balance is growing. You need to pay more than '+fmt(Math.ceil(bal*(rate/100/12)))+' a month just to stand still.';
+  } else {
+    // At the floor, do NOT also congratulate. The explanation below does the work, and a
+    // "you save" badge beside "you are paying the minimum" is a mixed signal.
+    if(payment>minp+5&&savedMoney>10&&minSim.paidOff){sb.style.display='flex';document.getElementById('d2r-savings-text').textContent='You save '+fmt(savedMoney)+' and '+(savedTime<24?savedTime+' months':(savedTime/12).toFixed(1)+' years')}else sb.style.display='none';
+    // Trigger off the slider's own floor, not the typed minimum field. Those two are
+    // derived differently, so leaving the field at its default meant the lesson callout
+    // never appeared even with the slider dragged all the way down.
+    var sl=document.getElementById('d2r-payment');
+    var floor=sl?(parseFloat(sl.min)||minp):minp;
+    if(payment<=Math.max(floor,minp)+5){
+      // The two panels show very different numbers for the SAME dollar amount today.
+      // The bank's minimum SHRINKS as the balance falls; a fixed payment does not.
+      // That difference is the single most valuable thing on this screen.
+      var frozenSaved=minSim.interest-yourSim.interest;
+      var frozenYrs=((minSim.months-yourSim.months)/12).toFixed(1);
+      if(frozenSaved>50){
+        var nextBal=bal+(bal*(rate/100/12))-payment;
+        var nextMin=Math.max(Math.round(nextBal*0.01+nextBal*(rate/100/12)),25);
+        act.textContent='This is your minimum today. Next month the bank will ask for about '+fmt(nextMin)+', then a little less again. That is why it takes '+(minSim.months/12).toFixed(1)+' years. Keep paying '+fmt(payment)+' and never let it drop and you are done in '+(yourSim.months/12).toFixed(1)+' years instead, saving '+fmt(frozenSaved)+'. Better still, pay more than the minimum.';
+      } else {
+        act.textContent='You\'re paying the minimum. Even '+fmt(minp+50)+'/month would save you '+fmt(simFixedPayment(bal,rate,minp+50).interest<minSim.interest?minSim.interest-simFixedPayment(bal,rate,minp+50).interest:0)+' in interest.';
+      }
+    }
+    else act.textContent='Paying '+fmt(payment)+'/month saves you '+fmt(savedMoney)+' compared to minimums.';
+  }
+
+  // Lump sum: what does one payment today do to the whole debt?
+  var lumpEl=document.getElementById('d2r-lump');
+  var lump=lumpEl?(parseFloat(lumpEl.value)||0):0;
+  if(lump<0)lump=0;
+  if(lump>bal)lump=bal;
+  var lr=document.getElementById('d2r-lump-result');
+  if(lr){
+    if(lump>0&&lump<bal&&!yourSim.nonAmortising){
+      var after=simFixedPayment(bal-lump,rate,payment);
+      var intSaved=yourSim.interest-after.interest;
+      var moSaved=yourSim.months-after.months;
+      var h='<div class="result-label" style="margin-top:14px">With Your '+fmt(lump)+' Lump Sum</div><div class="result-grid">';
+      h+='<div class="compare-card green-card"><div class="compare-card-label">Debt-Free In</div><div class="compare-card-number">'+(after.months<24?after.months+' mo':(after.months/12).toFixed(1)+' yrs')+'</div></div>';
+      // Total Paid MUST include the lump sum. It is money you paid.
+      h+='<div class="compare-card green-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">'+fmt(lump+after.total)+'</div></div>';
+      h+='<div class="compare-card green-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">'+fmt(after.interest)+'</div></div></div>';
+      h+='<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">That '+fmt(lump)+' saves you '+fmt(intSaved)+' in interest and '+(moSaved<24?moSaved+' months':(moSaved/12).toFixed(1)+' years')+'</span></div>';
+      lr.innerHTML=h;
+    } else if(lump>=bal&&bal>0){
+      lr.innerHTML='<div class="savings-badge"><span class="savings-badge-icon">&#127881;</span><span class="savings-badge-text">That clears the debt outright. You save '+fmt(yourSim.interest)+' in interest.</span></div>';
+    } else lr.innerHTML='';
+  }
 }
 function calcD2Inst(){
   var bal=parseFloat(document.getElementById('d2i-balance').value)||0;
@@ -997,96 +1078,172 @@ function addDebt(){
 }
 function removeDebt(idx){if(pdDebts.length<=1)return;pdDebts.splice(idx,1);pdConsolSelected.splice(idx,1);renderPdCards();if(pdConsolOpen)renderConsolChecks();calcPaydown()}
 
-function simPaydown(debts,extra,strategy){
+function simPaydown(debts,extra,strategy,fixedBudget){
+  // ONE fixed monthly budget: every debt's scheduled payment, plus the extra. It never
+  // shrinks. When a debt clears, the money that serviced it STAYS in the budget and is
+  // redirected at the next target. That cascade is the whole mechanic of avalanche and
+  // snowball. The old code let a cleared debt's payment simply vanish.
   var ds=debts.map(function(d){
     var isRev=isRevolvingType(d.type);
     var mp;
     if(isRev){mp=d.minpay||calcMinPay(d.balance,d.rate)}
-    else{var mo=(d.term||3)*12;mp=pmtMonthly(d.balance,d.rate,mo)}
+    else{
+      var mo=(d.term||3)*12;
+      // A mortgage compounds semi-annually in Canada. Using pmtMonthly here gave the same
+      // mortgage a different payment than the offer door did.
+      mp=(d.type==='mortgage')?pmtMortgage(d.balance,d.rate,mo):pmtMonthly(d.balance,d.rate,mo);
+    }
     return{type:d.type,balance:d.balance,rate:d.rate,minPay:mp,origBal:d.balance,isRev:isRev,paidOff:false,paidOffMonth:0}
   });
-  var totalPaid=0,months=0,maxMo=600,order=[];
-  while(months<maxMo){
-    var allDone=true;
-    for(var i=0;i<ds.length;i++){if(ds[i].balance>0.50)allDone=false}
-    if(allDone)break;
+  var startBal=ds.reduce(function(a,d){return a+d.balance},0);
+  // fixedBudget holds the monthly outlay CONSTANT across two scenarios. Without it, a
+  // consolidation comparison secretly also compares two different monthly budgets, and
+  // credits consolidation for a "saving" that was really just paying less each month.
+  var scheduled=ds.reduce(function(a,d){return a+d.minPay},0);
+  var budgetPerMonth=(typeof fixedBudget==='number'&&fixedBudget>0)?Math.max(fixedBudget,scheduled):scheduled+extra;
+  var months=0,totalPaid=0,order=[],prevBal=startBal,nonAmortising=false;
+  while(months<600){
+    var live=ds.filter(function(d){return d.balance>0.005});
+    if(!live.length)break;
     months++;
-    // Collect freed minimums from debts paid off in PREVIOUS months
-    var freedFromPrev=0;
-    for(var i=0;i<ds.length;i++){if(ds[i].paidOff)freedFromPrev+=ds[i].minPay}
-    var newlyFreed=0;
-    // Pay minimums on all active debts
-    for(var i=0;i<ds.length;i++){
-      if(ds[i].balance<=0.50)continue;
-      var interest=ds[i].balance*(ds[i].rate/100/12);
-      var mp=ds[i].isRev?Math.max(Math.min(ds[i].minPay,ds[i].balance+interest),Math.min(25,ds[i].balance+interest)):Math.min(ds[i].minPay,ds[i].balance+interest);
-      ds[i].balance=ds[i].balance+interest-mp;totalPaid+=mp;
-      if(ds[i].balance<=0.50&&!ds[i].paidOff){ds[i].paidOff=true;ds[i].paidOffMonth=months;ds[i].balance=0;newlyFreed+=ds[i].minPay;order.push({type:ds[i].type,month:months})}
-    }
-    // Apply extra + all freed minimums, cascading through debts
-    var extraBudget=extra+freedFromPrev+newlyFreed;
-    while(extraBudget>0.01){
-      var active=ds.filter(function(d){return d.balance>0.50});
-      if(active.length===0)break;
+    var budget=budgetPerMonth;
+    live.forEach(function(d){d.balance+=d.balance*(d.rate/100/12)});
+    live.forEach(function(d){
+      if(d.balance<=0.005||budget<=0.005)return;
+      var pay=Math.min(d.minPay,d.balance,budget);
+      d.balance-=pay;budget-=pay;totalPaid+=pay;
+      if(d.balance<=0.005){d.balance=0;if(!d.paidOff){d.paidOff=true;d.paidOffMonth=months;order.push({type:d.type,month:months})}}
+    });
+    while(budget>0.005){
+      var active=ds.filter(function(d){return d.balance>0.005});
+      if(!active.length)break;
       active.sort(function(a,b){return strategy==='avalanche'?b.rate-a.rate:a.balance-b.balance});
-      var target=active[0];
-      var apply=Math.min(extraBudget,target.balance);
-      target.balance-=apply;totalPaid+=apply;extraBudget-=apply;
-      if(target.balance<=0.50&&!target.paidOff){target.paidOff=true;target.paidOffMonth=months;target.balance=0;order.push({type:target.type,month:months})}
+      var t=active[0];
+      var apply=Math.min(budget,t.balance);
+      t.balance-=apply;budget-=apply;totalPaid+=apply;
+      if(t.balance<=0.005){t.balance=0;if(!t.paidOff){t.paidOff=true;t.paidOffMonth=months;order.push({type:t.type,month:months})}}
     }
+    var nowBal=ds.reduce(function(a,d){return a+d.balance},0);
+    if(months>=12&&nowBal>=prevBal){nonAmortising=true;break}
+    prevBal=nowBal;
   }
-  var totalInt=totalPaid-debts.reduce(function(s,d){return s+d.balance},0);
-  return{months:months,totalPaid:totalPaid,interest:totalInt,order:order}
+  var remaining=ds.reduce(function(a,d){return a+d.balance},0);
+  var paidOff=remaining<=0.5&&!nonAmortising&&months<600;
+  return{months:months,totalPaid:totalPaid,
+         interest:totalPaid-(startBal-remaining),
+         order:order,remainingBalance:remaining,paidOff:paidOff,
+         nonAmortising:nonAmortising||(!paidOff&&remaining>0.5),
+         monthlyBudget:budgetPerMonth}
 }
 function simMinOnly(debts){
+  // The "required payments only" baseline: each account gets its own payment and NOTHING
+  // is rolled forward when an account closes. That is a different question from simPaydown
+  // with zero extra, and the UI must not pretend otherwise.
   var ds=debts.map(function(d){
     var isRev=isRevolvingType(d.type);
-    var mp;if(isRev){mp=d.minpay||calcMinPay(d.balance,d.rate)}else{mp=pmtMonthly(d.balance,d.rate,(d.term||3)*12)}
+    var mp;
+    if(isRev){mp=d.minpay||calcMinPay(d.balance,d.rate)}
+    else{
+      var mo=(d.term||3)*12;
+      mp=(d.type==='mortgage')?pmtMortgage(d.balance,d.rate,mo):pmtMonthly(d.balance,d.rate,mo);
+    }
     return{balance:d.balance,rate:d.rate,minPay:mp,isRev:isRev}
   });
-  var totalPaid=0,months=0;
+  var startBal=ds.reduce(function(a,d){return a+d.balance},0);
+  var totalPaid=0,months=0,prevBal=startBal,nonAmortising=false;
   while(months<600){
-    var allDone=true;
-    for(var i=0;i<ds.length;i++){if(ds[i].balance>0.50)allDone=false}
-    if(allDone)break;months++;
-    for(var i=0;i<ds.length;i++){
-      if(ds[i].balance<=0.50)continue;
-      var interest=ds[i].balance*(ds[i].rate/100/12);
-      var mp=ds[i].isRev?Math.max(Math.min(ds[i].minPay,ds[i].balance+interest),Math.min(25,ds[i].balance+interest)):Math.min(ds[i].minPay,ds[i].balance+interest);
-      ds[i].balance=ds[i].balance+interest-mp;totalPaid+=mp;
-      if(ds[i].balance<=0.50)ds[i].balance=0;
-    }
+    var live=ds.filter(function(d){return d.balance>0.005});
+    if(!live.length)break;
+    months++;
+    live.forEach(function(d){
+      var interest=d.balance*(d.rate/100/12);
+      d.balance+=interest;
+      var mp=Math.min(d.minPay,d.balance);
+      d.balance-=mp;totalPaid+=mp;
+      if(d.balance<=0.005)d.balance=0;
+    });
+    var nowBal=ds.reduce(function(a,d){return a+d.balance},0);
+    if(months>=12&&nowBal>=prevBal){nonAmortising=true;break}
+    prevBal=nowBal;
   }
-  return{months:months,totalPaid:totalPaid,interest:totalPaid-debts.reduce(function(s,d){return s+d.balance},0)}
+  var remaining=ds.reduce(function(a,d){return a+d.balance},0);
+  var paidOff=remaining<=0.5&&!nonAmortising&&months<600;
+  // Interest identity that survives an incomplete payoff. The old formula
+  // (totalPaid - originalPrincipal) could report NEGATIVE interest.
+  return{months:months,totalPaid:totalPaid,
+         interest:totalPaid-(startBal-remaining),
+         remainingBalance:remaining,paidOff:paidOff,
+         nonAmortising:nonAmortising||(!paidOff&&remaining>0.5)}
 }
 
 function calcPaydown(){cbTrackCalc();
+  // Do not hand a student a confident personal instruction about debts they have not
+  // entered. It used to say "put your extra $100 toward your Credit Card this month"
+  // on an empty form.
+  var anyDebt = pdDebts.some(function(d){ return (parseFloat(d.balance)||0) > 0; });
+  if(!anyDebt){
+    ['pd-aval-months','pd-aval-int','pd-snow-months','pd-snow-int'].forEach(function(id){
+      var e=document.getElementById(id); if(e)e.textContent='--';
+    });
+    var o=document.getElementById('pd-order'); if(o)o.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:8px 0">Enter your debts above to see your payoff order.</div>';
+    var sv=document.getElementById('pd-savings'); if(sv)sv.style.display='none';
+    var at=document.getElementById('pd-action-text'); if(at)at.textContent='Add your debts above, then set an extra monthly payment.';
+    return;
+  }
   var extra=parseFloat(document.getElementById('pd-extra').value)||0;
   var aval=simPaydown(pdDebts,extra,'avalanche');
   var snow=simPaydown(pdDebts,extra,'snowball');
   var minOnly=simMinOnly(pdDebts);
+  var pdDesc=document.getElementById('pd-desc');
+  if(pdDesc){
+    pdDesc.innerHTML = extra>0
+      ? '<p><strong>Avalanche:</strong> Attack the highest-rate debt first. Saves the most money. <strong>Snowball:</strong> Attack the smallest balance first. Gives you a win sooner.</p>'
+      : '<p>These two show the same result until you add an extra monthly amount above. With nothing spare, every dollar is already committed to minimum payments, so there is nothing to aim at either target. Add an extra amount and they separate.</p>';
+  }
+  var isAval=document.getElementById('pd-aval-card').classList.contains('active');
+  var chosen=isAval?aval:snow;
+
+  // If the budget cannot outrun the interest, this plan never clears the debt. Say so.
+  // The old code printed a payoff month and a savings figure regardless, which handed a
+  // reassuring false answer to the person in the most danger.
+  if(chosen.nonAmortising){
+    var shortfall=Math.max(0,Math.ceil((chosen.remainingBalance>0?1:0)*50));
+    document.getElementById('pd-aval-months').textContent='--';
+    document.getElementById('pd-aval-int').textContent='never clears';
+    document.getElementById('pd-snow-months').textContent='--';
+    document.getElementById('pd-snow-int').textContent='never clears';
+    document.getElementById('pd-order').innerHTML='<div class="caution-note"><strong>Your current budget does not repay these debts.</strong> At least one balance is growing faster than you are paying it down, so there is no payoff date to show. Raise your extra monthly payment until these numbers start to move. If you cannot, this is the point to speak to a non-profit credit counsellor.</div>';
+    document.getElementById('pd-savings').style.display='none';
+    document.getElementById('pd-action-text').textContent='Your first move: increase the monthly amount, or get help. These payments will not clear this debt.';
+    return;
+  }
+
   document.getElementById('pd-aval-months').textContent=aval.months+' mo';
   document.getElementById('pd-aval-int').textContent=fmt(aval.interest)+' interest';
   document.getElementById('pd-snow-months').textContent=snow.months+' mo';
   document.getElementById('pd-snow-int').textContent=fmt(snow.interest)+' interest';
-  // Show which is active
-  var isAval=document.getElementById('pd-aval-card').classList.contains('active');
-  var chosen=isAval?aval:snow;
   // Order display
   var orderHtml='';
   chosen.order.forEach(function(o,i){
     orderHtml+='<div class="paydown-row"><div class="paydown-order">'+(i+1)+'</div><div class="paydown-info"><div class="paydown-name">'+getPdTypeName(o.type)+'</div><div class="paydown-detail">Paid off in month '+o.month+'</div></div></div>';
   });
   document.getElementById('pd-order').innerHTML=orderHtml||'<div class="paydown-row"><div class="paydown-info"><div class="paydown-name">Enter your debts above</div></div></div>';
+  // Only claim a saving if the baseline is real. Comparing against a baseline that never
+  // repays the debt produces a fictitious number.
   var saved=minOnly.interest-chosen.interest;
-  if(saved>10){document.getElementById('pd-savings').style.display='flex';document.getElementById('pd-savings-text').textContent='You save '+fmt(saved)+' vs. minimums only'}
-  else document.getElementById('pd-savings').style.display='none';
+  if(extra>0&&minOnly.paidOff&&saved>10){
+    document.getElementById('pd-savings').style.display='flex';
+    document.getElementById('pd-savings-text').textContent='Your extra '+fmt(extra)+' a month saves you '+fmt(saved)+' in interest, compared with paying only what each account requires.';
+  } else if(minOnly.paidOff&&saved>10){
+    document.getElementById('pd-savings').style.display='flex';
+    document.getElementById('pd-savings-text').textContent='Add an extra monthly amount above to see what it saves you.';
+  } else document.getElementById('pd-savings').style.display='none';
   // Mortgage caution
   var hasMort=pdDebts.some(function(d){return d.type==='mortgage'});
   document.getElementById('pd-mort-caution').style.display=hasMort?'block':'none';
   // Action
   if(chosen.order.length>0){
-    document.getElementById('pd-action-text').textContent='Your first move: put your extra '+fmt(extra)+' toward your '+getPdTypeName(chosen.order[0].type)+' this month.';
+    document.getElementById('pd-action-text').textContent=(extra>0?'Your first move: put your extra '+fmt(extra)+' toward your ':'When you have something spare, put it toward your ')+getPdTypeName(chosen.order[0].type)+' this month.';
   }
   if(pdConsolOpen){renderConsolChecks();calcConsol();}
 }
@@ -1114,17 +1271,28 @@ function toggleConsol(){
 
 function renderConsolChecks(){
   var html='';
+  // The one rule that decides whether a debt belongs in the loan: is it more expensive
+  // than the loan? Rolling in a CHEAPER debt raises its rate and costs you money.
+  var lrEl=document.getElementById('consol-rate');
+  var loanRate=lrEl?(parseFloat(lrEl.value)||0):0;
+  var rolledInCheaper=false;
   pdDebts.forEach(function(d,i){
     var bal=d.balance||0;
     var label=getPdTypeName(d.type)+(bal>0?' ('+fmt(bal)+' at '+d.rate+'%)':'');
     var checked=pdConsolSelected[i]?'checked':'';
     var isInst=!isRevolvingType(d.type);
+    var cheaper=loanRate>0&&bal>0&&d.rate<loanRate;
+    if(cheaper&&pdConsolSelected[i])rolledInCheaper=true;
     html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:'+(pdConsolSelected[i]?'var(--green-light)':'var(--muted-bg)')+';border-radius:8px;margin-bottom:6px;cursor:pointer" onclick="toggleConsolDebt('+i+')">';
     html+='<input type="checkbox" '+checked+' style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;pointer-events:none">';
     html+='<span style="font-size:13px;font-weight:600;color:'+(pdConsolSelected[i]?'var(--green-dark)':'var(--text-secondary)')+'">'+label+'</span>';
-    if(isInst)html+='<span style="font-size:11px;color:var(--text-muted);margin-left:auto">installment</span>';
+    if(cheaper)html+='<span class="consol-warn">already below '+loanRate+'%</span>';
+    else if(isInst)html+='<span style="font-size:11px;color:var(--text-muted);margin-left:auto">installment</span>';
     html+='</div>';
   });
+  if(rolledInCheaper){
+    html+='<div class="caution-note">You have rolled in a debt that already costs less than '+loanRate+'%. Moving it into the loan raises its rate. Only consolidate debts that cost more than the loan.</div>';
+  }
   document.getElementById('consol-checks').innerHTML=html;
 }
 
@@ -1137,6 +1305,7 @@ function toggleConsolDebt(idx){
 
 function calcConsol(){
   if(!pdConsolOpen)return;
+  renderConsolChecks();
   while(pdConsolSelected.length<pdDebts.length)pdConsolSelected.push(false);
 
   // Calculate consolidation amount
@@ -1159,7 +1328,9 @@ function calcConsol(){
   var isAval=document.getElementById('pd-aval-card').classList.contains('active');
   var strategy=isAval?'avalanche':'snowball';
 
-  // Current scenario: all debts as-is
+  // Per the spec (s3.8): both scenarios use the SAME EXTRA payment, and each keeps its own
+  // required payments. That models what actually happens: consolidating changes what you
+  // MUST pay each month. We surface that difference below rather than hiding it.
   var currentSim=simPaydown(pdDebts,extra,strategy);
 
   // Consolidation scenario: remove selected debts, add consolidation loan
@@ -1169,27 +1340,42 @@ function calcConsol(){
   var consolSim=simPaydown(consolDebts,extra,strategy);
 
   // Build comparison
-  var currentBetter=currentSim.interest<=consolSim.interest;
+  // Judge on total money out the door, INCLUDING the consolidation fee. Judging on
+  // interest alone let a fee-heavy loan be crowned the winner while costing more, because
+  // the fee was folded into principal and vanished from the interest figure.
+  if(currentSim.nonAmortising||consolSim.nonAmortising){
+    document.getElementById('consol-vs').innerHTML='<div class="caution-note">At this budget one of these plans never clears the debt, so a comparison would be meaningless. Increase the monthly amount.</div>';
+    return;
+  }
+  var currentBetter=currentSim.totalPaid<=consolSim.totalPaid;
   var consolBetter=!currentBetter;
-  var savedInt=Math.abs(currentSim.interest-consolSim.interest);
+  var savedInt=Math.abs(currentSim.totalPaid-consolSim.totalPaid);
   var savedMo=Math.abs(currentSim.months-consolSim.months);
 
   var html='';
   html+='<div class="consol-vs-card'+(currentBetter?' better':'')+'"><div class="consol-vs-label">Current Plan</div>';
+  html+='<div class="consol-vs-row"><strong>'+fmt(currentSim.monthlyBudget)+'</strong>per month</div>';
   html+='<div class="consol-vs-row"><strong>'+fmt(currentSim.interest)+'</strong>total interest</div>';
   html+='<div class="consol-vs-row"><strong>'+fmt(currentSim.totalPaid)+'</strong>total paid</div>';
   html+='<div class="consol-vs-row"><strong>'+(currentSim.months<24?currentSim.months+' mo':Math.round(currentSim.months/12)+' yr')+'</strong>to debt-free</div></div>';
   html+='<div class="consol-vs-mid"><div class="vs-badge">vs</div></div>';
   html+='<div class="consol-vs-card'+(consolBetter?' better':'')+'"><div class="consol-vs-label">Consolidation</div>';
+  html+='<div class="consol-vs-row"><strong>'+fmt(consolSim.monthlyBudget)+'</strong>per month</div>';
   html+='<div class="consol-vs-row"><strong>'+fmt(consolSim.interest)+'</strong>total interest</div>';
   html+='<div class="consol-vs-row"><strong>'+fmt(consolSim.totalPaid)+'</strong>total paid</div>';
   html+='<div class="consol-vs-row"><strong>'+(consolSim.months<24?consolSim.months+' mo':Math.round(consolSim.months/12)+' yr')+'</strong>to debt-free</div></div>';
+  var moDiff=consolSim.monthlyBudget-currentSim.monthlyBudget;
+  if(Math.abs(moDiff)>1){
+    html+='<div class="caution-note" style="grid-column:1/-1">These two plans do not cost the same each month. Consolidating '
+      +(moDiff<0?'LOWERS':'RAISES')+' your monthly payment by '+fmt(Math.abs(moDiff))
+      +'. Some of the difference above comes from that, not from the loan itself. Look at total paid, not just interest.</div>';
+  }
   document.getElementById('consol-vs').innerHTML=html;
 
   if(savedInt>10){
     document.getElementById('consol-savings').style.display='flex';
     var winner=currentBetter?'Current plan':'Consolidation';
-    document.getElementById('consol-savings-text').textContent=winner+' saves '+fmt(savedInt)+' in interest'+(savedMo>1?' and '+(savedMo<24?savedMo+' months':(savedMo/12).toFixed(1)+' years'):'');
+    document.getElementById('consol-savings-text').textContent=winner+' saves '+fmt(savedInt)+' in total'+(savedMo>1?' and '+(savedMo<24?savedMo+' months':(savedMo/12).toFixed(1)+' years'):'');
     document.getElementById('consol-savings').className=consolBetter?'savings-badge':'savings-badge warning';
   }else{
     document.getElementById('consol-savings').style.display='none';
@@ -1218,6 +1404,19 @@ function addAcct(){uAccounts.push({limit:0,balance:0});uNextIdx++;renderAccounts
 function removeAcct(i){if(uAccounts.length<=1)return;uAccounts.splice(i,1);renderAccounts();calcUtil()}
 
 function calcUtil(){cbTrackCalc();
+  // Say nothing until there is something to say. This used to report "0% - Good, under 30%"
+  // and congratulate a student on figures they had not entered.
+  var anyLimit=0, anyBal=0;
+  uAccounts.forEach(function(a){ anyLimit+=parseFloat(a.limit)||0; anyBal+=parseFloat(a.balance)||0; });
+  if(anyLimit<=0){
+    var un=document.getElementById('u-pct'); if(un)un.textContent='--';
+    var ust=document.getElementById('u-status'); if(ust)ust.textContent='Enter your limit and balance';
+    var ub=document.getElementById('u-bar'); if(ub){ub.style.width='0%';ub.style.background='var(--border)';}
+    var ua=document.getElementById('u-action-text');
+    if(ua)ua.textContent='Enter your credit limit and balance above to see your utilization.';
+    var uaf=document.getElementById('u-after'); if(uaf)uaf.style.display='none';
+    return;
+  }
   var totalLimit=0,totalBalance=0;
   uAccounts.forEach(function(a,i){
     totalLimit+=a.limit;totalBalance+=a.balance;
@@ -1235,20 +1434,24 @@ function calcUtil(){cbTrackCalc();
   sl.max=Math.max(100,totalBalance);
   document.getElementById('u-slider-max').textContent=fmt(totalBalance);
   var adjBalance=Math.max(0,totalBalance-paydown);
-  var pct=totalLimit>0?Math.round(adjBalance/totalLimit*100):0;
-  var basePct=totalLimit>0?Math.round(totalBalance/totalLimit*100):0;
+  // Classify on the RAW ratio and round only for display. Rounding first meant 30.4%
+  // showed as "30%" and was called healthy, and 29.6% showed as "30%" and was not.
+  var pctRaw=totalLimit>0?(adjBalance/totalLimit*100):0;
+  var basePctRaw=totalLimit>0?(totalBalance/totalLimit*100):0;
+  var pct=Math.round(pctRaw);
+  var basePct=Math.round(basePctRaw);
   document.getElementById('u-pct').textContent=pct+'%';
   var bar=document.getElementById('u-bar');bar.style.width=Math.min(pct,100)+'%';
-  if(pct<30){bar.style.background='var(--green-glow)';document.getElementById('u-pct').style.color='var(--green)';document.getElementById('u-status').textContent='Good. Under 30%'}
-  else if(pct<50){bar.style.background='var(--gold)';document.getElementById('u-pct').style.color='var(--gold)';document.getElementById('u-status').textContent='Caution. Between 30% and 50%'}
+  if(pctRaw<30){bar.style.background='var(--green-glow)';document.getElementById('u-pct').style.color='var(--green)';document.getElementById('u-status').textContent='Good. Under 30%'}
+  else if(pctRaw<50){bar.style.background='var(--gold)';document.getElementById('u-pct').style.color='var(--gold)';document.getElementById('u-status').textContent='Caution. Between 30% and 50%'}
   else{bar.style.background='var(--red-glow)';document.getElementById('u-pct').style.color='var(--red)';document.getElementById('u-status').textContent='High. Over 50%'}
   document.getElementById('u-pd-display').textContent=paydown;
   var afterSection=document.getElementById('u-after');
   if(paydown>0){afterSection.style.display='block';document.getElementById('u-before-pct').textContent=basePct+'%';document.getElementById('u-after-pct').textContent=pct+'%'}else afterSection.style.display='none';
   // Target
   var targetEl=document.getElementById('u-target');
-  if(basePct>=30){
-    var needed=totalBalance-totalLimit*0.30;
+  if(basePctRaw>=30){
+    var needed=Math.ceil(totalBalance-totalLimit*0.30);
     if(needed>0&&paydown<needed){targetEl.style.display='block';document.getElementById('u-target-text').textContent='Pay down '+fmt(needed)+' to get under 30%.'}
     else if(pct<30){targetEl.style.display='block';document.getElementById('u-target-text').textContent='You\'d be under 30%. Nice!'}
     else targetEl.style.display='none';
@@ -1262,7 +1465,23 @@ function calcUtil(){cbTrackCalc();
 
 // Mortgage Readiness (TDS)
 function calcDTI(){cbTrackCalc();
-  var income=parseFloat(document.getElementById('dti-income').value)||1;
+  var incomeRaw=parseFloat(document.getElementById('dti-income').value);
+  // Blank income used to become $1, which turned any debt into a ~100,000% ratio and
+  // presented it as a finding. Refuse to answer instead.
+  if(!isFinite(incomeRaw)||incomeRaw<=0){
+    // Clear EVERY placeholder, not just the caption. The old bail-out left a red 46% gauge
+    // and $1,750 / $2,300 on screen: a confident, alarming ratio belonging to nobody.
+    var g=document.getElementById('dti-tds'); if(g)g.textContent='--';
+    var st=document.getElementById('dti-status'); if(st)st.textContent='Enter your income to see your ratio';
+    var bar=document.getElementById('dti-bar'); if(bar){bar.style.width='0%';bar.style.background='var(--border)';}
+    var h=document.getElementById('dti-housing-total'); if(h)h.textContent='--';
+    var a=document.getElementById('dti-all-total'); if(a)a.textContent='--';
+    var r=document.getElementById('dti-room'); if(r)r.textContent='--';
+    var actEl=document.getElementById('dti-action-text');
+    if(actEl)actEl.textContent='Enter your gross monthly income above to see where you stand.';
+    return;
+  }
+  var income=incomeRaw;
   var mortgage=parseFloat(document.getElementById('dti-mortgage').value)||0;
   var tax=parseFloat(document.getElementById('dti-tax').value)||0;
   var heat=parseFloat(document.getElementById('dti-heat').value)||0;
@@ -1271,19 +1490,20 @@ function calcDTI(){cbTrackCalc();
   var loans=parseFloat(document.getElementById('dti-loans').value)||0;
   var housing=mortgage+tax+heat+(condo*0.5);
   var allDebt=housing+cards+loans;
-  var tds=Math.round(allDebt/income*100);
+  var tdsRaw=allDebt/income*100;
+  var tds=Math.round(tdsRaw);
   document.getElementById('dti-tds').textContent=tds+'%';
   document.getElementById('dti-housing-total').textContent=fmt(housing);
   document.getElementById('dti-all-total').textContent=fmt(allDebt);
   var bar=document.getElementById('dti-bar');bar.style.width=Math.min(tds,100)+'%';
-  if(tds<44){bar.style.background='var(--green-glow)';document.getElementById('dti-tds').style.color='var(--green)';document.getElementById('dti-status').textContent='Under 44%. You\'d likely qualify'}
-  else if(tds<50){bar.style.background='var(--gold)';document.getElementById('dti-tds').style.color='var(--gold)';document.getElementById('dti-status').textContent='Between 44-50%. Tight'}
+  if(tdsRaw<44){bar.style.background='var(--green-glow)';document.getElementById('dti-tds').style.color='var(--green)';document.getElementById('dti-status').textContent='Under 44% on the payment you entered. Canadian lenders apply a stress test: they qualify you at your contract rate plus two points, or 5.25%, whichever is higher. Their number will be above yours.'}
+  else if(tdsRaw<50){bar.style.background='var(--gold)';document.getElementById('dti-tds').style.color='var(--gold)';document.getElementById('dti-status').textContent='Between 44-50%. Tight'}
   else{bar.style.background='var(--red-glow)';document.getElementById('dti-tds').style.color='var(--red)';document.getElementById('dti-status').textContent='Over 50%. A lender would likely decline'}
   var room=Math.max(0,income*0.44-allDebt);
   document.getElementById('dti-room').textContent=room>0?fmt(room)+'/mo':'$0/mo';
   document.getElementById('dti-room').className='result-row-value '+(room>0?'green':'red');
   var act=document.getElementById('dti-action-text');
-  if(tds<44){act.textContent='Your TDS is '+tds+'%. You have room for '+fmt(room)+'/month in additional debt payments before hitting the 44% threshold.'}
+  if(tdsRaw<44){act.textContent='Your TDS is '+tds+'%. You have room for '+fmt(room)+'/month in additional debt payments before hitting the 44% threshold.'}
   else{var over=allDebt-income*0.44;act.textContent='Your TDS is '+tds+'%. Clearing '+fmt(over)+'/month in debt payments would bring you to 44%.'}
 }
 

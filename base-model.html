@@ -45,7 +45,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg-dark);mi
 .screen{display:none;flex-direction:column;min-height:100vh;opacity:0;transition:opacity 0.5s ease}
 .screen.active{display:flex;opacity:1}
 .screen-scroll{}
-.screen-scroll::after{content:'🍁 Built in Canada, for Canada';display:block;text-align:right;padding:16px 24px 12px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.04em;color:var(--text-muted);opacity:0.5}
+.screen-scroll::after{content:'🍁 Built in Canada, for Canadians';display:block;text-align:right;padding:16px 24px 12px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.04em;color:var(--text-muted);opacity:0.5}
 
 /* ── Logo ── */
 .logo-bar{padding:16px 24px 8px;display:flex;align-items:center;gap:8px}
@@ -96,6 +96,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .btn-primary:active{transform:translateY(0)}
 .btn-primary:disabled{opacity:0.5;cursor:default;transform:none;box-shadow:none}
 .btn-secondary{display:block;width:100%;padding:14px;background:transparent;color:rgba(255,255,255,0.8);border:1.5px solid rgba(255,255,255,0.2);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s}
+.btn-text{background:none;border:none;color:var(--text-secondary);font-family:inherit;font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer;padding:6px 4px;opacity:0.85}
+.btn-text:hover{opacity:1;color:var(--text)}
 .btn-secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.35)}
 
 /* ── Flip cards ── */
@@ -272,7 +274,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .calc-card .calc-body{flex:1}
 .calc-card .calc-label{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--green-glow);font-weight:600;margin-bottom:8px}
 .calc-card .calc-title{font-family:'Instrument Serif',serif;font-size:18px;color:#fff;font-weight:400;line-height:1.3;margin-bottom:8px}
-.calc-card .calc-desc{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6}
+.calc-card .calc-desc{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.6}
 .sim-card{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:20px;padding:24px;margin:24px 0}
 .sim-card .sim-label{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--green-glow);font-weight:600;margin-bottom:10px}
 .sim-card .sim-title{font-family:'Instrument Serif',serif;font-size:20px;color:#fff;font-weight:400;line-height:1.3;margin-bottom:12px}
@@ -370,11 +372,11 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 /* ═══ EMBEDDED CALCULATOR ═══ */
 .calc-embed{padding:0}
 .calc-embed .calc-header{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));padding:16px 24px}
-.calc-embed .calc-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
-.calc-embed .calc-header-back:hover{color:rgba(255,255,255,0.8)}
+.calc-embed .calc-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.8);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
+.calc-embed .calc-header-back:hover{color:rgba(255,255,255,1)}
 .calc-embed .calc-header-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .calc-embed .calc-header-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:20px;color:#fff;line-height:1.2;margin-bottom:4px}
-.calc-embed .calc-header-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.5}
+.calc-embed .calc-header-sub{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5}
 .calc-embed .calc-body{padding:20px 24px}
 .calc-embed .input-group{margin-bottom:16px}
 .calc-embed .input-label{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
@@ -389,12 +391,18 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 .calc-embed .pill:hover{border-color:var(--green);color:var(--green)}
 .calc-embed .pill.active{background:var(--green);color:#fff;border-color:var(--green)}
 .calc-embed .big-result{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:16px;padding:22px 20px;margin-bottom:14px;text-align:center}
-.calc-embed .big-result-label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.calc-embed .big-result-label{font-size:12px;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
 .calc-embed .big-result-number{font-family:'Instrument Serif',serif;font-size:36px;color:#fff;font-weight:400;line-height:1.1}
-.calc-embed .big-result-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
+.calc-embed .big-result-sub{font-size:12px;color:rgba(255,255,255,0.8);margin-top:4px}
 .calc-embed .result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
 .calc-embed .result-grid.two-col{grid-template-columns:1fr 1fr}
 .calc-embed .compare-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
+.consol-trigger{display:flex;align-items:center;gap:8px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;transition:all 0.2s;background:var(--green-light);border-radius:10px;margin:16px 0 0;justify-content:center;border:1px solid transparent}
+.consol-trigger:hover{background:var(--green);color:#fff}
+.consol-trigger.open{background:var(--green);color:#fff;border-radius:10px 10px 0 0;margin-bottom:0}
+.consol-section{display:none;background:var(--card);border:1px solid var(--green);border-top:none;border-radius:0 0 10px 10px;padding:16px 12px;margin-bottom:14px}
+.consol-section.open{display:block}
+.consol-config{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
 .calc-embed .compare-card.green-card{border-color:var(--green);background:var(--green-light)}
 .calc-embed .compare-card.red-card{border-color:rgba(198,40,40,0.2);background:var(--red-light)}
 .calc-embed .compare-card-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:6px}
@@ -499,11 +507,11 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 /* ═══ EMBEDDED SIMULATOR ═══ */
 .sim-embed{padding:0}
 .sim-embed .sim-header{background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));padding:16px 24px}
-.sim-embed .sim-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
-.sim-embed .sim-header-back:hover{color:rgba(255,255,255,0.8)}
+.sim-embed .sim-header-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.8);cursor:pointer;margin-bottom:10px;transition:color 0.2s}
+.sim-embed .sim-header-back:hover{color:rgba(255,255,255,1)}
 .sim-embed .sim-header-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .sim-embed .sim-header-title{font-family:'Instrument Serif',serif;font-weight:400;font-size:20px;color:#fff;line-height:1.2;margin-bottom:4px}
-.sim-embed .sim-header-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.5}
+.sim-embed .sim-header-sub{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5}
 .sim-embed .sim-body{padding:20px 24px}
 .sim-embed .profile-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
 .sim-embed .profile-card:hover{border-color:var(--green);background:var(--green-light)}
@@ -577,6 +585,12 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
 /* ── Mobile Polish ── */
 @media(max-width:400px){
+  /* Compare panel: stack the three inputs, or the Fees field lands off-screen.
+     These rules exist in getting-out-of-debt.html and were missed when the panel
+     was ported here. */
+  .consol-config{grid-template-columns:1fr;gap:8px}
+  .consol-config .input-group{margin-bottom:0}
+  .result-grid.two-col{grid-template-columns:1fr}
   /* Sort buckets - stack on very small screens */
   .sort-buckets{flex-direction:column;gap:8px}
   .sort-bucket{min-height:auto;padding:12px}
@@ -668,6 +682,15 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 <!-- Loading gate: visible until auth/enrollment verified -->
 <div id="cb-loading-gate" class="cb-loading-gate"><div class="spinner"></div></div>
 <!-- Resume modal -->
+<div id="cb-gate-overlay" class="cb-overlay">
+  <div class="cb-modal">
+    <h3>Not quite yet</h3>
+    <p id="cb-gate-text"></p>
+    <div class="cb-modal-btns">
+      <button class="cb-btn-resume" onclick="cbGateGo()">Take me there</button>
+    </div>
+  </div>
+</div>
 <div id="cb-resume-overlay" class="cb-overlay">
   <div class="cb-modal">
     <h3>Welcome back</h3>
@@ -701,8 +724,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <button class="cb-nav-item" onclick="cbNavGo('s6-0')"><span class="cb-nav-num">6</span>Building Credit</button>
     <button class="cb-nav-item" onclick="cbNavGo('ms-1')">Credit Simulator</button>
     <button class="cb-nav-item" onclick="cbNavGo('s7-0')"><span class="cb-nav-num">7</span>Course Conclusion</button>
-    <button class="cb-nav-item" onclick="cbNavGo('post-0')">Post-Assessment</button>
-    <button class="cb-nav-item" onclick="cbNavGo('cert-0')">Certificate</button>
+    <button class="cb-nav-item" onclick="cbNavFinal()">Final Assessment</button>
+    <button class="cb-nav-item" onclick="cbNavCert()">Certificate</button>
     <button class="cb-nav-item cb-dashboard" onclick="window.location.href='website-dashboard.html'">&#8592; Back to Dashboard</button>
     <div class="cb-nav-privacy">Credit Bright is 100% independent. We are not affiliated with any credit bureau, bank, or government agency. Your progress is saved automatically.</div>
   </div>
@@ -874,7 +897,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:75%"></div></div></div>
     <div class="content">
       <h2 class="concept-title">Two Types of Credit</h2>
-      <p>Every credit product in Canada falls into one of two categories. Once you see the difference, you'll recognise it everywhere.</p>
+      <p>Every credit product in Canada falls into one of two categories. Once you see the difference, you'll recognize it everywhere.</p>
       <div class="type-card installment">
         <div class="type-card-label">INSTALLMENT</div>
         <p>You borrow a fixed amount, once. You pay it back in regular, predictable payments over a set period of time. When it's done, it's done. The loan closes.</p>
@@ -914,7 +937,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:100%"></div></div></div>
     <div class="content">
       <h2 class="concept-title">The Foundation</h2>
-      <p>Credit is borrowed money with a price. It comes in two types. And it reaches further into your life than most people realise.</p>
+      <p>Credit is borrowed money with a price. It comes in two types. And it reaches further into your life than most people realize.</p>
       <p>Now that you know what credit is, let's look at how the deal is actually structured. Every time you borrow money in Canada, you sign a credit agreement. Inside that agreement, a set of key terms shape your entire experience. Some apply to every product. Others depend on whether you're borrowing a fixed amount, like a car loan, or using a revolving credit line, like a credit card.</p>
       <p>Once you understand them, you can read any credit agreement in this country and know exactly what you're looking at.</p>
       <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('mc-1')">Continue</button></div>
@@ -935,10 +958,10 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <div class="tool-inter-title">You're Going to<br>Need a Tool</div>
     </div>
     <div class="tool-inter-body">
-      <p>You know what credit is. You know it comes in two types. You know it reaches further into your life than most people realise.</p>
+      <p>You know what credit is. You know it comes in two types. You know it reaches further into your life than most people realize.</p>
       <p>But every credit decision you'll ever face comes down to numbers. And most people can't see them.</p>
       <p>The rate on the page isn't the real cost. The monthly payment hides the total you'll actually pay. The minimum payment hides decades of interest. The fee buried in the fine print changes the math entirely.</p>
-      <p>So we built something.</p>
+      <p>So we built something to fix that.</p>
       <div style="margin-top:28px;text-align:center;"><button class="btn-primary" onclick="goTo('mc-2')">Continue</button></div>
     </div>
   </div>
@@ -1059,7 +1082,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
           <span style="padding:6px 14px;background:var(--red-light);color:var(--red);border-radius:10px;font-size:13px;font-weight:600;">One Debt</span>
         </div>
         <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin-bottom:10px;">Enter your balance and rate. The calculator shows you the <strong>minimum payment path</strong> - how long it takes if you only pay the minimum. Then drag the payment slider. Watch the timeline shrink. See exactly how much time and interest you save with every extra dollar.</p>
-        <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin:0;">This is where you'll see the minimum payment trap in action. A $5,000 credit card balance at 19.99% takes over 30 years to pay off at the minimum. Pay $75 more per month and you're free in under 4 years.</p>
+        <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin:0;">This is where you'll see the minimum payment trap in action. A $5,000 credit card balance at 19.99% takes nearly 19 years to pay off at the minimum. Pay $75 more per month and you're free in under 3 years.</p>
       </div>
 
       <div style="background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin:20px 0;">
@@ -1116,7 +1139,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
           <span style="padding:6px 14px;background:var(--green-light);color:var(--green-dark);border-radius:10px;font-size:13px;font-weight:600;">Mortgage Readiness</span>
         </div>
         <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin-bottom:10px;">Thinking about buying a home? Enter your gross income, your monthly housing costs, and your other debt payments. The calculator computes your <strong>Total Debt Service ratio (TDS)</strong> - the number lenders use to decide if you can handle a mortgage.</p>
-        <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin:0;">In Canada, most lenders want your TDS below 44%. This tool shows you exactly where you stand.</p>
+        <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin:0;">In Canada, most lenders want your TDS below 44%, and your GDS, which counts housing costs alone, below 39%. Both have to pass. This tool shows you exactly where you stand.</p>
       </div>
 
       <p>These calculations are simple ratios - but they're the exact same ratios lenders run when you apply. Now you can run them first.</p>
@@ -1134,7 +1157,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="tool-inter-header" style="background:linear-gradient(165deg,#F4F3F0 0%,#E8F5EC 100%);padding-bottom:16px;">
       <div class="tool-inter-label">Credit Calculator</div>
       <div class="tool-inter-title">Your First Look</div>
-      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:10px;text-align:left;">Here's a $10,000 personal loan at 6% over 3 years. Try changing the term - type in a different number of months and watch what happens to your monthly payment and total interest. Shorter term, higher payment, less interest. Longer term, lower payment, more interest. That trade-off is at the heart of every credit decision.</p>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:10px;text-align:left;">This is the calculator you just read about, loaded with a $10,000 personal loan at 6% over 3 years.</p><p><strong>Have a look around.</strong> Change the term. Change the rate. Change the amount. Open Compare With Another Offer and put two versions side by side. Nothing you do here is wrong.</p><p>Do not worry if some of the terms are unfamiliar. We explain every one of them over the next few sections, and this tool will be waiting for you the whole way through.</p><p><strong>One thing to try before you move on.</strong> Change the term and watch what happens to the two numbers underneath. See if you can work out the trade-off for yourself. It sits at the heart of every credit decision you will ever make.</p>
     </div>
     <div id="calc-mc-try" class="calc-embed"></div>
     <div style="padding:16px 24px 24px;text-align:center;"><button class="btn-primary" onclick="goTo('s2-0')">Continue to Section 2</button></div>
@@ -1273,7 +1296,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>Not all interest rates stay the same.</p>
       <div class="rate-type-card fixed">
         <div class="rate-type-label">FIXED RATE</div>
-        <p>Locked in for the life of your loan. Your rate won't change, and neither will your payment. Predictable.</p>
+        <p>Locked in for the term. On a personal or car loan the term usually is the life of the loan, so the rate never changes. A Canadian mortgage works differently: the rate is fixed for a term of one to five years, then you renew at whatever rates are then available, even though the loan is amortized over twenty-five. That renewal is the moment your rate can move, and it is also your best moment to negotiate.</p>
       </div>
       <div class="rate-type-card variable">
         <div class="rate-type-label">VARIABLE RATE</div>
@@ -1302,7 +1325,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:50%"></div></div></div>
     <div class="content">
       <h2 class="concept-title">Where Your Money Actually Goes</h2>
-      <p>You've seen what the interest rate costs over the life of a loan. But there's something most people don't realise about how payments work on installment loans.</p>
+      <p>You've seen what the interest rate costs over the life of a loan. But there's something most people don't realize about how payments work on installment loans.</p>
       <p>When you make a monthly payment, it feels like all of that money is going toward paying off your debt.</p>
       <p class="emphasis">It's not.</p>
       <p>Every payment gets split in two. Part goes to interest - the cost of borrowing. Part goes to your actual balance - the amount you still owe. That amount is called the principal.</p>
@@ -1343,7 +1366,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
         </div>
         <div id="feedback-3-1" style="display:none;"></div>
         <div id="nav-3-1" style="display:none;">
-          <p style="margin-top:20px;">See the difference extra payments make. The calculator is loaded with a $15,000 car loan at 6% with 4 years remaining. Drag the extra payment slider and watch how much time and interest you save. What happens if you put an extra $100 per month toward the balance?</p>
+          <p style="margin-top:20px;">See the difference a bigger payment makes. The calculator is loaded with a $15,000 car loan at 6% with 4 years remaining. The slider sets your monthly payment. Drag it up and watch how much time and interest you save against the scheduled payoff. What happens if you push it to $450 a month?</p>
           <div style="margin-top:20px;"><button class="btn-primary" onclick="openCalc('s2-4bc','offer',calcConfigs['s2-4bc'])">Open Calculator</button></div>
         </div>
       </div>
@@ -1496,7 +1519,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
         </div>
         <div id="feedback-2-7" style="display:none;"></div>
         <div id="nav-2-7" style="display:none;">
-          <p style="margin-top:16px;">One more thing worth knowing. Some installment loans charge a penalty if you try to pay them off early. Before you sign, ask if there are any prepayment penalties. You don't want to be penalised for getting out of debt ahead of schedule.</p>
+          <p style="margin-top:16px;">One more thing worth knowing. Some installment loans charge a penalty if you try to pay them off early. Before you sign, ask if there are any prepayment penalties. You don't want to be penalized for getting out of debt ahead of schedule.</p>
           <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('s2-9')">Continue</button></div>
         </div>
       </div>
@@ -1515,7 +1538,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>Not every one appears in every agreement. Revolving credit won't list a loan amount or a fixed term, and many unsecured products won't mention collateral. But together, these six terms govern how all credit works in Canada. Now you know what each one means, why it matters, and what to watch for. And with the calculator, you've seen what these terms actually cost in real dollars.</p>
       <p>You've also seen where your money actually goes. With installment loans, interest takes the biggest bite at the start. The earlier you pay extra, the more you save.</p>
       <p>That knowledge is yours now. And the Credit Calculator is yours for life. Any credit decision you face, from here on out, you can run the numbers before you sign.</p>
-      <div class="insight-box"><p>One more thing worth knowing: many of these terms are negotiable. Most people don't realise that. Our <strong>Negotiating Better Deals</strong> course teaches you when to ask, how to ask, and what to say.</p></div>
+      <div class="insight-box"><p>One more thing worth knowing: many of these terms are negotiable. Most people don't realize that. Our <strong>Negotiating Better Deals</strong> course teaches you when to ask, how to ask, and what to say.</p></div>
       <p>In the next section, you'll see the most expensive trap in consumer credit, and learn two strategies to fight back.</p>
       <div style="margin-top:28px;">
         <button class="btn-primary" onclick="goTo('s3-0')">Continue to Section 3</button>
@@ -1550,28 +1573,28 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="content">
       <h2 class="concept-title">The Minimum Payment Trap</h2>
       <p>Credit cards are unsecured, which means higher interest rates. In Canada, most major credit cards charge around 19.99%.</p>
-      <p>Your monthly statement shows a minimum payment. It's usually 2% to 3% of your balance, or a fixed amount like $10, whichever is greater. It looks manageable. That's by design. Lenders set the minimum low because the longer you take to pay, the more interest they earn.</p>
+      <p>Your monthly statement shows a minimum payment. It's usually interest for the month plus a small slice of the balance, usually around 1%, or a fixed floor, whichever is greater. The calculators in this course use 1% plus interest with a $25 floor. Your own card may differ, so check your statement. And if you are in Quebec, the rules are different again: minimum payments there are set at 5% of the balance, which clears the same debt far faster than the examples here. It looks manageable. That's by design. Lenders set the minimum low because the longer you take to pay, the more interest they earn.</p>
       <div class="reveal-card" style="background:var(--bg-dark);border-radius:16px;padding:24px;margin:20px 0;color:#fff;">
         <p style="font-size:15px;color:rgba(255,255,255,0.95);margin-bottom:4px;">$5,000 credit card balance</p>
         <p style="font-size:14px;color:rgba(255,255,255,0.85);">19.99% interest · Paying only the minimum</p>
         <div id="trap-reveal-1" style="display:none;margin-top:16px;">
           <div style="margin:12px 0;padding:12px;background:rgba(198,40,40,0.15);border-radius:8px;">
             <p style="font-size:14px;color:rgba(255,255,255,0.9);">Time to pay off</p>
-            <p style="font-size:22px;font-weight:600;color:var(--red-glow);">30+ years</p>
+            <p style="font-size:22px;font-weight:600;color:var(--red-glow);">Nearly 19 years</p>
           </div>
           <div style="margin:12px 0;padding:12px;background:rgba(198,40,40,0.15);border-radius:8px;">
             <p style="font-size:14px;color:rgba(255,255,255,0.9);">Total interest paid</p>
-            <p style="font-size:22px;font-weight:600;color:var(--red-glow);">$7,700</p>
+            <p style="font-size:22px;font-weight:600;color:var(--red-glow);">$7,300</p>
           </div>
           <div style="margin:12px 0;padding:12px;background:rgba(198,40,40,0.15);border-radius:8px;">
             <p style="font-size:14px;color:rgba(255,255,255,0.9);">Total amount paid</p>
-            <p style="font-size:22px;font-weight:600;color:var(--red-glow);">$12,700</p>
+            <p style="font-size:22px;font-weight:600;color:var(--red-glow);">$12,300</p>
           </div>
         </div>
         <button id="trap-btn-1" class="btn-secondary" style="margin-top:16px;width:100%;border-color:rgba(255,255,255,0.3);color:#fff;" onclick="revealTrap('1')">Reveal the true cost</button>
       </div>
       <div id="trap-after-1" style="display:none;">
-        <p>On a $5,000 balance. You'd pay back more than double what you borrowed. And it would take three decades.</p>
+        <p>On a $5,000 balance. You'd pay back more than you borrowed, in interest alone. And it would take nearly nineteen years.</p>
         <p class="emphasis">Sit with that for a moment.</p>
         <div style="margin-top:28px;"><button class="btn-primary" onclick="revealTrapFix('1')">See what one small change can do</button></div>
       </div>
@@ -1585,11 +1608,11 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
           </div>
           <div style="margin:12px 0;padding:12px;background:rgba(46,125,79,0.2);border-radius:8px;">
             <p style="font-size:14px;color:rgba(255,255,255,0.9);">Total interest paid</p>
-            <p style="font-size:22px;font-weight:600;color:var(--green-glow);">$2,100</p>
+            <p style="font-size:22px;font-weight:600;color:var(--green-glow);">$2,357</p>
           </div>
         </div>
-        <p class="emphasis">$5,600 saved. 26 years back.</p>
-        <p>Not by doubling your payment. Not by some dramatic sacrifice. By paying $50 to $75 more per month.</p>
+        <p class="emphasis">$4,950 saved. Almost 15 years back.</p>
+        <p>Not by doubling your payment. Not by some dramatic sacrifice. By paying about $17 more per month, and never letting it drop.</p>
         <p>That's the minimum payment trap. It keeps you in debt for decades, quietly draining thousands of dollars in interest, while the number on your monthly statement looks perfectly manageable.</p>
         <p>Knowing this changes how you look at that minimum payment number forever.</p>
         <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('s3-1c')">Try it yourself</button></div>
@@ -1850,8 +1873,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
         <h2 class="concept-title" style="margin-top:24px;">Hard vs Soft Inquiries</h2>
         <p>One more thing worth knowing. You can check your own credit report and score for free.</p>
-        <p>Both <a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);font-weight:500;">Equifax</a> and <a href="https://www.transunion.ca/product/consumer-disclosure" target="_blank" style="color:var(--green);font-weight:500;">TransUnion</a> are required to give you a free copy of your credit report if you request one. You can also check your score for free through most major Canadian banks and through apps like Credit Karma.</p>
-        <p>Here's the important part: <strong>checking your own score does not hurt it.</strong> When you check your own score, it's called a <strong>soft inquiry</strong>. It doesn't appear on your report and lenders can't see it. When a lender checks your score because you've applied for credit, that's a <strong>hard inquiry</strong>, and it does appear on your report. Too many hard inquiries in a short period can lower your score slightly, because it looks like you're desperate for credit.</p>
+        <p>Both <a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);font-weight:500;">Equifax</a> and <a href="https://www.transunion.ca/product/consumer-disclosure" target="_blank" style="color:var(--green);font-weight:500;">TransUnion</a> are required to give you a free copy of your credit report if you request one. Many major Canadian banks also show you a credit score free inside their own online banking, which is a good habit to build.</p>
+        <p>Here's the important part: <strong>checking your own score does not hurt it.</strong> When you check your own score, it's called a <strong>soft inquiry</strong>. Lenders can't see it and it doesn't affect your score. When a lender checks your score because you've applied for credit, that's a <strong>hard inquiry</strong>, and it does appear on your report. Too many hard inquiries in a short period can lower your score slightly, because it looks like you're desperate for credit.</p>
         <p><strong>So check your score. Check it regularly. It's your file. You should know what's in it.</strong></p>
 
         <div class="quiz-wrap" id="quiz-4-2a">
@@ -1879,11 +1902,11 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Capacity: Can You Afford It?</h2>
       <p>Capacity answers a different question: <strong>can you afford it?</strong></p>
       <p>This is about your income relative to your existing obligations. Lenders want to know that you earn enough to cover a new payment on top of everything you already owe. The less of your income that's already committed, the more room you have to borrow.</p>
-      <p>Income is not on your credit report. Lenders get it from your application. But there is one part of Capacity that does show up on your report: <strong>credit utilization</strong>.</p>
+      <p>Income is not on your credit report. Lenders get it from your application. But there is a second, separate measure that does show up on your report, and lenders read it alongside your income: <strong>credit utilization</strong>.</p>
       <h2 class="concept-title" style="margin-top:24px;">Credit Utilization</h2>
-      <p>Credit utilization is how much of your available revolving credit you're using. If your credit card limit is $10,000 and your balance is $8,000, that's 80% utilization. Lenders see that as a sign of financial stress.</p>
+      <p>Credit utilization is how much of your available revolving credit you're using. It is one calculation and one only: your balance divided by your limit. Your income does not come into it at all. If your credit card limit is $10,000 and your balance is $8,000, that is 80% utilization, whether you earn $40,000 a year or $400,000. Lenders see that as a sign of financial stress.</p>
       <p><strong>Below 30% is the target.</strong> Divide your total credit card balances by your total limits.</p>
-      <p>Find your number. The calculator is loaded with one credit card account. Enter your own limit and balance, or try the example values.</p>
+      <p>Find your number. The calculator is loaded with one credit card account. It asks for a limit and a balance, and nothing else, because nothing else goes into it. Enter your own, or try the example values.</p>
       <div style="margin-top:16px;"><button class="btn-primary" onclick="openCalc('s4-4c','strength',calcConfigs['s4-4c'])">Open Calculator</button></div>
     </div>
   </div>
@@ -1917,7 +1940,6 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Capital: Your Safety Net</h2>
       <p>Capital is your savings, investments, or other assets. It tells the lender that even if something goes wrong - a job loss, an emergency - you have resources to fall back on.</p>
       <p>Capital is assessed from your application, not from the credit bureaus. Your savings don't appear on your credit report. But they matter to lenders, especially for large loans like mortgages.</p>
-      <p>But lenders do. Especially for large loans like mortgages.</p>
 
       <div class="quiz-wrap" id="quiz-4-3a">
         <p class="quiz-question">Two people apply for a mortgage. Both earn $80,000/year. Person A has $40,000 in savings. Person B has $2,000. Beyond the down payment, why does the savings difference matter?</p>
@@ -2066,7 +2088,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>You now know how credit works, what it costs, how to repay your debt, and how lenders evaluate you.</p>
       <p>That puts you ahead of most people. But knowledge alone isn't enough if the system is working against you.</p>
       <p>Not everything in the credit world is designed with your best interests in mind. Some products are built to keep you paying. Some offers are designed to look better than they are. And some situations can damage your credit without you doing anything wrong.</p>
-      <p>This section is about recognising the traps and knowing the protections that exist on your side.</p>
+      <p>This section is about recognizing the traps and knowing the protections that exist on your side.</p>
     </div>
     <div class="intro-bottom">
       <button class="btn-secondary" onclick="goTo('s5-1')">Begin Section 5</button>
@@ -2112,7 +2134,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Payday Loans</h2>
       <p>Payday loans are short-term, small-dollar loans designed to tide you over until your next paycheque. They're easy to get. You walk in, show proof of income, and walk out with cash. No credit check. No waiting.</p>
       <p class="emphasis">They are also one of the most expensive forms of borrowing that exists.</p>
-      <p>A typical payday loan in Canada charges around $14 per $100 borrowed, for a two-week term.</p>
+      <p>$14 per $100 borrowed is the most a payday lender may legally charge in Canada, and several provinces cap it lower. On a two-week term, that is what the maximum looks like.</p>
 
       <div class="quiz-wrap" id="quiz-5-2">
         <p class="quiz-question">A payday lender charges $14 per $100 borrowed for two weeks. If you translated that into an annual interest rate, what do you think it would be?</p>
@@ -2188,7 +2210,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
         <div class="flip-card" onclick="flipCard(this,'s5-4')" style="height:130px;">
           <div class="flip-card-inner">
             <div class="flip-card-front"><div class="flip-card-icon" style="background:var(--blue-light)">👁️</div><div class="flip-card-front-text"><p class="scenario">Monitor Your Credit Report</p><p class="tap-hint">Tap to learn how</p></div></div>
-            <div class="flip-card-back"><p>You can check it for free, as you learned in Section 4. Do it at least once a year. Look for accounts you don't recognise, inquiries you didn't authorise, and addresses you've never lived at. <a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green-glow);text-decoration:underline;">Check your report at Equifax</a></p></div>
+            <div class="flip-card-back"><p>You can check it for free, as you learned in Section 4. Do it at least once a year. Look for accounts you don't recognize, inquiries you didn't authorize, and addresses you've never lived at. <a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green-glow);text-decoration:underline;">Check your report at Equifax</a></p></div>
           </div>
         </div>
         <div class="flip-card" onclick="flipCard(this,'s5-4')" style="height:130px;">
@@ -2200,7 +2222,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
         <div class="flip-card" onclick="flipCard(this,'s5-4')" style="height:130px;">
           <div class="flip-card-inner">
             <div class="flip-card-front"><div class="flip-card-icon" style="background:var(--gold-light)">⚠️</div><div class="flip-card-front-text"><p class="scenario">Watch for Warning Signs</p><p class="tap-hint">Tap to learn what</p></div></div>
-            <div class="flip-card-back"><p>Unexpected bills, calls from collection agencies about debts you don't recognise, or a sudden unexplained drop in your credit score can all be signs that someone is using your identity.</p></div>
+            <div class="flip-card-back"><p>Unexpected bills, calls from collection agencies about debts you don't recognize, or a sudden unexplained drop in your credit score can all be signs that someone is using your identity.</p></div>
           </div>
         </div>
       </div>
@@ -2231,28 +2253,29 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Your Rights</h2>
       <p class="emphasis">You are not powerless in this system.</p>
       <p>You have the right to <strong>see your credit report</strong>. Free, from both bureaus.</p>
-      <p>You have the right to <strong>dispute errors</strong>. If something on your credit report is wrong - a payment marked as late that you paid on time, an account that isn't yours, a balance that's incorrect - you can file a dispute with the credit bureau. They are legally required to investigate within 30 days. If they can't verify the information, they must correct or remove it.</p>
-      <p>This matters more than most people realise. Errors on credit reports are not rare. And an error you don't catch can cost you a higher interest rate, a declined application, or worse.</p>
+      <p>You have the right to <strong>dispute errors</strong>. If something on your credit report is wrong - a payment marked as late that you paid on time, an account that isn't yours, a balance that's incorrect - you can file a dispute with the credit bureau. Bureaus generally complete an investigation in about 30 days, and several provincial consumer reporting acts set that expectation. If they cannot verify the information, they must correct or remove it. If you have heard nothing after 45 days, follow up in writing.</p>
+      <p>This matters more than most people realize. Errors on credit reports are not rare. And an error you don't catch can cost you a higher interest rate, a declined application, or worse.</p>
 
       <div class="quiz-wrap" id="quiz-5-5">
         <p class="quiz-question">You notice a payment marked as late that you know you paid on time. What are you entitled to do?</p>
         <button class="quiz-option" onclick="answerQuiz('5-5',0,this)">Nothing. The credit bureau's records are final.</button>
-        <button class="quiz-option" onclick="answerQuiz('5-5',1,this)">File a dispute. The bureau must investigate within 30 days.</button>
+        <button class="quiz-option" onclick="answerQuiz('5-5',1,this)">File a dispute. Bureaus generally complete an investigation in about 30 days, and several provincial consumer reporting acts set that expectation. If you have heard nothing after 45 days, follow up in writing.</button>
         <button class="quiz-option" onclick="answerQuiz('5-5',2,this)">Contact the lender, but only the lender can fix it.</button>
       </div>
       <div id="feedback-5-5" style="display:none;"></div>
       <div id="nav-5-5" style="display:none;">
-        <p style="margin-top:16px;">You have the right to <strong>know why you were declined</strong>. If a lender turns you down for credit, they must tell you why. That information helps you understand what to work on.</p>
+        <p style="margin-top:16px;">You can <strong>ask why you were declined</strong>. Canada has no blanket rule forcing every lender to give you a reason, but if the decision relied on your credit report, a federally regulated bank must tell you that and name the bureau it used. Ask anyway, in writing. Most will tell you, and the reason is what shows you where to work.</p>
         <p>You have the right to be <strong>free from harassment</strong>. Collection agencies in Canada must follow strict rules. They cannot call you at unreasonable hours, threaten you, or use abusive language. If a collection agency crosses the line, you can file a complaint with your provincial consumer protection office.</p>
-        <p>You have the right to <strong>file a complaint</strong>. Start with the institution, then escalate to the relevant ombudsman, then to FCAC.</p>
+        <p>You have the right to <strong>file a complaint</strong>. Start with your bank&rsquo;s own complaints process. If they do not resolve it, or 56 days pass, take it to OBSI, the Ombudsman for Banking Services and Investments. Since November 2024 every federally regulated bank in Canada must be a member, and OBSI is free to use. FCAC supervises the system but does not settle individual disputes.</p>
 
         <div class="divider"></div>
         <p class="emphasis">Where to get help</p>
-        <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal body that oversees banks and financial institutions. They provide educational tools, handle complaints about federally regulated financial institutions, and maintain a database of your rights as a consumer.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac →</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">OBSI &ndash; Ombudsman for Banking Services and Investments</div><div class="resource-card-desc">If your bank will not resolve a complaint, or 56 days pass, take it here. Since November 2024 every federally regulated bank in Canada must be a member. It is free, independent, and unlike FCAC it can actually decide your case.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.obsi.ca" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">obsi.ca &rarr;</a></div></div></div></div>
+        <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal regulator for consumer protection at banks. FCAC supervises how banks handle complaints and publishes educational tools, but it does not resolve individual disputes for you. Use it to report a problem and to look up your rights as a consumer.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac →</a></div></div></div></div>
         <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🛡️</div><div><div class="resource-card-name">Canadian Anti-Fraud Centre</div><div class="resource-card-desc">Canada's central agency for reporting fraud and identity theft. If you suspect someone has used your identity or you've been targeted by a scam, this is where you report it.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://antifraudcentre-centreantifraude.ca/index-eng.htm" target="_blank" style="color:var(--green);text-decoration:none;">antifraudcentre-centreantifraude.ca →</a></div></div></div></div>
         <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🤝</div><div><div class="resource-card-name">Credit Counselling Canada</div><div class="resource-card-desc">A national network of non-profit credit counselling agencies. They offer free or low-cost help with budgeting, debt management, and financial planning. If you're feeling overwhelmed by debt, they can help you build a plan.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditcounsellingcanada.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditcounsellingcanada.ca →</a></div></div></div></div>
 
-        <p style="margin-top:12px;">You don't need to memorise these right now. But know that they exist. If you ever find yourself dealing with an error on your report, a fraudulent account, an unfair lender, or a debt you can't manage, there are people whose job it is to help you.</p>
+        <p style="margin-top:12px;">You don't need to memorize these right now. But know that they exist. If you ever find yourself dealing with an error on your report, a fraudulent account, an unfair lender, or a debt you can't manage, there are people whose job it is to help you.</p>
         <div style="margin-top:20px;"><button class="btn-primary" onclick="goTo('s5-6')">Continue</button></div>
       </div>
     </div>
@@ -2270,7 +2293,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Behind the Curtain</h2>
       <p>The credit system wasn't designed to be easy to understand. Some parts of it were designed to be confusing on purpose.</p>
       <p>But you've now seen behind the curtain. You know what the traps look like: the BNPL plans that stack up, the payday loans that charge more than eighteen times what a credit card would, the pre-approved offers that aren't as good as they seem, and the co-signing arrangements that put your credit on the line for someone else's debt.</p>
-      <p>You know how to protect yourself from fraud. And you know your rights: the right to see your credit report, to dispute errors, to understand why you were declined, and to be treated fairly.</p>
+      <p>You know how to protect yourself from fraud. And you know your rights: the right to see your credit report, to dispute errors, to ask why you were declined and be told if a credit report was used, and to be treated fairly.</p>
       <p>In the next section, you'll put everything together. You know how lenders see you. Now you'll learn how to strengthen the four Cs you can control.</p>
       <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('ms-1')">Continue</button></div>
     </div>
@@ -2333,7 +2356,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
           <div class="tool-door-icon purple">👤</div>
           <div class="tool-door-info">
             <div class="tool-door-name">1. Start with a Profile</div>
-            <div class="tool-door-desc">A credit profile: score, account history, balances, income, and debts. Pre-loaded in guided exercises, or customised with your own numbers in open exploration.</div>
+            <div class="tool-door-desc">A credit profile: score, account history, balances, income, and debts. Pre-loaded in guided exercises, or customized with your own numbers in open exploration.</div>
           </div>
         </div>
         <div class="tool-door-card">
@@ -2371,19 +2394,19 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>Every simulation starts with a person. A credit profile that captures where they are right now.</p>
 
       <div style="background:linear-gradient(135deg,var(--bg-dark),var(--bg-dark-2));border-radius:14px;padding:18px;color:#fff;margin:20px 0;">
-        <div style="font-size:13px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Example Profile: Stretched Thin</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Example Profile: Stretched Thin</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
           <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Score: <strong>640</strong></div>
           <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Utilization: <strong>75%</strong></div>
           <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Accounts: <strong>3</strong></div>
           <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">TDS: <strong>42%</strong></div>
-          <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Credit age: <strong>4 yrs</strong></div>
-          <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Income: <strong>$55K</strong></div>
+          <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Credit age: <strong>5 yrs</strong></div>
+          <div style="padding:10px;background:rgba(255,255,255,0.06);border-radius:8px;">Income: <strong>$66K</strong></div>
         </div>
       </div>
 
       <p>This is "Stretched Thin" - someone with a fair credit score, high balances relative to their limits, moderate income, and a debt service ratio that's pushing the limit. Not in crisis. But not in control either.</p>
-      <p>In guided exercises, the profile is <strong>pre-loaded</strong> for you. In open exploration, you can <strong>customise every number</strong> to match your own situation - or test hypothetical scenarios.</p>
+      <p>In guided exercises, the profile is <strong>pre-loaded</strong> for you. In open exploration, you can <strong>customize every number</strong> to match your own situation - or test hypothetical scenarios.</p>
       <p>The profile isn't just a label. Every number feeds into the simulation. Your utilization, your credit age, your debt-to-income ratio - they all determine how each action affects your score and your five Cs.</p>
 
       <div style="margin-top:24px;text-align:center;"><button class="btn-primary" onclick="goTo('ms-4b')">Next step</button></div>
@@ -2454,8 +2477,8 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
         <div style="text-align:center;margin-bottom:16px;padding:12px;background:var(--muted-bg);border-radius:10px;">
           <span style="font-size:15px;color:var(--text-muted);">640</span>
           <span style="font-size:18px;color:var(--text-muted);margin:0 10px;">→</span>
-          <span style="font-family:'Instrument Serif',serif;font-size:32px;color:var(--green);font-weight:400;">672</span>
-          <span style="font-size:14px;color:var(--green);font-weight:600;margin-left:8px;">+32</span>
+          <span style="font-family:'Instrument Serif',serif;font-size:32px;color:var(--green);font-weight:400;">671</span>
+          <span style="font-size:14px;color:var(--green);font-weight:600;margin-left:8px;">+31</span>
         </div>
         <div style="font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">The Five Cs</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
@@ -2562,6 +2585,10 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:28%"></div></div></div>
     <div class="content">
       <h2 class="concept-title">Strengthen Your Capacity</h2>
+      <p>Capacity is about whether you can afford the debt: your income measured against everything you already owe. Lenders put a number on it. For a mortgage, the key one is the <strong>Total Debt Service ratio (TDS)</strong>: all of your monthly debt payments as a percentage of your gross income.</p>
+      <p>Canadian lenders typically want your TDS under 44%. There is a second ratio too: GDS, gross debt service, which counts only your housing costs and is usually capped at 39%. You have to pass both. The default insurers, CMHC, Sagen and Canada Guaranty, all work to broadly these limits, so a mortgage above them is difficult to insure.</p>
+      <p>You strengthen your capacity by improving that ratio. Pay down or consolidate existing debts so your monthly obligations shrink. Avoid taking on a new loan or financing a big purchase in the months before you apply. And over time, growing your income moves the ratio in your favour too. Knowing your number before you apply puts you in control: if you're above the threshold, you can see exactly what needs to change.</p>
+      <p>There's one part of your capacity that shows up directly on your credit report, and it's the fastest to move: your credit utilization.</p>
       <p>Utilization has no memory. Unlike late payments, which stay on your report for up to six years, utilization resets every time your lender reports your balance to the credit bureaus. That's typically once per billing cycle. Pay your balance down today, and the improvement can show up within weeks. A single payment can change your number next cycle.</p>
       <p>This makes utilization one of the fastest ways to improve how lenders see you.</p>
       <p><strong>Pay before the statement date.</strong> Your lender reports your balance on a specific day, usually when your statement closes. If you pay down your balance before that date, the lower number is what gets reported. Even if you use the card regularly, timing your payment can keep your reported utilization low.</p>
@@ -2633,11 +2660,10 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:57%"></div></div></div>
     <div class="content">
       <h2 class="concept-title">Strengthen Your Collateral Position</h2>
-      <p>For most Canadians, the biggest collateral question is a mortgage. Lenders use a specific formula: the <strong>Total Debt Service ratio (TDS)</strong>. It measures all your debt payments as a percentage of your gross income.</p>
-      <p>Canadian lenders typically require <strong>TDS under 44%</strong>. CMHC, the Canada Mortgage and Housing Corporation, will not insure a mortgage above this threshold.</p>
-      <p>Knowing your number before you apply puts you in control. If you're above the threshold, you can see exactly what needs to change.</p>
-      <p>The calculator shows your TDS ratio and how close you are to the 44% threshold. Try adjusting the debt payments to see what it would take to qualify.</p>
-      <div style="margin-top:16px;"><button class="btn-primary" onclick="openCalc('s6-4c','strength',calcConfigs['s6-4c'])">Open Calculator</button></div>
+      <p>Collateral is the asset you pledge to secure a loan: the home behind a mortgage, the car behind a car loan. Because the lender can take that asset if you stop paying, a secured loan is less risky for them. That's why secured loans come with lower rates than unsecured ones.</p>
+      <p>You strengthen your collateral position by lowering the lender's risk on that asset, and the main lever is your down payment. The more you put down, the smaller your loan is compared to what the asset is worth. Lenders measure this as your <strong>loan-to-value ratio (LTV)</strong>: the loan amount divided by the asset's value. A bigger down payment means a lower LTV, which means more of your own equity in the asset and less exposure for the lender. A lower LTV often earns you a better rate, and on a mortgage, putting down 20% or more lets you skip mortgage default insurance entirely.</p>
+      <p>The asset itself matters too. A well-maintained home or a newer vehicle holds its value, which protects both the lender's position and yours. And every payment you make builds equity, so your collateral position strengthens steadily over the life of the loan.</p>
+      <div style="margin-top:16px;"><button class="btn-primary" onclick="goTo('s6-5')">Continue</button></div>
     </div>
   </div>
 </div>
@@ -2720,7 +2746,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <p>You know the six terms that govern how credit works in Canada. Loan amount, loan term, interest rate, APR, collateral, and repayment terms. You've seen what each one means for your wallet. You've seen that with installment loans, interest takes the biggest bite at the start. And you've learned to read any credit agreement and understand what you're signing.</p>
       <p>You know the most expensive trap in consumer credit. You've seen what minimum payments actually cost, and you know two strategies for fighting back. The avalanche saves you the most money. The snowball gives you the fastest win. Both require the same thing: extra money focused on one debt at a time.</p>
       <p>You know how lenders decide. The 5 Cs: Character, Capacity, Capital, Conditions, Collateral. You know where your Character is recorded, how your score is calculated, and what weighs most heavily. You know that four of the five are within your control.</p>
-      <p>You've seen the traps. BNPL plans that stack up. Payday loans that charge more than eighteen times what a credit card would. Pre-approved offers that aren't as good as they look. Co-signing arrangements that put your credit on the line for someone else's debt. And you know your rights: the right to see your file, to dispute errors, to be told why you were declined, and to be treated fairly.</p>
+      <p>You've seen the traps. BNPL plans that stack up. Payday loans that charge more than eighteen times what a credit card would. Pre-approved offers that aren't as good as they look. Co-signing arrangements that put your credit on the line for someone else's debt. And you know your rights: the right to see your file, to dispute errors, to ask why you were declined and be told if a credit report was used, and to be treated fairly.</p>
       <p>And you know how to build. Character, one month at a time. Capacity, one payment at a time. Capital, one dollar at a time. Collateral, one ratio at a time. You've seen each one move in the Simulator. The proof isn't theoretical. You watched it happen.</p>
       <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('s7-2')">Continue</button></div>
     </div>
@@ -2789,10 +2815,13 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
       <h2 class="concept-title">Your Resources</h2>
       <p>Everything referenced throughout the course, in one place. Bookmark this page. Come back whenever you need it.</p>
 
+      <p class="emphasis" style="margin-top:24px;">Your Credit Bright Tools</p>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">&#129518;</div><div><div class="resource-card-name">Credit Calculator</div><div class="resource-card-desc">Run the numbers on any credit decision before you make it. Compare offers, see the true cost of minimum payments, and plan a payoff.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="/credit-calculator.html" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">Open the Calculator &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">&#128200;</div><div><div class="resource-card-name">Credit Simulator</div><div class="resource-card-desc">See how a decision moves your credit profile before you make it. Test an action, see what changes, then decide.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="/credit-simulator.html" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">Open the Simulator &rarr;</a></div></div></div></div>
+
       <p class="emphasis" style="margin-top:24px;">Check Your Credit</p>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">Equifax – Free Credit Report</div><div class="resource-card-desc">Request your free credit report from one of Canada's two credit bureaus. Check it at least once a year for errors or accounts you don't recognise.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca →</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">Equifax – Free Credit Report</div><div class="resource-card-desc">Request your free credit report from one of Canada's two credit bureaus. Check it at least once a year for errors or accounts you don't recognize.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca →</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📊</div><div><div class="resource-card-name">TransUnion – Free Credit Report</div><div class="resource-card-desc">Request your free credit report from Canada's other credit bureau. Comparing both reports can catch errors one bureau may have that the other doesn't.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/product/consumer-disclosure" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca →</a></div></div></div></div>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">📱</div><div><div class="resource-card-name">Credit Karma</div><div class="resource-card-desc">Check your credit score for free, anytime. Also provides alerts when something changes on your credit file.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditkarma.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditkarma.ca →</a></div></div></div></div>
 
       <div class="divider"></div>
       <p class="emphasis">Build Your Credit</p>
@@ -2801,17 +2830,18 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
 
       <div class="divider"></div>
       <p class="emphasis">Dispute Errors & Report Fraud</p>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">Equifax – Dispute a Credit Report Error</div><div class="resource-card-desc">Found something wrong on your Equifax report? File a dispute. They must investigate within 30 days.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/dispute-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca/dispute →</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">Equifax – Dispute a Credit Report Error</div><div class="resource-card-desc">Found something wrong on your Equifax report? File a dispute. They will generally investigate within about 30 days.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.equifax.ca/en/personal/dispute-credit-report/" target="_blank" style="color:var(--green);text-decoration:none;">equifax.ca/dispute →</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">TransUnion – Fraud Victim Resources</div><div class="resource-card-desc">If you suspect identity theft, TransUnion provides tools to place a fraud alert and begin the resolution process.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.transunion.ca/assistance/fraud-victims-resources" target="_blank" style="color:var(--green);text-decoration:none;">transunion.ca/fraud →</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🛡️</div><div><div class="resource-card-name">Canadian Anti-Fraud Centre</div><div class="resource-card-desc">Canada's central agency for reporting fraud and identity theft. If someone has used your identity, this is where you report it.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://antifraudcentre-centreantifraude.ca/index-eng.htm" target="_blank" style="color:var(--green);text-decoration:none;">antifraudcentre-centreantifraude.ca →</a></div></div></div></div>
 
       <div class="divider"></div>
       <p class="emphasis">Get Help</p>
-      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal body that oversees banks and financial institutions. Educational tools, complaint handling, and a database of your rights.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac →</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">⚖️</div><div><div class="resource-card-name">OBSI &ndash; Ombudsman for Banking Services and Investments</div><div class="resource-card-desc">If your bank will not resolve a complaint, or 56 days pass, take it here. Since November 2024 every federally regulated bank in Canada must be a member. It is free, independent, and unlike FCAC it can actually decide your case.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.obsi.ca" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;">obsi.ca &rarr;</a></div></div></div></div>
+      <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🏛️</div><div><div class="resource-card-name">Financial Consumer Agency of Canada (FCAC)</div><div class="resource-card-desc">The federal regulator for consumer protection at banks. Educational tools and a database of your rights. Note that FCAC does not settle individual disputes.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.canada.ca/en/financial-consumer-agency.html" target="_blank" style="color:var(--green);text-decoration:none;">canada.ca/fcac →</a></div></div></div></div>
       <div class="resource-card"><div style="display:flex;gap:14px;align-items:flex-start;"><div style="font-size:24px;flex-shrink:0;margin-top:2px;">🤝</div><div><div class="resource-card-name">Credit Counselling Canada</div><div class="resource-card-desc">A national network of non-profit agencies offering free or low-cost help with budgeting, debt management, and financial planning.</div><div style="margin-top:6px;font-size:13px;font-weight:500;"><a href="https://www.creditcounsellingcanada.ca" target="_blank" style="color:var(--green);text-decoration:none;">creditcounsellingcanada.ca →</a></div></div></div></div>
 
-      <p style="margin-top:20px;" class="small">You don't need to memorise these. Just know they're here. Come back whenever you need them.</p>
-      <div style="margin-top:28px;"><button class="btn-primary" onclick="goTo('post-0')">Take the Post-Assessment</button></div>
+      <p style="margin-top:20px;" class="small">You don't need to memorize these. Just know they're here. Come back whenever you need them.</p>
+      <div style="margin-top:28px;"><button class="btn-primary" onclick="cbNavFinal()">Take the Final Assessment</button></div>
     </div>
   </div>
 </div>
@@ -2905,7 +2935,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <div class="content" style="padding-top:12px;">
       <h2 class="concept-title">Congratulations</h2>
       <p>You've completed the Credit Bright Foundation Course.</p>
-      <p>Your certificate will be issued in the name on your account.</p>
+      <p id="cert-name-hint">Check the name below. This is what will be printed on your certificate.</p>
       <input type="text" class="name-input" id="cert-name" readonly style="background:var(--muted-bg);cursor:default;">
       <div style="margin-top:20px;"><button class="btn-primary" id="cert-gen-btn" onclick="generateCert()">Generate Certificate</button></div>
     </div>
@@ -2970,8 +3000,11 @@ setInterval(function() {
   sb.from('section_progress').upsert({
     user_id: cbUser.id, enrollment_id: cbEnrollmentId, course: courseKey,
     section_key: sInfo.key, section_title: sInfo.title,
-    time_spent_seconds: accumulated, completed_at: new Date().toISOString()
-  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+    // A 30-second heartbeat is NOT evidence of completion. Writing completed_at here
+    // marked a section done merely because the tab was open. Time is time; completion
+    // is completion. (A proper last_seen_at column is the real fix; noted for Supabase.)
+    time_spent_seconds: accumulated
+  }, { onConflict: 'user_id,course,section_key' }).then(cbWriteResult);
 }, 30000);
 var cbResumeScreen = null;
 var cbAnsweredQuizzes = {};
@@ -3037,6 +3070,17 @@ async function cbInit() {
         var { data: profileData } = await sb.from('profiles').select('full_name').eq('id', user.id).maybeSingle();
         if (profileData) userName = profileData.full_name || '';
       }
+      if (userName) {
+          certNameEl.readOnly = true;
+      } else {
+        // No name on the account. Let them type it, or the certificate is unreachable.
+        certNameEl.readOnly = false;
+        certNameEl.style.background = '';
+        certNameEl.style.cursor = 'text';
+        certNameEl.placeholder = 'Type your full name';
+        var lbl = document.getElementById('cert-name-hint');
+        if (lbl) lbl.textContent = 'We do not have a name on your account. Type the name you would like on your certificate.';
+      }
       certNameEl.value = userName;
     }
 
@@ -3074,6 +3118,9 @@ async function cbInit() {
       existingProgress.forEach(function(sp) {
         if (sp.section_key !== '_resume' && sp.time_spent_seconds) {
           cbSectionTime[sp.section_key] = sp.time_spent_seconds;
+          // Credit sections worked through in an earlier sitting, or a returning learner
+          // would be locked out of an exam they had already earned.
+          if (cbSectionLastScreenId[sp.section_key]) cbSectionsSeen[sp.section_key] = true;
         }
       });
     }
@@ -3094,6 +3141,10 @@ async function cbInit() {
     var urlParams = new URLSearchParams(window.location.search);
     var directScreen = urlParams.get('screen');
     if (directScreen) {
+      // The ?screen= parameter walked straight past every gate. Honour the same rules:
+      // the exam needs the course worked through, the certificate needs a pass.
+      if (directScreen === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+      if (directScreen.indexOf('cert-') === 0 && !cbCanCertify()) { cbNavFinal(); return; }
       goTo(directScreen);
       return;
     }
@@ -3106,9 +3157,20 @@ async function cbInit() {
       document.getElementById('cb-resume-overlay').classList.add('visible');
     }
   } catch (e) {
+    // FAIL CLOSED. The old code hid the gate on any unexpected error, which meant the
+    // paid course became visible precisely when auth was broken. Keep the gate up and
+    // say so instead.
     console.error('Credit Bright init error:', e);
     var gate = document.getElementById('cb-loading-gate');
-    if (gate) gate.style.display = 'none';
+    if (gate) {
+      gate.style.display = '';
+      gate.innerHTML = '<div style="max-width:340px;margin:0 auto;text-align:center;padding:24px;">'
+        + '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">We could not verify your access</div>'
+        + '<div style="font-size:14px;color:#666;line-height:1.5;margin-bottom:18px;">Something went wrong while checking your account. Please try again, or sign in.</div>'
+        + '<button onclick="window.location.reload()" style="padding:10px 18px;border:none;border-radius:8px;background:#1F7A5C;color:#fff;font-weight:600;cursor:pointer;margin-right:8px;">Retry</button>'
+        + '<button onclick="window.location.href=\'website-login.html\'" style="padding:10px 18px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;">Sign in</button>'
+        + '</div>';
+    }
   }
 }
 
@@ -3124,6 +3186,91 @@ function cbDismissResume() {
 }
 
 // ── Progress Saving ──
+// Work out the last screen of each section once, from the DOM. Reaching that screen is
+// the only thing that legitimately means "this section is complete".
+var cbSectionLastScreenId = {};
+(function() {
+  var ids = [];
+  document.querySelectorAll('.screen').forEach(function(el) { if (el.id) ids.push(el.id); });
+  ids.forEach(function(id) {
+    var m = id.match(/^(s\d+)-(\d+)$/);   // lesson screens only, not calculator overlays
+    if (!m) return;
+    var sec = m[1], n = parseInt(m[2], 10);
+    if (cbSectionLastScreenId[sec] === undefined || n > cbSectionLastScreenId[sec].n) {
+      cbSectionLastScreenId[sec] = { n: n, id: id };
+    }
+  });
+})();
+// ── Final-assessment gate ────────────────────────────────────────────────────────────
+// You could take the pre-assessment, jump straight to the final exam from the Sections
+// menu, pass, and print a certificate without reading a single lesson screen. Any HR
+// officer would call that a bug. Require the course to actually be worked through.
+var cbSectionsSeen = {};
+function cbMarkSectionSeen(screenId) {
+  // Credit a section only when the learner reaches its FINAL screen. Marking it on arrival
+  // at any screen let the gate open itself: every blocked attempt dropped you into the next
+  // unseen section, which then counted as done.
+  var m = screenId && screenId.match(/^(s\d+)-(\d+)$/);
+  if (!m) return;
+  var last = cbSectionLastScreenId[m[1]];
+  if (last && last.id === screenId) cbSectionsSeen[m[1]] = true;
+}
+function cbSectionsRemaining() {
+  var missing = [];
+  Object.keys(cbSectionLastScreenId).sort().forEach(function(sec) {
+    if (!cbSectionsSeen[sec]) missing.push(sec);
+  });
+  return missing;
+}
+var cbGateTarget = null;
+// The last raw browser dialogs. Everything else in this product uses a styled notice;
+// alert() and confirm() block the page and look wrong here.
+function cbGateNotice(title, body) {
+  var t = document.getElementById('cb-gate-text');
+  var ov = document.getElementById('cb-gate-overlay');
+  if (t && ov) { t.textContent = body; cbGateTarget = null; ov.classList.add('visible'); return; }
+  alert(body);
+}
+function cbConfirmRetake() {
+  var t = document.getElementById('cb-gate-text');
+  var ov = document.getElementById('cb-gate-overlay');
+  if (!t || !ov) { resetPost(); return; }
+  t.textContent = 'Retaking will clear your current result. You will need to pass again to reach your certificate.';
+  cbGateTarget = null;
+  var btn = ov.querySelector('.cb-btn-resume');
+  if (btn) { btn.textContent = 'Retake it'; btn.onclick = function(){ ov.classList.remove('visible'); btn.textContent = 'Take me there'; btn.onclick = cbGateGo; resetPost(); }; }
+  ov.classList.add('visible');
+}
+
+function cbGateGo() {
+  var ov = document.getElementById('cb-gate-overlay');
+  if (ov) ov.classList.remove('visible');
+  if (cbGateTarget) goTo(cbGateTarget);
+}
+function cbCanTakeFinal() { return cbSectionsRemaining().length === 0; }
+function cbNavFinal() {
+  if (typeof cbNavClose === 'function') cbNavClose();
+  if (cbCanTakeFinal()) { goTo('post-0'); return; }
+  var missing = cbSectionsRemaining();
+  var n = missing.length;
+  // A raw browser alert() looked wrong in an otherwise fully styled app. Use the same
+  // modal the resume prompt uses.
+  cbGateTarget = missing[0] + '-0';
+  var t = document.getElementById('cb-gate-text');
+  if (t) t.textContent = 'The final assessment unlocks once you have worked through the course. You still have '
+    + n + (n === 1 ? ' section' : ' sections') + ' to go.';
+  var ov = document.getElementById('cb-gate-overlay');
+  if (ov) { ov.classList.add('visible'); return; }
+  goTo(cbGateTarget);
+}
+
+function cbIsSectionComplete(screenId) {
+  var m = screenId && screenId.match(/^(s\d+)-(\d+)$/);
+  if (!m) return false;
+  var last = cbSectionLastScreenId[m[1]];
+  return !!last && last.id === screenId;
+}
+
 function cbSaveProgress(fromScreen, toScreen) {
   if (!sb || !cbUser) return;
   var now = new Date().toISOString();
@@ -3142,8 +3289,10 @@ function cbSaveProgress(fromScreen, toScreen) {
     section_key: fromSection.key,
     section_title: fromSection.title,
     time_spent_seconds: timeSpent,
-    completed_at: now
-  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+    // Only mark complete if they actually reached the end of this section. Writing this
+    // on every transition marked a section done the moment they left its first page.
+    completed_at: cbIsSectionComplete(fromScreen) ? now : undefined
+  }, { onConflict: 'user_id,course,section_key' }).then(cbWriteResult);
 
   // Save resume bookmark
   sb.from('section_progress').upsert({
@@ -3151,14 +3300,24 @@ function cbSaveProgress(fromScreen, toScreen) {
     enrollment_id: cbEnrollmentId,
     course: courseKey,
     section_key: '_resume',
-    section_title: toScreen,
-    completed_at: now
-  }, { onConflict: 'user_id,course,section_key' }).then(function() {});
+    section_title: toScreen
+  }, { onConflict: 'user_id,course,section_key' }).then(cbWriteResult);
 
   screenEnteredAt = Date.now();
 }
 
 // ── Assessment Logging ──
+// Supabase reports a rejected write in the returned { error } object rather than by
+// throwing, so an empty .then() swallowed every failure. A learner could complete the
+// course, see success on screen, and have nothing recorded at all. Surface it instead.
+function cbWriteResult(res) {
+  if (res && res.error) {
+    console.error('Credit Bright: database write failed', res.error);
+    if (typeof cbWriteFailures !== 'undefined') cbWriteFailures++;
+  }
+}
+var cbWriteFailures = 0;
+
 function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer, correctAnswer, isCorrect) {
   if (!sb || !cbUser) return;
   sb.from('assessment_responses').insert({
@@ -3172,7 +3331,7 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
     correct_answer: correctAnswer,
     is_correct: isCorrect,
     answered_at: new Date().toISOString()
-  }).then(function() {});
+  }).then(cbWriteResult);
 }
 
 // ── Certificate Issuance ──
@@ -3193,8 +3352,7 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
     // Mark foundation enrollment as completed (not bundle, which spans all courses)
     await sb.from('enrollments')
       .update({ completed_at: new Date().toISOString() })
-      .eq('user_id', cbUser.id)
-      .eq('product', 'foundation');
+      .eq('id', cbEnrollmentId);
 
     // Send certificate notification email via Netlify Function
     await fetch('/.netlify/functions/send-email', {
@@ -3221,6 +3379,7 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
 
 // ── Navigation ──
 var currentScreen = 'intro-0';
+var cbSectionLastScreen = {}; // in-session memory: last main content screen visited per section
 var cbEmbedCalcLogged = false;
 var cbEmbedSimLogged = false;
 var cbEmbedCalcStart = null;
@@ -3238,13 +3397,20 @@ function cbLogEmbeddedTool(toolName) {
     started_at: new Date(start).toISOString(),
     ended_at: new Date().toISOString(),
     duration_seconds: duration
-  }).then(function() {});
+  }).then(cbWriteResult);
 }
 
 function goTo(id) {
+  cbMarkSectionSeen(id);
   var cur = document.getElementById(currentScreen);
   var nxt = document.getElementById(id);
   if (!cur || !nxt) { console.warn('Screen not found:', id); return; }
+
+  // In-session memory: remember the last main content screen visited in each section (s1-s7),
+  // skipping calculator/simulator overlays (ids ending in c/s), so the Sections menu can return
+  // the user to where they were rather than to the section start.
+  var cbSecPrefix = getSectionPrefix(id);
+  if (/^s[1-7]$/.test(cbSecPrefix) && !/[cs]$/.test(id)) { cbSectionLastScreen[cbSecPrefix] = id; }
 
   // Track embedded tool sessions
   var enteringCalc = id.indexOf('mc-') === 0;
@@ -3294,11 +3460,11 @@ var assessmentQuestions = [
   { q: 'A credit card is an example of which type of credit?', opts: ['Installment credit', 'Revolving credit', 'Secured credit'], correct: 1, feedback: 'A credit card is revolving credit. You borrow up to a limit, pay it back, and borrow again. Installment credit, like a car loan, is a fixed amount repaid over a set term.' },
   { q: 'When comparing two loan offers, which number gives you the truest picture of the total cost of borrowing?', opts: ['The interest rate', 'The monthly payment', 'The APR (Annual Percentage Rate)'], correct: 2, feedback: 'The APR combines the interest rate and lender fees into one number. Two loans can have the same interest rate but very different APRs. For installment loans, look for the APR on your disclosure statement. For revolving credit, compare the interest rate and fees together.' },
   { q: 'Your credit card statement arrives. You owe $2,000. If you pay the full balance within the grace period, how much interest do you pay?', opts: ['Interest on the full $2,000', 'A reduced amount of interest', 'Zero'], correct: 2, feedback: 'Pay your full balance within the grace period, usually 21 to 25 days after your statement closes, and you pay zero interest. That window is your best friend with credit cards.' },
-  { q: 'If you only pay the minimum on a $5,000 credit card balance at 19.99% interest, roughly how long could it take to pay off?', opts: ['About 5 years', 'About 15 years', '30 years or more'], correct: 2, feedback: 'Paying only the minimum on a $5,000 balance at 19.99% can take over 30 years and cost you $7,700 in interest. Paying just $50 to $75 more per month cuts that to about 4 years and saves you $5,600.' },
+  { q: 'If you only pay the minimum on a $5,000 credit card balance at 19.99% interest, roughly how long could it take to pay off?', opts: ['About 5 years', 'Almost 19 years', 'Under 3 years'], correct: 1, feedback: 'Paying only the minimum on a $5,000 balance at 19.99% takes nearly 19 years and costs you over $7,300 in interest. That is more than you borrowed in the first place. The minimum payment is designed to keep you paying, not to get you out.' },
   { q: "You're carrying three debts. You have $100 extra per month. The avalanche method says to put that $100 toward which debt?", opts: ['The one with the smallest balance.', 'The one with the highest interest rate.', 'The one with the highest monthly payment.'], correct: 1, feedback: "The avalanche targets the debt with the highest interest rate because that's the one costing you the most money every month. The snowball targets the smallest balance for a quick win. Both work. The key is putting extra money toward one debt at a time." },
   { q: 'What is the single biggest factor in your credit score?', opts: ['How much money you earn', 'Whether you pay on time', 'How many credit cards you have'], correct: 1, feedback: "Payment history is the single biggest factor. Income doesn't appear on your credit report at all. Consistent on-time payments are the most powerful thing you can do for your score." },
   { q: 'Your credit card limit is $10,000 and your balance is $7,000. What is your credit utilization?', opts: ['30%', '70%', '100%'], correct: 1, feedback: 'Credit utilization is your balance divided by your limit. $7,000 divided by $10,000 is 70%. Lenders generally like to see this below 30%.' },
-  { q: 'You find an error on your credit report, a late payment that you actually paid on time. What are you entitled to do?', opts: ["Nothing. The credit bureau's records are final.", 'File a dispute. The bureau must investigate within 30 days.', 'Wait and hope it corrects itself.'], correct: 1, feedback: "You have a legal right to dispute any inaccurate information on your credit report. The bureau must investigate within 30 days and correct or remove anything they can't verify." },
+  { q: 'You find an error on your credit report, a late payment that you actually paid on time. What are you entitled to do?', opts: ["Nothing. The credit bureau's records are final.", 'File a dispute. Bureaus generally complete an investigation in about 30 days, and several provincial consumer reporting acts set that expectation. If you have heard nothing after 45 days, follow up in writing.', 'Wait and hope it corrects itself.'], correct: 1, feedback: "You have a legal right to dispute any inaccurate information on your credit report. The bureau will generally investigate within about 30 days and must correct or remove anything they can't verify." },
   { q: 'Which of these actions would improve the most areas of your credit at once?', opts: ["Closing old credit accounts you don't use.", 'Paying your credit card on time and keeping the balance low.', 'Checking your credit score every day.'], correct: 1, feedback: 'Paying on time builds your Character, the most important of the 5 Cs. Keeping your balance low improves your credit utilization. One habit, multiple benefits.' },
   { q: "You build an emergency fund of three months' expenses. What happens to your credit score?", opts: ['It goes up significantly.', "It doesn't change, because savings aren't reported to credit bureaus.", "It goes down, because the money isn't being used to pay debt."], correct: 1, feedback: "Savings aren't reported to credit bureaus, so your score doesn't move. But Capital is one of the 5 Cs lenders evaluate. A lender reviewing a mortgage application would notice the emergency fund even though the score ignores it. Your score is important, but it's not the whole picture." }
 ];
@@ -3317,15 +3483,40 @@ function shuffleOpts(opts) {
   return items;
 }
 
+// Build a SEPARATE, run-free option layout for each assessment phase. A plain shuffle
+// leaves ~54% of read-throughs with three-or-more answers in a row in the same slot, which
+// is exactly the exploit the section quizzes were fixed to prevent. The pre/post delta is
+// the number we would show an employer, so it has to be clean.
+var cbAssessLayout = { pre: [], post: [] };
+function cbBuildAssessLayout(phase) {
+  var counts = assessmentQuestions.map(function(q) { return q.opts.length; });
+  var targets = cbAssignAnswerPositions(counts);
+  cbAssessLayout[phase] = assessmentQuestions.map(function(aq, qi) {
+    var target = targets[qi] % aq.opts.length;
+    var correctOpt = aq.opts[aq.correct];
+    var others = aq.opts.filter(function(_, i) { return i !== aq.correct; });
+    for (var i = others.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = others[i]; others[i] = others[j]; others[j] = t;
+    }
+    var opts = [], map = [], o = 0;
+    for (var p = 0; p < aq.opts.length; p++) {
+      if (p === target) { opts.push(correctOpt); map.push(aq.correct); }
+      else { opts.push(others[o]); map.push(aq.opts.indexOf(others[o])); o++; }
+    }
+    return { opts: opts, map: map };
+  });
+}
+
 function initPreAssessment() {
   var area = document.getElementById('pre-quiz-area');
   if (!area) return;
-  preShuffleMap = [];
+  cbBuildAssessLayout('pre');
+  preShuffleMap = cbAssessLayout['pre'].map(function(L) { return L.map; });
   var html = '';
   for (var i = 0; i < assessmentQuestions.length; i++) {
     var aq = assessmentQuestions[i];
-    var shuffled = shuffleOpts(aq.opts);
-    preShuffleMap.push(shuffled.map(function(s) { return s.orig; }));
+    var shuffled = cbAssessLayout['pre'][i].opts.map(function(txt) { return { text: txt }; });
     html += '<div class="assessment-item">';
     html += '<div class="assessment-progress">Question ' + (i+1) + ' of 10</div>';
     html += '<p class="assessment-q">' + aq.q + '</p>';
@@ -3340,9 +3531,15 @@ function initPreAssessment() {
 }
 
 function answerPre(qi, ai, el) {
+  // Lock on first answer, exactly as the post-assessment does. The pre-assessment used
+  // to allow endless revision, which made the "before" score whatever the learner
+  // settled on after thinking. That baseline is what we report to an employer.
+  if (preScores[qi] !== undefined && preScores[qi] !== null) return;
   var origIdx = preShuffleMap[qi][ai];
   preScores[qi] = (origIdx === assessmentQuestions[qi].correct) ? 1 : 0;
   preSelections[qi] = { ai: ai, origIdx: origIdx };
+  var wrapLock = el.closest('.assessment-item');
+  wrapLock.querySelectorAll('.quiz-option').forEach(function(b) { b.style.pointerEvents = 'none'; });
   var wrap = el.closest('.assessment-item');
   var btns = wrap.querySelectorAll('.quiz-option');
   btns.forEach(function(b) { b.classList.remove('selected'); });
@@ -3356,12 +3553,12 @@ function answerPre(qi, ai, el) {
 function initPostAssessment() {
   var area = document.getElementById('post-quiz-area');
   if (!area) return;
-  postShuffleMap = [];
+  cbBuildAssessLayout('post');
+  postShuffleMap = cbAssessLayout['post'].map(function(L) { return L.map; });
   var html = '';
   for (var i = 0; i < assessmentQuestions.length; i++) {
     var aq = assessmentQuestions[i];
-    var shuffled = shuffleOpts(aq.opts);
-    postShuffleMap.push(shuffled.map(function(s) { return s.orig; }));
+    var shuffled = cbAssessLayout['post'][i].opts.map(function(txt) { return { text: txt }; });
     html += '<div class="assessment-item">';
     html += '<div class="assessment-progress">Question ' + (i+1) + ' of 10</div>';
     html += '<p class="assessment-q">' + aq.q + '</p>';
@@ -3459,7 +3656,8 @@ function showResults() {
   // Certificate gate: 7 out of 10 required
   var gateEl = document.getElementById('cert-gate');
   if (postTot >= 7) {
-    gateEl.innerHTML = '<div style="margin-top:28px;"><button class="btn-primary" onclick="goTo(\'cert-0\')">Get Your Certificate</button></div>';
+    gateEl.innerHTML = '<div style="margin-top:28px;"><button class="btn-primary" onclick="goTo(\'cert-0\')">Get Your Certificate</button>'
+      + '<div style="margin-top:12px;"><button class="btn-text" onclick="cbConfirmRetake();">Retake the assessment</button></div></div>';
   } else {
     gateEl.innerHTML = '<div style="margin-top:28px;background:var(--gold-light);border-radius:14px;padding:24px;text-align:center;"><p style="font-weight:600;color:#7D6608;margin-bottom:8px;">You need 70% to earn your certificate.</p><p style="font-size:15px;color:#7D6608;margin-bottom:16px;">You scored ' + (postTot * 10) + '%. Review the sections you found challenging and retake the assessment when you are ready. There is no limit on attempts.</p><button class="btn-primary" onclick="resetPost()" style="background:linear-gradient(135deg,#E6A817,#F5C542);">Retake Assessment</button></div>';
   }
@@ -3473,9 +3671,33 @@ function resetPost() {
   goTo('post-0');
 }
 
+// See the sibling courses: the Sections menu let anyone jump straight to the certificate.
+function cbCanCertify() {
+  // 7 out of 10. This MUST match the gate in showResults() and the "Minimum score of 70%"
+  // printed on the certificate. Requiring 8 here while showResults opened the gate at 7
+  // meant a 70% student saw "Get Your Certificate", clicked it, was refused, and was sent
+  // back to a locked assessment with no retake button. A closed loop.
+  var tot = postScores.reduce(function(a, b) { return a + (b || 0); }, 0);
+  return tot >= 7;
+}
+
 function generateCert() {
-  var name = document.getElementById('cert-name').value.trim();
-  if (!name) { document.getElementById('cert-name').style.borderColor = 'var(--red)'; return; }
+  if (!cbCanCertify()) {
+    cbGateNotice('Not yet', 'You need at least 70% on the final assessment before the certificate unlocks. Take it again when you are ready.');
+    goTo('post-0');
+    return;
+  }
+  var nameEl = document.getElementById('cert-name');
+  var name = nameEl.value.trim();
+  if (!name) {
+    nameEl.style.borderColor = 'var(--red)';
+    nameEl.readOnly = false;
+    nameEl.style.background = '';
+    nameEl.focus();
+    var h = document.getElementById('cert-name-hint');
+    if (h) h.textContent = 'Please enter the name you would like on your certificate.';
+    return;
+  }
   document.getElementById('cert-display-name').textContent = name;
   var postTot = postScores.reduce(function(a, b) { return a + b; }, 0);
   var preTot = preScores.reduce(function(a, b) { return a + b; }, 0);
@@ -3510,9 +3732,9 @@ var quizData = {
   '4-3a': { feedback: ["Income determines whether you can afford the monthly payment, but savings determine whether you can survive a disruption.", "Exactly. Savings are a safety net. Life is unpredictable, and lenders know that.", "Savings matter regardless of employment type. Any borrower could face a job loss, medical emergency, or unexpected expense."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'after-4-3a' },
   '4-5': { feedback: ["Capacity matters, but Character carries the most weight. A strong income means nothing to a lender if your history shows missed payments and defaults. Your track record is the best predictor of what you'll do next.", "Right. Character is the most important C. Your track record of paying on time tells lenders more about your reliability than any other single factor.", "Collateral reduces the lender's risk, but it doesn't predict your behaviour. Character does. A borrower with a strong track record of on-time payments is a safer bet than one who pledges an asset but has a history of missed payments."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-4-5' },
   '5-1': { feedback: ["No interest doesn't mean no cost. If you miss a payment, late fees kick in, and some providers retroactively apply interest. Plus with three overlapping schedules, the odds of missing one go up.", "Right. The individual payments look small, but stacking them creates complexity. Three overlapping plans means multiple deadlines across the month. Miss one and the fees, or retroactive interest, can turn a free plan into an expensive one. And missed payments are increasingly showing up on credit reports.", "That's changing. More BNPL providers are now reporting to credit bureaus. A missed payment on a $100 installment could show up alongside a missed mortgage payment."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-5-1' },
-  '5-2': { feedback: ["Much higher. $14 per $100 over two weeks works out to roughly 365% per year. That's not a typo. For comparison, a typical credit card charges around 20%. Payday loans cost more than eighteen times as much. And here's the thing: under Canadian law, the criminal rate of interest is 35% APR. Payday lenders are given a special exemption, which is why they can legally charge rates that would be criminal for anyone else.", "Higher still. $14 per $100 over two weeks works out to roughly 365% per year. For comparison, a typical credit card charges around 20%. Payday loans cost more than eighteen times as much. Under Canadian law, the criminal rate of interest is 35% APR. Payday lenders are given a special exemption, which is why they can legally charge rates that would be criminal for anyone else.", "That's right. $14 per $100 over two weeks translates to roughly 365% on an annualized basis. For comparison, a typical credit card charges around 20%. And here's the thing: under Canadian law, the criminal rate of interest is 35% APR. That 35% cap applies to everyone. Payday lenders are given a special exemption, which is why they can legally charge rates that would be criminal for anyone else."], style: ['gold', 'gold', 'green'], showNav: true, navId: 'nav-5-2' },
+  '5-2': { feedback: ["Much higher. $14 per $100 over two weeks works out to roughly 365% per year. That's not a typo. For comparison, a typical credit card charges around 20%. Payday loans cost more than eighteen times as much. And here's the thing: under Canadian law, the criminal rate of interest is 35% APR. Payday lenders are given a special exemption, which is why they can legally charge rates that would be criminal for anyone else.", "Higher still. $14 per $100 over two weeks works out to roughly 365% per year. For comparison, a typical credit card charges around 20%. Payday loans cost more than eighteen times as much. Under Canadian law, the criminal rate of interest is 35% APR. Payday lenders are given a special exemption, which is why they can legally charge rates that would be criminal for anyone else.", "That's right. $14 per $100 over two weeks translates to roughly 365% on an annualized basis. For comparison, a typical credit card charges around 20%. And here's the thing: under Canadian law, the criminal rate of interest is 35% APR. That cap protects consumers, though it is not universal: business loans between $10,000 and $500,000 have a higher limit, business loans above $500,000 are not capped at all, and pawn loans under $1,000 have their own rules. Payday lenders are given a special exemption, which is why they can legally charge rates that would be criminal for anyone else."], style: ['gold', 'gold', 'green'], showNav: true, navId: 'nav-5-2' },
   '5-4': { feedback: ["Mistakes on credit reports don't fix themselves. If someone opened an account in your name, you need to act immediately. Contact both credit bureaus.", "That's the right first step. Contact both <a href='https://www.equifax.ca/en/personal/dispute-credit-report/' target='_blank' style='color:var(--green-dark);text-decoration:underline;'>Equifax</a> and <a href='https://www.transunion.ca/assistance/fraud-victims-resources' target='_blank' style='color:var(--green-dark);text-decoration:underline;'>TransUnion</a> to report the suspicious account and request a fraud alert on your file. A fraud alert is a flag that tells lenders to verify your identity before opening any new account in your name. From there, you'd file a report with the <a href='https://antifraudcentre-centreantifraude.ca/index-eng.htm' target='_blank' style='color:var(--green-dark);text-decoration:underline;'>Canadian Anti-Fraud Centre</a> and contact the financial institution where the fraudulent account was opened.", "Closing your own accounts could hurt your credit score. The right move is to report the suspicious account and place a fraud alert."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-5-4' },
-  '5-5': { feedback: ["Credit bureau records are not final. Canadian law gives you the right to dispute any information you believe is inaccurate.", "That's right. You have a legal right to dispute inaccurate information on your credit report. The bureau must investigate within 30 days.", "Contacting the lender can help, but you also have a direct right to dispute the error with the credit bureau."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-5-5' },
+  '5-5': { feedback: ["Credit bureau records are not final. Canadian law gives you the right to dispute any information you believe is inaccurate.", "That's right. You have a legal right to dispute inaccurate information on your credit report. The bureau generally investigate within about 30 days.", "Contacting the lender can help, but you also have a direct right to dispute the error with the credit bureau."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-5-5' },
   '6-1': { feedback: ["An emergency fund strengthens your Capital, one of the 5 Cs. That's important. But it only directly addresses one dimension.", "Right. Paying on time strengthens your Character, the most heavily weighted factor in your score. Keeping utilization low improves another. Together, they address the two biggest scoring factors at once.", "Reducing hard inquiries helps, but its impact is relatively small and temporary."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-6-1' },
   '6-2': { feedback: ["That's the mathematically optimal approach, called the avalanche method. You saw in Section 3 how interest eats your payments. Targeting the highest rate first reduces that drain faster. Both approaches work. The key is to pay more than the minimum on at least one debt. You already know what paying only the minimum costs.", "That's the momentum approach, called the snowball method. Clearing one balance entirely, even a small one, gives you a real sense of progress. One fewer bill. One account at zero. Both approaches work. The key is to pay more than the minimum on at least one debt. You already know what paying only the minimum costs."], style: ['green', 'green'], showNav: true, navId: 'nav-6-2' },
   '6-3': { feedback: ["Each application creates a hard inquiry on your credit report. Multiple applications in a short period can hurt your score and signal desperation to lenders.", "That's the strongest path. A secured card is designed for exactly this situation. You put down a deposit, use the card responsibly, and every on-time payment builds your credit history. No risk to the lender, and real progress for you. Over time, many issuers will upgrade you to a regular unsecured card.", "A payday loan is one of the most expensive forms of borrowing, as you learned in Section 5. And many payday lenders don't report to credit bureaus at all, which means the payment wouldn't even appear on your credit report. It costs you more and builds nothing."], style: ['gold', 'green', 'gold'], showNav: true, navId: 'nav-6-3' },
@@ -3841,11 +4063,21 @@ function checkItem(el, idx) {
 // ═══════════════════════════════════════
 // EMBEDDED CALCULATOR ENGINE
 // ═══════════════════════════════════════
+// Where a calculator's "Back to lesson" returns to.
+// The old code did screenId.replace('c',''), which strips the FIRST 'c' in the
+// string, not the trailing one. For 'mc-try' that produced 'm-try', a screen that
+// does not exist, so the back button did nothing. Use an explicit target.
+function calcBackTarget(screenId) {
+  var cfg = calcConfigs[screenId];
+  if (cfg && cfg.returnScreen) return cfg.returnScreen;
+  return screenId.replace(/c$/, '');
+}
+
 var calcConfigs = {
-  's2-1c': { door: 'offer', type: 'personal', amount: 10000, rate: 6, term: 60, fees: 0, label: 'Try changing the loan amount to $15,000 and see what happens to your monthly payment and total interest.' },
-  's2-2c': { door: 'offer', type: 'car', amount: 10000, rate: 6, term: 36, fees: 0, label: 'Note your monthly payment and total interest. Now change the term to 6 years (72 months).' },
-  's2-3c': { door: 'offer', type: 'mortgage', amount: 300000, rate: 4, term: 300, fees: 0, label: 'Note the monthly payment and total interest at 4%. Now change the rate to 6%.' },
-  's2-6c': { door: 'offer', type: 'car', amount: 10000, rate: 4.5, term: 36, fees: 600, label: 'Look at the APR - it includes the $600 in fees. Now change to 5.5% rate and $75 fees to compare.' },
+  's2-1c': { door: 'offer', compareRate: 6, compareLabel: 'Other offer', type: 'personal', amount: 10000, rate: 6, term: 60, fees: 0, label: 'Try changing the loan amount to $15,000 and watch the monthly payment and total interest move. Then put the amount back to $10,000 and open Compare With Another Offer: it holds the same loan at two different rates or terms, side by side, so you never have to remember the first one.' },
+  's2-2c': { door: 'offer', compareRate: 6, compareLabel: 'Other offer', type: 'car', amount: 10000, rate: 6, term: 36, fees: 0, label: 'Open Compare With Another Offer and set the second one to 72 months. Now both are on screen together: the longer term drops the monthly payment and raises the total interest.' },
+  's2-3c': { door: 'offer', compareRate: 6, compareLabel: 'Other offer', type: 'mortgage', amount: 300000, rate: 4, term: 300, fees: 0, label: 'The comparison is already loaded: 4% on one side, 6% on the other. Open Compare With Another Offer and look at the total cost on each side. Two percentage points, on a mortgage, over 25 years.' },
+  's2-6c': { door: 'offer', compareRate: 5.5, compareLabel: 'Other offer', type: 'car', amount: 10000, rate: 4.5, term: 36, fees: 600, label: 'Look at the APR: it includes the $600 in fees. Now open Compare With Another Offer, preloaded at 5.5%, and set its fee to $75. The lower rate is not the cheaper loan.' },
   's4-4c': { door: 'strength', mode: 'util', label: 'Enter your own credit limit and balance, or try the example values.' },
   's6-2c': { door: 'debt-several', debts:[{name:'Store Card',balance:2000,rate:9,minPay:50,type:'card'},{name:'Credit Card',balance:7000,rate:19.99,minPay:175,type:'card'}], label: 'Two debts loaded: a store card at $2,000 (9%) and a credit card at $7,000 (19.99%). Compare avalanche vs snowball.' },
   's6-3c': { door: 'strength', mode: 'mortgage', label: 'Enter your income and monthly debts to see your TDS ratio and whether you\'d qualify.' },
@@ -3855,8 +4087,8 @@ var calcConfigs = {
   's3-4c':{door:'debt-several',debts:[{name:'Store Card',balance:1500,rate:12,minPay:40,type:'card'},{name:'Credit Card',balance:4000,rate:19.99,minPay:100,type:'card'},{name:'Car Loan',balance:12000,rate:5,minPay:226,type:'car'}],label:'Three debts loaded. Snowball targets the smallest balance first. Avalanche targets the highest rate. See how the order changes the outcome.'},
   's4-5c':{door:'strength',mode:'util',label:'Enter your credit limit and balance to see your utilization.'},
   's6-4c':{door:'strength',mode:'mortgage',label:'Enter your income and monthly debts to see your TDS ratio.'},
-  's2-4bc':{ door: 'debt-one', type: 'car', amount: 15000, rate: 6, term: 48, label: 'Drag the payment slider and watch how much time and interest you save. What happens if you put an extra $100 per month toward the balance?' },
-  'mc-try':{ door: 'offer', type: 'personal', amount: 10000, rate: 6, term: 36, fees: 0, label: 'Try changing the term and watch the monthly payment and total interest change. Shorter term, higher payment, less interest. Longer term, lower payment, more interest.' }
+  's2-4bc':{ door: 'debt-one', type: 'car', amount: 15000, rate: 6, term: 48, label: 'Drag the payment slider and watch how much time and interest you save. What happens if you push it to $450 a month?' },
+  'mc-try':{ door: 'offer', returnScreen: 'mc-4c', compareRate: 6, compareLabel: 'Other offer', type: 'personal', amount: 10000, rate: 6, term: 36, fees: 0, label: 'Change anything you like. Nothing here is wrong.' }
 };
 
 function openCalc(screenId, door, config) {
@@ -3884,14 +4116,21 @@ function calcAPR(P, pmt, mo, fees) {
   return ((lo + hi) / 2) * 100;
 }
 function calcMinPay(bal, rate) { return Math.max(Math.round(bal * 0.01 + bal * (rate / 100 / 12)), 25); }
+// MUST match credit-calculator.html exactly. This version rounded the minimum payment and
+// broke a month early, so the flagship $5,000 example came out 225 mo / $7,305 here while
+// the Calculator and the debt course both return 226 mo / $7,313. The debt course was
+// fixed for exactly this reason; Foundation was missed.
 function simMinPayment(bal, annualRate) {
-  var months = 0, totalInterest = 0, b = bal, r = annualRate / 100 / 12;
-  while (b > 0.5 && months < 600) {
-    var interest = b * r; var minPay = Math.max(Math.round(b * 0.01 + interest), 25);
-    if (minPay >= b + interest) { totalInterest += b * r; break; }
-    totalInterest += interest; b = b + interest - minPay; months++;
+  var r = annualRate / 100 / 12, b = bal, tot = 0, mo = 0;
+  while (b > 0.50 && mo < 600) {
+    var i = b * r;
+    var mp = Math.max(b * 0.01 + i, 25);
+    mp = Math.min(mp, b + i);
+    b -= (mp - i);
+    tot += mp;
+    mo++;
   }
-  return { months: months, totalInterest: Math.round(totalInterest) };
+  return { months: mo, totalInterest: Math.round(tot - (bal - b)) };
 }
 function simFixedPayment(bal, annualRate, payment) {
   var months = 0, totalInterest = 0, b = bal, r = annualRate / 100 / 12;
@@ -3931,7 +4170,7 @@ function renderCalcOffer(container, config, screenId) {
   var isMortgage = config.type === 'mortgage';
   var termMonths = config.term;
   var html = '';
-  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + calcBackTarget(screenId) + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
   html += '<div class="calc-header-title">Credit Calculator</div>';
   html += '<div class="calc-header-sub">' + config.label + '</div></div>';
   html += '<div class="calc-body">';
@@ -3941,10 +4180,73 @@ function renderCalcOffer(container, config, screenId) {
   html += '<div class="input-group"><div class="input-label">Fees</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-fees" value="' + (config.fees || 0) + '" oninput="calcOfferUpdate(\'' + screenId + '\')"></div></div>';
   html += '<div class="divider"></div>';
   html += '<div id="' + screenId + '-results"></div>';
+  // Compare With Another Offer. Only rendered where the exercise asks for a comparison.
+  if (config.compareRate) {
+    html += '<div class="consol-trigger" id="' + screenId + '-cmp-trigger" onclick="calcToggleOfferCompare(\'' + screenId + '\')">&#128260; Compare With Another Offer</div>';
+    html += '<div class="consol-section" id="' + screenId + '-cmp-section">';
+    html += '<div style="font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:10px;" id="' + screenId + '-cmp-sub">Same ' + calcFmt(config.amount) + ', different terms. What does the other option cost?</div>';
+    html += '<div class="consol-config">';
+    html += '<div class="input-group"><div class="input-label">Rate (%)</div><input type="number" step="0.1" class="input-field" id="' + screenId + '-cmp-rate" value="' + config.compareRate + '" oninput="calcOfferCompareUpdate(\'' + screenId + '\')"></div>';
+    html += '<div class="input-group"><div class="input-label">Term (mo)</div><input type="number" class="input-field" id="' + screenId + '-cmp-term" value="' + config.term + '" oninput="calcOfferCompareUpdate(\'' + screenId + '\')"></div>';
+    html += '<div class="input-group"><div class="input-label">Fees ($)</div><input type="number" class="input-field" id="' + screenId + '-cmp-fees" value="0" oninput="calcOfferCompareUpdate(\'' + screenId + '\')"></div>';
+    html += '</div>';
+    html += '<div id="' + screenId + '-cmp-results"></div>';
+    html += '</div>';
+  }
   html += '<div class="tool-disclaimer">This calculator is for educational purposes only. It uses Canadian-standard calculations including semi-annual compounding for mortgages.</div>';
   html += '</div>';
   container.innerHTML = html;
   calcOfferUpdate(screenId);
+}
+
+
+// ── Compare With Another Offer ───────────────────────────────────────────────────────
+// Ported from the debt course. Holds two offers on screen at once so the learner is not
+// asked to change a number and remember what it used to be.
+function calcToggleOfferCompare(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  container._cmpOpen = !container._cmpOpen;
+  var trigger = document.getElementById(screenId + '-cmp-trigger');
+  var section = document.getElementById(screenId + '-cmp-section');
+  trigger.classList.toggle('open', container._cmpOpen);
+  section.classList.toggle('open', container._cmpOpen);
+  trigger.innerHTML = container._cmpOpen ? '&#9662; Compare With Another Offer' : '&#128260; Compare With Another Offer';
+  if (container._cmpOpen) calcOfferCompareUpdate(screenId);
+}
+
+function calcOfferCompareUpdate(screenId) {
+  var container = document.getElementById('calc-' + screenId);
+  if (!container || !container._cmpOpen) return;
+  var config = calcConfigs[screenId];
+  var isMortgage = config.type === 'mortgage';
+  var amount = parseFloat(document.getElementById(screenId + '-amount').value) || 0;
+  var rA = parseFloat(document.getElementById(screenId + '-rate').value) || 0;
+  var tA = parseInt(document.getElementById(screenId + '-term').value) || 1;
+  var fA = parseFloat(document.getElementById(screenId + '-fees').value) || 0;
+  var rB = parseFloat(document.getElementById(screenId + '-cmp-rate').value) || 0;
+  var tB = parseInt(document.getElementById(screenId + '-cmp-term').value) || tA;
+  var fB = parseFloat(document.getElementById(screenId + '-cmp-fees').value) || 0;
+  var pA = isMortgage ? calcPmtMortgage(amount, rA, tA) : calcPmtMonthly(amount, rA, tA);
+  var pB = isMortgage ? calcPmtMortgage(amount, rB, tB) : calcPmtMonthly(amount, rB, tB);
+  var totA = pA * tA + fA, totB = pB * tB + fB;
+  var intA = totA - amount, intB = totB - amount;
+  var sub = document.getElementById(screenId + '-cmp-sub');
+  if (sub) sub.textContent = 'Same ' + calcFmt(amount) + ', different terms. What does the other option cost?';
+  var meaningful = Math.abs(totA - totB) > 5;
+  var aWins = totA <= totB;
+  var html = '<div class="result-grid two-col" style="margin-top:12px;">';
+  html += '<div class="compare-card ' + (!meaningful ? '' : (aWins ? 'green-card' : 'red-card')) + '"><div class="compare-card-label">This Offer (' + rA.toFixed(2) + '%)</div>';
+  html += '<div class="compare-card-number">' + calcFmt(pA) + '/mo</div>';
+  html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + calcFmt(intA) + ' total cost</div></div>';
+  html += '<div class="compare-card ' + (!meaningful ? '' : (aWins ? 'red-card' : 'green-card')) + '"><div class="compare-card-label">' + (config.compareLabel || 'Other Offer') + ' (' + rB.toFixed(2) + '%)</div>';
+  html += '<div class="compare-card-number">' + calcFmt(pB) + '/mo</div>';
+  html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + calcFmt(intB) + ' total cost</div></div>';
+  html += '</div>';
+  var diff = Math.abs(totA - totB);
+  if (diff > 5) {
+    html += '<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">' + (aWins ? 'This offer' : (config.compareLabel || 'The other offer')) + ' saves ' + calcFmt(diff) + ' in total</span></div>';
+  }
+  document.getElementById(screenId + '-cmp-results').innerHTML = html;
 }
 
 function calcOfferUpdate(screenId) {
@@ -3955,8 +4257,10 @@ function calcOfferUpdate(screenId) {
   var fees = parseFloat(document.getElementById(screenId + '-fees').value) || 0;
   var isMortgage = config.type === 'mortgage';
   var pmt = isMortgage ? calcPmtMortgage(amount, rate, term) : calcPmtMonthly(amount, rate, term);
-  var totalPaid = pmt * term + fees;
-  var totalInterest = totalPaid - amount;
+  // Fees are real money out of your pocket. Leaving them out of Total Paid made the
+  // calculator contradict the very lesson it teaches: that APR reveals the true cost.
+  var totalInterest = (pmt * term) - amount;
+  var totalPaid = (pmt * term) + fees;
   var apr = fees > 0 ? calcAPR(amount, pmt, term, fees) : rate;
   
   var html = '<div class="big-result"><div class="big-result-label">Monthly Payment</div><div class="big-result-number">' + calcFmt(pmt) + '</div>';
@@ -3964,11 +4268,14 @@ function calcOfferUpdate(screenId) {
   html += '</div>';
   html += '<div class="result-grid"><div class="compare-card"><div class="compare-card-label">Total Paid</div><div class="compare-card-number">' + calcFmt(totalPaid) + '</div></div>';
   html += '<div class="compare-card red-card"><div class="compare-card-label">Total Interest</div><div class="compare-card-number">' + calcFmt(totalInterest) + '</div></div>';
-  html += '<div class="compare-card' + (fees > 0 ? '' : ' green-card') + '"><div class="compare-card-label">' + (fees > 0 ? 'APR' : 'Rate') + '</div><div class="compare-card-number">' + apr.toFixed(2) + '%</div></div></div>';
+  html += '<div class="compare-card' + (fees > 0 ? '' : ' green-card') + '"><div class="compare-card-label">' + (fees > 0 ? 'APR' : 'Rate') + '</div><div class="compare-card-number">' + apr.toFixed(2) + '%</div>' + (fees > 0 ? '<div class="compare-card-sub">Annual Percentage Rate</div>' : '') + '</div></div>';
   if (fees > 0 && apr > rate) {
     html += '<div class="insight-box"><p>The APR (' + apr.toFixed(2) + '%) is higher than the interest rate (' + rate.toFixed(1) + '%) because it includes the $' + fees + ' in fees. This is the real cost of borrowing.</p></div>';
   }
   document.getElementById(screenId + '-results').innerHTML = html;
+  // Refresh the comparison too, or it shows figures from before the main offer changed.
+  var cmpC = document.getElementById('calc-' + screenId);
+  if (cmpC && cmpC._cmpOpen) calcOfferCompareUpdate(screenId);
 }
 
 function renderCalcDebtOne(container, config, screenId) {
@@ -3979,14 +4286,14 @@ function renderCalcDebtOne(container, config, screenId) {
   var sliderMax = isCard ? Math.max(sliderMin + 100, 1000) : Math.max(sliderMin + 100, 800);
   var sliderDefault = isCard ? Math.max(150, sliderMin) : Math.max(400, sliderMin);
   var html = '';
-  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + calcBackTarget(screenId) + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
   html += '<div class="calc-header-title">Credit Calculator</div>';
   html += '<div class="calc-header-sub">' + config.label + '</div></div>';
   html += '<div class="calc-body">';
   html += '<div class="input-group"><div class="input-label">Balance</div><div class="input-row"><span class="input-prefix">$</span><input type="number" class="input-field" id="' + screenId + '-bal" value="' + config.amount + '" oninput="calcDebtOneUpdate(\'' + screenId + '\')"></div></div>';
   html += '<div class="input-group"><div class="input-label">Interest Rate</div><div class="input-row"><input type="number" step="0.1" class="input-field" id="' + screenId + '-rate" value="' + config.rate + '" oninput="calcDebtOneUpdate(\'' + screenId + '\')"><span class="input-unit">%</span></div></div>';
   if (!isCard) {
-    html += '<div class="input-group"><div class="input-label">Remaining Term (months)</div><div class="input-row"><input type="number" class="input-field" id="' + screenId + '-term" value="' + config.term + '" oninput="calcDebtOneUpdate(\'' + screenId + '\')"><span class="input-unit">mo</span></div></div>';
+    html += '<div class="input-group"><div class="input-label">Remaining Term (months)</div><div class="input-row"><input type="number" class="input-field" id="' + screenId + '-term" value="' + config.term + '" readonly title="Fixed for this exercise" style="background:#EEEEEC;color:var(--text-muted);cursor:not-allowed;"><span class="input-unit">mo</span></div></div>';
   }
   html += '<div class="input-group"><div class="input-label">Monthly Payment</div>';
   html += '<div class="slider-wrap"><div class="slider-header"><div class="slider-value" id="' + screenId + '-pay-display">$' + sliderDefault + '</div></div>';
@@ -4056,7 +4363,7 @@ function calcDebtOneUpdate(screenId) {
 
 function renderCalcUtil(container, config, screenId) {
   var html = '';
-  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + calcBackTarget(screenId) + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
   html += '<div class="calc-header-title">Credit Utilization</div>';
   html += '<div class="calc-header-sub">' + config.label + '</div></div>';
   html += '<div class="calc-body">';
@@ -4128,7 +4435,7 @@ function calcUtilUpdate(screenId, container) {
 
 function renderCalcTDS(container, config, screenId) {
   var html = '';
-  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + calcBackTarget(screenId) + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
   html += '<div class="calc-header-title">Mortgage Readiness</div>';
   html += '<div class="calc-header-sub">' + config.label + '</div></div>';
   html += '<div class="calc-body">';
@@ -4165,7 +4472,7 @@ function calcTDSUpdate(screenId) {
   var tds = Math.round(allDebt / income * 100);
 
   var color, status;
-  if (tds < 44) { color = 'var(--green)'; status = 'Under 44% - you\'d likely qualify'; }
+  if (tds < 44) { color = 'var(--green)'; status = 'Under 44% on the payment you entered. Lenders stress test at your rate plus two points, or 5.25%, whichever is higher.'; }
   else if (tds < 50) { color = 'var(--gold)'; status = 'Between 44-50% - tight'; }
   else { color = 'var(--red)'; status = 'Over 50% - a lender would likely decline'; }
 
@@ -4195,7 +4502,7 @@ function calcTDSUpdate(screenId) {
 function renderCalcDebtSeveral(container, config, screenId) {
   var locked = config.lockedStrategy || null;
   var html = '';
-  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + screenId.replace('c', '') + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
+  html += '<div class="calc-header"><div class="calc-header-back" onclick="goTo(\'' + calcBackTarget(screenId) + '\')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to lesson</div>';
   html += '<div class="calc-header-title">Paydown Strategies</div>';
   html += '<div class="calc-header-sub">' + config.label + '</div></div>';
   html += '<div class="calc-body">';
@@ -4246,30 +4553,63 @@ function calcPaydownUpdate(screenId, container) {
   var strategy = container._strategy;
   var extra = parseInt(document.getElementById(screenId + '-extra-slider').value) || 0;
 
-  // Simulate both strategies
+  // ONE fixed monthly budget: every debt's minimum, plus the extra. It never shrinks.
+  // As debts clear, the money that serviced them stays in the budget and is redirected
+  // at the next target. That cascade IS the avalanche/snowball, and it is what this
+  // course's own text describes.
   function simPaydown(debts, extra, strat) {
-    var ds = debts.map(function(d) { return { balance: d.balance, rate: d.rate, minPay: d.minPay, name: d.name }; });
-    var months = 0, totalInterest = 0;
-    while (ds.some(function(d) { return d.balance > 0.5; }) && months < 600) {
-      var sorted = ds.filter(function(d) { return d.balance > 0.5; });
-      if (strat === 'avalanche') sorted.sort(function(a, b) { return b.rate - a.rate; });
-      else sorted.sort(function(a, b) { return a.balance - b.balance; });
-      var extraLeft = extra;
-      ds.forEach(function(d) {
-        if (d.balance <= 0.5) return;
-        var interest = d.balance * (d.rate / 100 / 12);
-        totalInterest += interest;
-        var pay = d.minPay;
-        if (d === sorted[0]) pay += extraLeft;
-        d.balance = Math.max(0, d.balance + interest - pay);
-      });
+    var ds = debts.map(function(d) {
+      return { balance: d.balance, rate: d.rate, minPay: d.minPay, name: d.name };
+    });
+    var startBal = ds.reduce(function(sum, d) { return sum + d.balance; }, 0);
+    var budgetPerMonth = ds.reduce(function(sum, d) { return sum + d.minPay; }, 0) + extra;
+    var months = 0, totalPaid = 0, prevBal = startBal, nonAmortising = false;
+    while (months < 600) {
+      var live = ds.filter(function(d) { return d.balance > 0.005; });
+      if (!live.length) break;
       months++;
+      var budget = budgetPerMonth;
+      live.forEach(function(d) { d.balance += d.balance * (d.rate / 100 / 12); });
+      live.forEach(function(d) {
+        if (d.balance <= 0.005 || budget <= 0.005) return;
+        var pay = Math.min(d.minPay, d.balance, budget);
+        d.balance -= pay; budget -= pay; totalPaid += pay;
+        if (d.balance <= 0.005) d.balance = 0;
+      });
+      while (budget > 0.005) {
+        var active = ds.filter(function(d) { return d.balance > 0.005; });
+        if (!active.length) break;
+        active.sort(function(a, b) {
+          return strat === 'avalanche' ? b.rate - a.rate : a.balance - b.balance;
+        });
+        var t = active[0];
+        var apply = Math.min(budget, t.balance);
+        t.balance -= apply; budget -= apply; totalPaid += apply;
+        if (t.balance <= 0.005) t.balance = 0;
+      }
+      var nowBal = ds.reduce(function(sum, d) { return sum + d.balance; }, 0);
+      if (months >= 12 && nowBal >= prevBal) { nonAmortising = true; break; }
+      prevBal = nowBal;
     }
-    return { months: months, totalInterest: Math.round(totalInterest) };
+    var remaining = ds.reduce(function(sum, d) { return sum + d.balance; }, 0);
+    var paidOff = remaining <= 0.5 && !nonAmortising && months < 600;
+    return { months: months,
+             totalInterest: Math.round(totalPaid - (startBal - remaining)),
+             remainingBalance: Math.round(remaining),
+             paidOff: paidOff,
+             nonAmortising: nonAmortising || (!paidOff && remaining > 0.5) };
   }
 
   var avalResult = simPaydown(debts, extra, 'avalanche');
   var snowResult = simPaydown(debts, extra, 'snowball');
+  // If the payments cannot outrun the interest, the debt never clears. Never show a
+  // payoff date in that case; it would be a lie told to the person most at risk.
+  var chosen0 = strategy === 'avalanche' ? avalResult : snowResult;
+  if (chosen0.nonAmortising) {
+    var resEl0 = document.getElementById(screenId + '-results');
+    if (resEl0) resEl0.innerHTML = '<div class="caution-note"><strong>These payments will never clear this debt.</strong> The interest is growing faster than the balance is shrinking. Raise the extra payment and watch for the point where the numbers start to move.</div>';
+    return;
+  }
   var avalEl = document.getElementById(screenId + '-aval-int');
   var snowEl = document.getElementById(screenId + '-snow-int');
   if (avalEl) avalEl.textContent = calcFmt(avalResult.totalInterest);
@@ -4429,7 +4769,7 @@ function renderSimProfile(container, isOpenExploration, guidedExercise) {
   if (isOpenExploration) {
     html += '<div id="sim-custom-editor" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">';
     html += '<div style="background:var(--green-light);border-radius:10px;padding:12px 14px;margin-bottom:12px;">';
-    html += '<div style="font-size:13px;color:var(--green-dark);line-height:1.5;">Know your credit score? Check it free at <a href="https://www.creditkarma.ca" target="_blank" style="color:var(--green);font-weight:600;">Credit Karma</a> or <a href="https://www.borrowell.com" target="_blank" style="color:var(--green);font-weight:600;">Borrowell</a>. It won\'t affect your score.</div>';
+    html += '<div style="font-size:13px;color:var(--green-dark);line-height:1.5;">You are entitled to a free credit report from each of Canada&#39;s two bureaus, <a href=\'https://www.equifax.ca/en/personal/products/equifax-consumer-credit-report/\' target=\'_blank\' rel=\'noopener\'>Equifax</a> and <a href=\'https://www.transunion.ca/product/consumer-disclosure\' target=\'_blank\' rel=\'noopener\'>TransUnion</a>. Requesting your own will not affect your score.</div>';
     html += '</div>';
     html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Enter your own numbers to see how actions affect your profile.</div>';
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">';
@@ -4628,16 +4968,81 @@ function shuffleArray(arr) {
   return arr;
 }
 
+// Assign each question's correct-answer position so that a learner cannot spot a pattern.
+// Aware of each quiz's own option count (this course has both 2- and 3-option questions),
+// never the same position twice in a row, and evenly spread across positions.
+// A plain random shuffle produced an exploitable run of three-or-more identical positions
+// on roughly two thirds of read-throughs.
+function cbAssignAnswerPositions(optionCounts) {
+  var used = {}, out = [], prev = null;
+  for (var q = 0; q < optionCounts.length; q++) {
+    var o = optionCounts[q];
+    var cands = [];
+    for (var i = 0; i < o; i++) if (i !== prev) cands.push(i);
+    if (!cands.length) for (var j = 0; j < o; j++) cands.push(j);
+    var lowest = Infinity;
+    cands.forEach(function(c) { var u = used[c] || 0; if (u < lowest) lowest = u; });
+    var pool = cands.filter(function(c) { return (used[c] || 0) === lowest; });
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    used[pick] = (used[pick] || 0) + 1;
+    out.push(pick); prev = pick;
+  }
+  return out;
+}
+
 function shuffleQuizOptions() {
-  var wraps = document.querySelectorAll('.quiz-wrap');
-  wraps.forEach(function(wrap) {
-    var btns = Array.from(wrap.querySelectorAll('.quiz-option'));
-    if (btns.length < 2) return;
-    // Tag each button with its original index before shuffling
-    btns.forEach(function(btn, i) { btn.setAttribute('data-answer-index', i); });
-    var parent = btns[0].parentNode;
-    shuffleArray(btns);
-    btns.forEach(function(btn) { parent.appendChild(btn); });
+  // Group the quizzes by section, so the no-repeat rule applies where a learner would
+  // actually notice it: within a single sitting.
+  var wraps = [];
+  document.querySelectorAll('.quiz-wrap').forEach(function(w) {
+    if (w.querySelectorAll('.quiz-option').length >= 2) wraps.push(w);
+  });
+  var bySection = {};
+  wraps.forEach(function(w) {
+    var m = (w.id || '').match(/^quiz-(\d+)/);
+    var sec = m ? m[1] : 'x';
+    (bySection[sec] = bySection[sec] || []).push(w);
+  });
+
+  Object.keys(bySection).forEach(function(sec) {
+    var group = bySection[sec];
+    var counts = group.map(function(w) { return w.querySelectorAll('.quiz-option').length; });
+    var targets = cbAssignAnswerPositions(counts);
+
+    group.forEach(function(wrap, gi) {
+      var btns = Array.prototype.slice.call(wrap.querySelectorAll('.quiz-option'));
+      // Tag each button with its TRUE index before anything moves.
+      btns.forEach(function(b, i) { b.setAttribute('data-answer-index', i); });
+
+      var qid = wrap.id.replace('quiz-', '');
+      var data = (typeof quizData !== 'undefined') ? quizData[qid] : null;
+      // Which option is the correct one? Encoded in the style array: 'green' = correct.
+      var correctIdx = -1, greens = 0;
+      if (data && data.style) {
+        data.style.forEach(function(st, i) { if (st === 'green') { greens++; correctIdx = i; } });
+      }
+      // Some questions are reflective and have no single right answer. Shuffle those freely.
+      if (greens !== 1 || correctIdx < 0 || correctIdx >= btns.length) {
+        for (var i = btns.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = btns[i]; btns[i] = btns[j]; btns[j] = t;
+        }
+        btns.forEach(function(b) { wrap.appendChild(b); });
+        return;
+      }
+
+      var target = targets[gi] % btns.length;
+      var correctBtn = btns[correctIdx];
+      var others = btns.filter(function(_, i) { return i !== correctIdx; });
+      for (var i2 = others.length - 1; i2 > 0; i2--) {
+        var j2 = Math.floor(Math.random() * (i2 + 1));
+        var t2 = others[i2]; others[i2] = others[j2]; others[j2] = t2;
+      }
+      var o = 0;
+      for (var p = 0; p < btns.length; p++) {
+        wrap.appendChild(p === target ? correctBtn : others[o++]);
+      }
+    });
   });
 }
 
@@ -4655,7 +5060,20 @@ function shareCert(platform) {
 
 function cbNavOpen(){document.getElementById('cb-nav-overlay').classList.add('open')}
 function cbNavClose(){document.getElementById('cb-nav-overlay').classList.remove('open')}
-function cbNavGo(id){cbNavClose();goTo(id)}
+function cbNavCert(){
+  cbNavClose();
+  if (cbCanCertify()) { goTo('cert-0'); return; }
+  cbNavFinal();
+}
+function cbNavGo(id){
+  // The certificate needs a pass, and the exam needs the course actually worked through.
+  if (id === 'cert-0' && !cbCanCertify()) { cbNavFinal(); return; }
+  if (id === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+  cbNavClose();
+  var p = getSectionPrefix(id);
+  if (/^s[1-7]$/.test(p) && cbSectionLastScreen[p]) { goTo(cbSectionLastScreen[p]); }
+  else { goTo(id); }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   initPreAssessment();
@@ -4769,20 +5187,30 @@ function pickMatch(btn, value) {
 }
 
 function resetMatching(group) {
-  var container = document.getElementById(group + '-match');
-  if (!container) return;
-  var items = container.querySelectorAll('.match-item');
+  // This used to look for a container '#<group>-match' that does not exist, and to
+  // strip class names ('wrong', 'selected', '.match-fb') that this exercise never uses.
+  // It therefore did nothing at all. Reset against the real markup instead: items are
+  // tagged with data-match-group, picks with .picked, and state with .answered/.correct/.incorrect.
+  var items = document.querySelectorAll('[data-match-group="' + group + '"]');
+  if (!items.length) return;
   items.forEach(function(item) {
-    item.classList.remove('correct', 'wrong');
-    var btns = item.querySelectorAll('.match-btn');
-    btns.forEach(function(b) { b.classList.remove('selected'); b.disabled = false; });
-    var fb = item.querySelector('.match-fb');
-    if (fb) fb.style.display = 'none';
+    item.classList.remove('correct', 'incorrect', 'answered');
+    item.removeAttribute('data-picked');
+    item.querySelectorAll('.match-btn').forEach(function(b) {
+      b.classList.remove('picked');
+      b.disabled = false;
+      b.style.pointerEvents = '';
+      b.style.opacity = '';
+    });
+    var fb = item.querySelector('.match-feedback');
+    if (fb) { fb.style.display = 'none'; fb.className = 'match-feedback'; }
   });
   var nav = document.getElementById(group + '-nav');
   if (nav) nav.style.display = 'none';
   var retry = document.getElementById(group + '-retry');
   if (retry) retry.style.display = 'none';
+  var result = document.getElementById(group + '-result');
+  if (result) { result.style.display = 'none'; result.innerHTML = ''; }
 }
 
 function checkMatching(group) {
