@@ -858,7 +858,9 @@ function calcD1Compare(){
   var cA=document.getElementById('d1c-card-a'),cB=document.getElementById('d1c-card-b');
   var _rbw=document.getElementById('d1c-rate'); var _blank=!_rbw||String(_rbw.value).trim()===''||(parseFloat(_rbw.value)||0)<=0;
   // Do not crown a second offer the learner has not filled in.
-  if(_blank){cA.className='compare-card';cB.className='compare-card'}
+  if(_blank){cA.className='compare-card';cB.className='compare-card';cA.style.opacity='0.35';cB.style.opacity='0.35'}
+  else {cA.style.opacity='';cB.style.opacity='';}
+  if(_blank){}
   else if(tA<=tB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
   var diff=Math.abs(tA-tB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
   // Do not claim a saving against a second offer the learner has not filled in yet.
@@ -877,7 +879,9 @@ function calcD1CompareRev(){
   document.getElementById('d1c-rev-sub-b').textContent=rB+'%'+(feeB>0?' + '+fmt(feeB)+' fee':' + no fee');
   var cA=document.getElementById('d1c-rev-card-a'),cB=document.getElementById('d1c-rev-card-b');
   var _rbw2=document.getElementById('d1c-rev-rate'); var _blank2=!_rbw2||String(_rbw2.value).trim()===''||(parseFloat(_rbw2.value)||0)<=0;
-  if(_blank2){cA.className='compare-card';cB.className='compare-card'}
+  if(_blank2){cA.className='compare-card';cB.className='compare-card';cA.style.opacity='0.35';cB.style.opacity='0.35'}
+  else {cA.style.opacity='';cB.style.opacity='';}
+  if(_blank2){}
   else if(costA<=costB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
   var diff=Math.abs(costA-costB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
   var _rb2=document.getElementById('d1c-rev-rate'); var _empty2=!_rb2||String(_rb2.value).trim()===''||(parseFloat(_rb2.value)||0)<=0;

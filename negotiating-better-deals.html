@@ -1636,18 +1636,11 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
 async function cbIssueCertificate(certName, certId, preScore, postScore) {
   if (!sb || !cbUser) return;
   try {
-    // Do not issue a second certificate for the same course. A learner who saw a blank
-    // one and clicked generate again would otherwise create a duplicate record.
-    if (cbIssuedCert && cbIssuedCert.certificate_number) {
-      certId = cbIssuedCert.certificate_number;
-      document.getElementById('cert-id').textContent = certId;
-    } else {
     await sb.from('certificates').insert({
       user_id: cbUser.id, enrollment_id: cbEnrollmentId, certificate_type: courseKey, certificate_number: certId,
       pre_assessment_score: preScore, post_assessment_score: postScore,
       issued_at: new Date().toISOString()
     });
-    }
     await sb.from('enrollments').update({ completed_at: new Date().toISOString() })
       .eq('id', cbEnrollmentId);
     await fetch('/.netlify/functions/send-email', {
@@ -1946,6 +1939,13 @@ function cbCanCertify() {
 }
 
 function generateCert() {
+  // Already issued? Show the saved one and stop. Re-running the rest would stamp today's
+  // date on an older certificate, recompute the score, and send a second email.
+  if (cbIssuedCert && cbIssuedCert.certificate_number) {
+    cbPaintSavedCertificate();
+    goTo('cert-1');
+    return;
+  }
   if (!cbCanCertify()) {
     cbGateNotice('Not yet', 'You need at least 80% on the final assessment before the certificate unlocks. Take it again when you are ready.');
     goTo('post-0');
