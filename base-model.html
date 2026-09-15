@@ -3286,6 +3286,25 @@ function cbPaintSavedCertificate() {
   if (nameField && nm) nameField.value = nm;
 }
 
+// A certificate that did not save is not a certificate. Say so plainly and leave the
+// learner able to try again rather than handing them a number that exists nowhere.
+function cbCertIssueFailed(certId) {
+  var t = document.getElementById('cb-gate-text');
+  var ov = document.getElementById('cb-gate-overlay');
+  var msg = 'Your result is safe, but we could not save your certificate just now. '
+    + 'Please try again in a moment. If it keeps failing, contact us and we will issue it manually.';
+  if (t && ov) {
+    var h = ov.querySelector('h3'); if (h) h.textContent = 'Could not save your certificate';
+    t.textContent = msg;
+    cbGateTarget = null;
+    ov.classList.add('visible');
+  } else {
+    alert(msg);
+  }
+  var idEl = document.getElementById('cert-id');
+  if (idEl) idEl.textContent = '—';
+}
+
 function cbSectionKeyToPrefix(dbKey) {
   for (var p in sectionMap) {
     if (sectionMap.hasOwnProperty(p) && sectionMap[p] && sectionMap[p].key === dbKey) return p;
@@ -3421,8 +3440,9 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
   cbCertIssueInFlight = true;
   if (!sb || !cbUser) return;
   try {
-    // Insert certificate record
-    await sb.from('certificates').insert({
+    // Insert certificate record. The client returns { error } rather than throwing, so the
+    // result MUST be inspected — otherwise a failed write still issues a number and an email.
+    var certIns = await sb.from('certificates').insert({
       user_id: cbUser.id,
       enrollment_id: cbEnrollmentId,
       certificate_type: courseKey,
@@ -3431,8 +3451,14 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
       post_assessment_score: postScore,
       issued_at: new Date().toISOString()
     });
-    // Remember it immediately. The early return in generateCert() reads this, and without
-    // it a second Generate in the same visit would insert again and send a second email.
+    if (certIns && certIns.error) {
+      console.error('Credit Bright: certificate insert failed', certIns.error);
+      cbCertIssueInFlight = false;
+      cbCertIssueFailed(certId);
+      return;
+    }
+    // Only now is the certificate real. Remember it so a second Generate in this visit
+    // cannot insert again or send a second email.
     cbIssuedCert = { certificate_number: certId, post_assessment_score: postScore, issued_at: new Date().toISOString() };
 
     // Mark foundation enrollment as completed (not bundle, which spans all courses)
@@ -3456,6 +3482,11 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
     });
   } catch (e) {
     console.error('Certificate issuance error:', e);
+    cbCertIssueFailed(certId);
+  } finally {
+    // Always release the lock. Leaving it set meant a learner could never retry after a
+    // transient failure.
+    cbCertIssueInFlight = false;
   }
 }
 
