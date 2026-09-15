@@ -1429,6 +1429,7 @@ function cbMarkSectionSeen(screenId) {
   if (last && last.id === screenId) cbSectionsSeen[m[1]] = true;
 }
 var cbIssuedCert = null;
+var cbCertIssueInFlight = false;
 var cbCertScoreOutOf = 5;
 // Paint an already-issued certificate onto the page. generateCert() is the only other
 // thing that fills these fields, so without this a return visit shows a blank one.
@@ -1542,6 +1543,11 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
   }).then(cbWriteResult);
 }
 async function cbIssueCertificate(certName, certId, preScore, postScore) {
+  // Belt and braces: never insert a second certificate for this course, whatever the
+  // caller did. One certificate per learner per course.
+  if (cbIssuedCert && cbIssuedCert.certificate_number && cbIssuedCert.certificate_number !== certId) return;
+  if (cbCertIssueInFlight) return;
+  cbCertIssueInFlight = true;
   if (!sb || !cbUser) return;
   try {
     await sb.from('certificates').insert({
@@ -1549,6 +1555,9 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
       pre_assessment_score: preScore, post_assessment_score: postScore,
       issued_at: new Date().toISOString()
     });
+    // Remember it immediately. The early return in generateCert() reads this, and without
+    // it a second Generate in the same visit would insert again and send a second email.
+    cbIssuedCert = { certificate_number: certId, post_assessment_score: postScore, issued_at: new Date().toISOString() };
     await sb.from('enrollments').update({ completed_at: new Date().toISOString() })
       .eq('id', cbEnrollmentId);
     await fetch('/.netlify/functions/send-email', {

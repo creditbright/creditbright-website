@@ -3265,6 +3265,7 @@ function cbMarkSectionSeen(screenId) {
 // like 's1'. Translate one to the other using the same map that produced them, rather
 // than assuming a naming convention.
 var cbIssuedCert = null;
+var cbCertIssueInFlight = false;
 var cbCertScoreOutOf = 10;
 // Paint an already-issued certificate onto the page. generateCert() is the only other
 // thing that fills these fields, so without this a return visit shows a blank one.
@@ -3413,6 +3414,11 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
 
 // ── Certificate Issuance ──
 async function cbIssueCertificate(certName, certId, preScore, postScore) {
+  // Belt and braces: never insert a second certificate for this course, whatever the
+  // caller did. One certificate per learner per course.
+  if (cbIssuedCert && cbIssuedCert.certificate_number && cbIssuedCert.certificate_number !== certId) return;
+  if (cbCertIssueInFlight) return;
+  cbCertIssueInFlight = true;
   if (!sb || !cbUser) return;
   try {
     // Insert certificate record
@@ -3425,6 +3431,9 @@ async function cbIssueCertificate(certName, certId, preScore, postScore) {
       post_assessment_score: postScore,
       issued_at: new Date().toISOString()
     });
+    // Remember it immediately. The early return in generateCert() reads this, and without
+    // it a second Generate in the same visit would insert again and send a second email.
+    cbIssuedCert = { certificate_number: certId, post_assessment_score: postScore, issued_at: new Date().toISOString() };
 
     // Mark foundation enrollment as completed (not bundle, which spans all courses)
     await sb.from('enrollments')
