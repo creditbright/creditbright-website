@@ -1287,6 +1287,17 @@ async function cbInit() {
       }
       certNameEl.value = userName;
     }
+    // Load an already-issued certificate so a returning learner sees it rather than a
+    // blank page. Without this the gate admits them to a certificate nothing fills in.
+    var { data: savedCert } = await sb.from('certificates')
+      .select('certificate_number, post_assessment_score, issued_at')
+      .eq('user_id', user.id).eq('certificate_type', courseKey)
+      .order('issued_at', { ascending: false }).limit(1);
+    if (savedCert && savedCert.length > 0) {
+      cbIssuedCert = savedCert[0];
+      cbPaintSavedCertificate();
+    }
+
     // Restore the FINAL assessment score too. Without this, a learner who passed in an
     // earlier sitting is refused their own certificate on every return visit, because
     // cbCanCertify() has nothing to judge.
@@ -1417,6 +1428,27 @@ function cbMarkSectionSeen(screenId) {
   var last = cbSectionLastScreenId[m[1]];
   if (last && last.id === screenId) cbSectionsSeen[m[1]] = true;
 }
+var cbIssuedCert = null;
+var cbCertScoreOutOf = 5;
+// Paint an already-issued certificate onto the page. generateCert() is the only other
+// thing that fills these fields, so without this a return visit shows a blank one.
+function cbPaintSavedCertificate() {
+  if (!cbIssuedCert) return;
+  var setText = function(id, val) { var el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+  var nm = (cbUser && cbUser.user_metadata && cbUser.user_metadata.full_name) || '';
+  if (nm) setText('cert-display-name', nm);
+  if (cbIssuedCert.post_assessment_score != null) {
+    setText('cert-score', Math.round((cbIssuedCert.post_assessment_score / cbCertScoreOutOf) * 100) + '%');
+  }
+  if (cbIssuedCert.issued_at) {
+    var d = new Date(cbIssuedCert.issued_at);
+    setText('cert-date', d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }));
+  }
+  setText('cert-id', cbIssuedCert.certificate_number);
+  var nameField = document.getElementById('cert-name');
+  if (nameField && nm) nameField.value = nm;
+}
+
 function cbSectionKeyToPrefix(dbKey) {
   for (var p in sectionMap) {
     if (sectionMap.hasOwnProperty(p) && sectionMap[p] && sectionMap[p].key === dbKey) return p;
@@ -1512,11 +1544,18 @@ function cbLogAssessment(assessmentType, questionIndex, questionText, userAnswer
 async function cbIssueCertificate(certName, certId, preScore, postScore) {
   if (!sb || !cbUser) return;
   try {
+    // Do not issue a second certificate for the same course. A learner who saw a blank
+    // one and clicked generate again would otherwise create a duplicate record.
+    if (cbIssuedCert && cbIssuedCert.certificate_number) {
+      certId = cbIssuedCert.certificate_number;
+      document.getElementById('cert-id').textContent = certId;
+    } else {
     await sb.from('certificates').insert({
       user_id: cbUser.id, enrollment_id: cbEnrollmentId, certificate_type: courseKey, certificate_number: certId,
       pre_assessment_score: preScore, post_assessment_score: postScore,
       issued_at: new Date().toISOString()
     });
+    }
     await sb.from('enrollments').update({ completed_at: new Date().toISOString() })
       .eq('id', cbEnrollmentId);
     await fetch('/.netlify/functions/send-email', {
@@ -2013,7 +2052,10 @@ function calcOfferCompareUpdate(screenId) {
 
   var sub = document.getElementById(screenId + '-cmp-sub');
   if (sub) sub.textContent = 'Same ' + calcFmt(amount) + ', different terms. What does the other option cost?';
-  var meaningful = Math.abs(totA - totB) > 5;
+  var _cmpRaw = document.getElementById(screenId + '-cmp-rate');
+  var _cmpBlank = !_cmpRaw || String(_cmpRaw.value).trim() === '' || rB <= 0;
+  // A blank second offer computes as 0% and would otherwise be painted the winner.
+  var meaningful = !_cmpBlank && Math.abs(totA - totB) > 5;
   var aWins = totA <= totB;
   var html = '<div class="result-grid two-col" style="margin-top:12px;">';
   html += '<div class="compare-card ' + (!meaningful ? '' : (aWins ? 'green-card' : 'red-card')) + '"><div class="compare-card-label">This Offer (' + rA.toFixed(2) + '%)</div>';

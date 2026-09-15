@@ -856,7 +856,10 @@ function calcD1Compare(){
   document.getElementById('d1c-sub-a').textContent='APR: '+aprA.toFixed(1)+'%'+(yA!==yB?' · '+yA+'yr':'');
   document.getElementById('d1c-sub-b').textContent='APR: '+aprB.toFixed(1)+'%'+(yA!==yB?' · '+yB+'yr':'');
   var cA=document.getElementById('d1c-card-a'),cB=document.getElementById('d1c-card-b');
-  if(tA<=tB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
+  var _rbw=document.getElementById('d1c-rate'); var _blank=!_rbw||String(_rbw.value).trim()===''||(parseFloat(_rbw.value)||0)<=0;
+  // Do not crown a second offer the learner has not filled in.
+  if(_blank){cA.className='compare-card';cB.className='compare-card'}
+  else if(tA<=tB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
   var diff=Math.abs(tA-tB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
   // Do not claim a saving against a second offer the learner has not filled in yet.
   var _rb=document.getElementById('d1c-rate'); var _empty=!_rb||String(_rb.value).trim()===''||(parseFloat(_rb.value)||0)<=0;
@@ -873,7 +876,9 @@ function calcD1CompareRev(){
   document.getElementById('d1c-rev-sub-a').textContent=rA+'%'+(feeA>0?' + '+fmt(feeA)+' fee':' + no fee');
   document.getElementById('d1c-rev-sub-b').textContent=rB+'%'+(feeB>0?' + '+fmt(feeB)+' fee':' + no fee');
   var cA=document.getElementById('d1c-rev-card-a'),cB=document.getElementById('d1c-rev-card-b');
-  if(costA<=costB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
+  var _rbw2=document.getElementById('d1c-rev-rate'); var _blank2=!_rbw2||String(_rbw2.value).trim()===''||(parseFloat(_rbw2.value)||0)<=0;
+  if(_blank2){cA.className='compare-card';cB.className='compare-card'}
+  else if(costA<=costB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
   var diff=Math.abs(costA-costB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
   var _rb2=document.getElementById('d1c-rev-rate'); var _empty2=!_rb2||String(_rb2.value).trim()===''||(parseFloat(_rb2.value)||0)<=0;
   if(!_empty2&&diff>1){badge.style.display='flex';txt.textContent=(costA<costB?'First':'Second')+' offer saves you '+fmt(diff)+'/year'}else badge.style.display='none';
