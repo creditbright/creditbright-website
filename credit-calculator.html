@@ -858,7 +858,9 @@ function calcD1Compare(){
   var cA=document.getElementById('d1c-card-a'),cB=document.getElementById('d1c-card-b');
   if(tA<=tB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
   var diff=Math.abs(tA-tB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
-  if(diff>5){badge.style.display='flex';txt.textContent=(tA<tB?'First':'Second')+' offer saves you '+fmt(diff)}else badge.style.display='none';
+  // Do not claim a saving against a second offer the learner has not filled in yet.
+  var _rb=document.getElementById('d1c-rate'); var _empty=!_rb||String(_rb.value).trim()===''||(parseFloat(_rb.value)||0)<=0;
+  if(!_empty&&diff>5){badge.style.display='flex';txt.textContent=(tA<tB?'First':'Second')+' offer saves you '+fmt(diff)}else badge.style.display='none';
   document.getElementById('d1-comp-breakeven').style.display='none';
 }
 function calcD1CompareRev(){
@@ -873,7 +875,8 @@ function calcD1CompareRev(){
   var cA=document.getElementById('d1c-rev-card-a'),cB=document.getElementById('d1c-rev-card-b');
   if(costA<=costB){cA.className='compare-card green-card';cB.className='compare-card red-card'}else{cA.className='compare-card red-card';cB.className='compare-card green-card'}
   var diff=Math.abs(costA-costB),badge=document.getElementById('d1c-savings'),txt=document.getElementById('d1c-savings-text');
-  if(diff>1){badge.style.display='flex';txt.textContent=(costA<costB?'First':'Second')+' offer saves you '+fmt(diff)+'/year'}else badge.style.display='none';
+  var _rb2=document.getElementById('d1c-rev-rate'); var _empty2=!_rb2||String(_rb2.value).trim()===''||(parseFloat(_rb2.value)||0)<=0;
+  if(!_empty2&&diff>1){badge.style.display='flex';txt.textContent=(costA<costB?'First':'Second')+' offer saves you '+fmt(diff)+'/year'}else badge.style.display='none';
   var feeDiff=feeB-feeA,rateDiff=(rA-rB)/100;
   if(feeDiff>0&&rateDiff>0){var be=feeDiff/rateDiff;document.getElementById('d1-comp-breakeven').style.display='block';document.getElementById('d1-comp-breakeven-text').textContent='The lower-rate option only saves money if you carry a balance above '+fmt(be)+'. Below that, the higher-rate option with no fee costs less.'}
   else if(feeDiff<0&&rateDiff<0){var be=Math.abs(feeDiff/rateDiff);document.getElementById('d1-comp-breakeven').style.display='block';document.getElementById('d1-comp-breakeven-text').textContent='The first option only saves money if you carry a balance above '+fmt(be)+'. Below that, the second option costs less.'}

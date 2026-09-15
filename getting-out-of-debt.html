@@ -342,6 +342,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <h3>Not quite yet</h3>
     <p id="cb-gate-text"></p>
     <div class="cb-modal-btns">
+      <button class="cb-btn-restart" onclick="document.getElementById('cb-gate-overlay').classList.remove('visible')">Stay here</button>
       <button class="cb-btn-resume" onclick="cbGateGo()">Take me there</button>
     </div>
   </div>
@@ -1286,6 +1287,19 @@ async function cbInit() {
       }
       certNameEl.value = userName;
     }
+    // Restore the FINAL assessment score too. Without this, a learner who passed in an
+    // earlier sitting is refused their own certificate on every return visit, because
+    // cbCanCertify() has nothing to judge.
+    var { data: savedPostScores } = await sb.from('assessment_responses')
+      .select('question_key, is_correct')
+      .eq('user_id', user.id).eq('course', courseKey).eq('assessment_type', 'post')
+      .order('answered_at');
+    if (savedPostScores && savedPostScores.length > 0) {
+      // This course keeps a single score, not a per-question array.
+      postScore = savedPostScores.filter(function(r) { return r.is_correct; }).length;
+      postAnswered = savedPostScores.length;
+    }
+
     // Load pre-assessment scores from Supabase (in case of browser restart)
     var { data: savedPre } = await sb.from('assessment_responses')
       .select('is_correct').eq('user_id', user.id).eq('course', courseKey).eq('assessment_type', 'pre');
@@ -1306,13 +1320,20 @@ async function cbInit() {
     }
     // Load existing section times for accumulation
     var { data: existingProgress } = await sb.from('section_progress')
-      .select('section_key, time_spent_seconds')
+      .select('section_key, time_spent_seconds, completed_at')
       .eq('user_id', user.id).eq('course', courseKey);
     if (existingProgress) {
       existingProgress.forEach(function(sp) {
         if (sp.section_key !== '_resume' && sp.time_spent_seconds) {
           cbSectionTime[sp.section_key] = sp.time_spent_seconds;
-          if (cbSectionLastScreenId[sp.section_key]) cbSectionsSeen[sp.section_key] = true;
+        }
+        // The database stores 'section_1'; the gate works in 's1'. Without translating,
+        // no section finished in an earlier sitting is ever credited and a returning
+        // learner is locked out of a certificate they already earned. Only a section with
+        // a completion timestamp counts — time logged alone is not finishing it.
+        if (sp.section_key !== '_resume' && sp.completed_at) {
+          var prefix = cbSectionKeyToPrefix(sp.section_key);
+          if (prefix) cbSectionsSeen[prefix] = true;
         }
       });
     }
@@ -1325,7 +1346,7 @@ async function cbInit() {
     var directScreen = urlParams.get('screen');
     if (directScreen) {
       // ?screen= used to walk straight past every gate.
-      if (directScreen === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+      if (directScreen.indexOf('post-') === 0 && !cbCanTakeFinal()) { cbNavFinal(); return; }
       if (directScreen.indexOf('cert-') === 0 && !cbCanCertify()) { cbNavFinal(); return; }
       goTo(directScreen); return;
     }
@@ -1352,6 +1373,16 @@ async function cbInit() {
   }
 }
 function cbResume() {
+  // A blocked attempt could be saved as the resume bookmark, letting the next visit
+  // walk straight past the gate. Honour the gate on resume too.
+  if (cbResumeScreen && String(cbResumeScreen).indexOf('post-') === 0 && !cbCanTakeFinal()) {
+    document.getElementById('cb-resume-overlay').classList.remove('visible');
+    cbNavFinal(); return;
+  }
+  if (cbResumeScreen && String(cbResumeScreen).indexOf('cert-') === 0 && !cbCanCertify()) {
+    document.getElementById('cb-resume-overlay').classList.remove('visible');
+    cbNavFinal(); return;
+  }
   document.getElementById('cb-resume-overlay').classList.remove('visible');
   if (cbResumeScreen) goTo(cbResumeScreen);
 }
@@ -1386,6 +1417,13 @@ function cbMarkSectionSeen(screenId) {
   var last = cbSectionLastScreenId[m[1]];
   if (last && last.id === screenId) cbSectionsSeen[m[1]] = true;
 }
+function cbSectionKeyToPrefix(dbKey) {
+  for (var p in sectionMap) {
+    if (sectionMap.hasOwnProperty(p) && sectionMap[p] && sectionMap[p].key === dbKey) return p;
+  }
+  return null;
+}
+
 function cbSectionsRemaining() {
   var missing = [];
   Object.keys(cbSectionLastScreenId).sort().forEach(function(sec) {
@@ -1985,8 +2023,12 @@ function calcOfferCompareUpdate(screenId) {
   html += '<div class="compare-card-number">' + calcFmt(pB) + '/mo</div>';
   html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + calcFmt(intB) + ' total cost</div></div>';
   html += '</div>';
+  // An empty second offer computes as 0% and announces a saving before the learner has
+  // typed anything. Say nothing until there is a real rate to compare against.
+  var cmpRateRaw = document.getElementById(screenId + '-cmp-rate');
+  var cmpEmpty = !cmpRateRaw || String(cmpRateRaw.value).trim() === '' || rB <= 0;
   var diff = Math.abs(totA - totB);
-  if (diff > 5) {
+  if (!cmpEmpty && diff > 5) {
     html += '<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">' + (aWins ? 'This offer' : (config.compareLabel || 'The other offer')) + ' saves ' + calcFmt(diff) + ' in total</span></div>';
   }
   document.getElementById(screenId + '-cmp-results').innerHTML = html;
@@ -2587,7 +2629,7 @@ function cbNavCert(){
   else { goTo('post-0'); }
 }
 function cbNavGo(id){
-  if (id === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+  if (String(id).indexOf('post-') === 0 && !cbCanTakeFinal()) { cbNavFinal(); return; }
   // Never allow a direct jump to the certificate without having earned it.
   if (id === 'cert-0' && !cbCanCertify()) { cbNavFinal(); return; }
   cbNavClose();

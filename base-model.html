@@ -687,6 +687,7 @@ p.small{font-size:14px;color:var(--text-muted);line-height:1.6}
     <h3>Not quite yet</h3>
     <p id="cb-gate-text"></p>
     <div class="cb-modal-btns">
+      <button class="cb-btn-restart" onclick="document.getElementById('cb-gate-overlay').classList.remove('visible')">Stay here</button>
       <button class="cb-btn-resume" onclick="cbGateGo()">Take me there</button>
     </div>
   </div>
@@ -3084,6 +3085,25 @@ async function cbInit() {
       certNameEl.value = userName;
     }
 
+    // Restore the FINAL assessment score too. Without this, a learner who passed in an
+    // earlier sitting is refused their own certificate on every return visit, because
+    // cbCanCertify() has nothing to judge.
+    var { data: savedPostScores } = await sb.from('assessment_responses')
+      .select('question_key, is_correct')
+      .eq('user_id', user.id).eq('course', courseKey).eq('assessment_type', 'post')
+      .order('answered_at');
+    if (savedPostScores && savedPostScores.length > 0) {
+      savedPostScores.forEach(function(r) {
+        var qm = r.question_key && r.question_key.match(/q(\d+)$/);
+        if (qm) {
+          var qi = parseInt(qm[1]);
+          if (typeof postScores !== 'undefined' && postScores[qi] === undefined) {
+            postScores[qi] = r.is_correct ? 1 : 0;
+          }
+        }
+      });
+    }
+
     // Load pre-assessment scores from Supabase (in case of browser restart)
     var { data: savedPreScores } = await sb.from('assessment_responses')
       .select('question_key, is_correct')
@@ -3112,15 +3132,20 @@ async function cbInit() {
 
     // Load existing section times for accumulation
     var { data: existingProgress } = await sb.from('section_progress')
-      .select('section_key, time_spent_seconds')
+      .select('section_key, time_spent_seconds, completed_at')
       .eq('user_id', user.id).eq('course', courseKey);
     if (existingProgress) {
       existingProgress.forEach(function(sp) {
         if (sp.section_key !== '_resume' && sp.time_spent_seconds) {
           cbSectionTime[sp.section_key] = sp.time_spent_seconds;
-          // Credit sections worked through in an earlier sitting, or a returning learner
-          // would be locked out of an exam they had already earned.
-          if (cbSectionLastScreenId[sp.section_key]) cbSectionsSeen[sp.section_key] = true;
+        }
+        // Credit a section finished in an earlier sitting. Two things matter here:
+        // the database stores 'section_1' while the gate works in 's1', so the key has to
+        // be translated; and only a section with a completion timestamp counts, because
+        // time logged alone would let a half-read section unlock the exam.
+        if (sp.section_key !== '_resume' && sp.completed_at) {
+          var prefix = cbSectionKeyToPrefix(sp.section_key);
+          if (prefix) cbSectionsSeen[prefix] = true;
         }
       });
     }
@@ -3143,7 +3168,7 @@ async function cbInit() {
     if (directScreen) {
       // The ?screen= parameter walked straight past every gate. Honour the same rules:
       // the exam needs the course worked through, the certificate needs a pass.
-      if (directScreen === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+      if (directScreen.indexOf('post-') === 0 && !cbCanTakeFinal()) { cbNavFinal(); return; }
       if (directScreen.indexOf('cert-') === 0 && !cbCanCertify()) { cbNavFinal(); return; }
       goTo(directScreen);
       return;
@@ -3175,6 +3200,16 @@ async function cbInit() {
 }
 
 function cbResume() {
+  // A blocked attempt could be saved as the resume bookmark, letting the next visit
+  // walk straight past the gate. Honour the gate on resume too.
+  if (cbResumeScreen && String(cbResumeScreen).indexOf('post-') === 0 && !cbCanTakeFinal()) {
+    document.getElementById('cb-resume-overlay').classList.remove('visible');
+    cbNavFinal(); return;
+  }
+  if (cbResumeScreen && String(cbResumeScreen).indexOf('cert-') === 0 && !cbCanCertify()) {
+    document.getElementById('cb-resume-overlay').classList.remove('visible');
+    cbNavFinal(); return;
+  }
   document.getElementById('cb-resume-overlay').classList.remove('visible');
   if (cbResumeScreen) {
     goTo(cbResumeScreen);
@@ -3215,6 +3250,16 @@ function cbMarkSectionSeen(screenId) {
   var last = cbSectionLastScreenId[m[1]];
   if (last && last.id === screenId) cbSectionsSeen[m[1]] = true;
 }
+// The database stores section keys as 'section_1'; the gate works in screen prefixes
+// like 's1'. Translate one to the other using the same map that produced them, rather
+// than assuming a naming convention.
+function cbSectionKeyToPrefix(dbKey) {
+  for (var p in sectionMap) {
+    if (sectionMap.hasOwnProperty(p) && sectionMap[p] && sectionMap[p].key === dbKey) return p;
+  }
+  return null;
+}
+
 function cbSectionsRemaining() {
   var missing = [];
   Object.keys(cbSectionLastScreenId).sort().forEach(function(sec) {
@@ -4242,8 +4287,12 @@ function calcOfferCompareUpdate(screenId) {
   html += '<div class="compare-card-number">' + calcFmt(pB) + '/mo</div>';
   html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + calcFmt(intB) + ' total cost</div></div>';
   html += '</div>';
+  // An empty second offer computes as 0% and announces a saving before the learner has
+  // typed anything. Say nothing until there is a real rate to compare against.
+  var cmpRateRaw = document.getElementById(screenId + '-cmp-rate');
+  var cmpEmpty = !cmpRateRaw || String(cmpRateRaw.value).trim() === '' || rB <= 0;
   var diff = Math.abs(totA - totB);
-  if (diff > 5) {
+  if (!cmpEmpty && diff > 5) {
     html += '<div class="savings-badge"><span class="savings-badge-icon">&#128176;</span><span class="savings-badge-text">' + (aWins ? 'This offer' : (config.compareLabel || 'The other offer')) + ' saves ' + calcFmt(diff) + ' in total</span></div>';
   }
   document.getElementById(screenId + '-cmp-results').innerHTML = html;
@@ -5068,7 +5117,7 @@ function cbNavCert(){
 function cbNavGo(id){
   // The certificate needs a pass, and the exam needs the course actually worked through.
   if (id === 'cert-0' && !cbCanCertify()) { cbNavFinal(); return; }
-  if (id === 'post-0' && !cbCanTakeFinal()) { cbNavFinal(); return; }
+  if (String(id).indexOf('post-') === 0 && !cbCanTakeFinal()) { cbNavFinal(); return; }
   cbNavClose();
   var p = getSectionPrefix(id);
   if (/^s[1-7]$/.test(p) && cbSectionLastScreen[p]) { goTo(cbSectionLastScreen[p]); }
